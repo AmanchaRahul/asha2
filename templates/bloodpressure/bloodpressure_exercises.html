@@ -1,0 +1,531 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block basepage %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercises for Managing Blood Pressure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .hover-olive:hover {
+            background-color: #808000;
+            color: white;
+        }
+        .video-thumbnail {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .video-thumbnail:hover {
+            transform: scale(1.05);
+        }
+        .video-thumbnail::before {
+            content: 'Click to Play';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+        .video-thumbnail:hover::before {
+            opacity: 1;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .exercise-timer {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #808000;
+            transition: width 0.5s ease-in-out;
+        }
+        .floating-tip {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #808000;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+            z-index: 1000;
+            max-width: 300px;
+        }
+        .custom-video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.7);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-video-controls button {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .custom-video-controls button:hover {
+            transform: scale(1.2);
+        }
+        .motivational-quote {
+            text-align: center;
+            font-style: italic;
+            padding: 1rem;
+            background-color: rgba(128, 128, 0, 0.2);
+            border-radius: 5px;
+        }
+        .video-progress {
+            width: 100%;
+            height: 5px;
+            background-color: #333;
+            cursor: pointer;
+        }
+        .video-progress-filled {
+            width: 0;
+            height: 100%;
+            background-color: #808000;
+        }
+        .workout-log {
+            background-color: rgba(128, 128, 0, 0.1);
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .achievement {
+            background-color: rgba(255, 215, 0, 0.2);
+            border-radius: 5px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        .achievement-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        .exercise-animation {
+            width: 100%;
+            height: 200px;
+            background-color: rgba(128, 128, 0, 0.1);
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .exercise-animation img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .daily-challenge {
+            background-color: rgba(128, 128, 0, 0.2);
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        .streak-tracker {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+        .streak-day {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #333;
+        }
+        .streak-day.completed {
+            background-color: #808000;
+        }
+        .small-button {
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-black">
+    <header class="bg-gray-900 p-4">
+        <a href="{% url 'wellnessdata' %}" class="back-button">
+            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
+        </a>
+        <h1 class="text-4xl text-center text-white">Exercises for Managing Blood Pressure</h1>
+    </header>
+
+    <main class="flex-grow p-4 flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+        <div class="w-full md:w-1/4 space-y-4">
+            <div class="exercise-timer">
+                <span id="timer" class="text-3xl font-bold">00:00</span>
+                <div class="flex space-x-2 mt-2">
+                    <button id="startTimer" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded small-button">Start</button>
+                    <button id="stopTimer" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded small-button">Stop</button>
+                    <button id="resetTimer" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded small-button">Reset</button>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress" id="exerciseProgress"></div>
+            </div>
+
+            <div class="workout-log">
+                <h3 class="text-xl mb-2">Workout Log</h3>
+                <ul id="workoutLog" class="list-disc list-inside"></ul>
+            </div>
+
+            <div class="achievements">
+                <h3 class="text-xl mb-2">Achievements</h3>
+                <div id="achievementsList"></div>
+            </div>
+
+            <div class="exercise-animation">
+                <img src="https://media.giphy.com/media/3o7TKwmnDgQb5jemjK/giphy.gif" alt="Exercise Animation" id="exerciseAnimation">
+            </div>
+
+            <div class="daily-challenge">
+                <h3 class="text-xl mb-2">Daily Challenge</h3>
+                <p id="dailyChallenge"></p>
+                <button id="startChallenge" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded small-button">Start Challenge</button>
+                <button id="restartChallenge" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded small-button mt-2">Restart Challenge</button>
+                <div class="streak-tracker mt-2">
+                    <div class="streak-day"></div>
+                    <div class="streak-day"></div>
+                    <div class="streak-day"></div>
+                    <div class="streak-day"></div>
+                    <div class="streak-day"></div>
+                    <div class="streak-day"></div>
+                    <div class="streak-day"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Video Player -->
+        <div class="w-full md:w-1/2 space-y-4">
+            <div id="mainPlayer" class="video-container">
+                <iframe id="mainVideoFrame" width="560" height="315" src="https://www.youtube.com/embed/CQ57B9NKHeo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+
+            <div id="videoThumbnails" class="grid grid-cols-2 gap-4">
+                <div class="video-thumbnail" data-video-id="LPJ86BzTvko">
+                    <img src="https://img.youtube.com/vi/LPJ86BzTvko/0.jpg" alt="Thumbnail 2" class="w-full h-auto">
+                    <p class="text-center mt-2">Yoga for Blood Pressure</p>
+                </div>
+                <div class="video-thumbnail" data-video-id="EsVLl_bEcXw">
+                    <img src="https://img.youtube.com/vi/EsVLl_bEcXw/0.jpg" alt="Thumbnail 3" class="w-full h-auto">
+                    <p class="text-center mt-2">Cardio Exercises for Heart Health</p>
+                </div>
+                <div class="video-thumbnail" data-video-id="kUVVgiDR1FE">
+                    <img src="https://img.youtube.com/vi/kUVVgiDR1FE/0.jpg" alt="Thumbnail 4" class="w-full h-auto">
+                    <p class="text-center mt-2">Strength Training for Blood Pressure</p>
+                </div>
+                <div class="video-thumbnail" data-video-id="lnUbb24xDjA">
+                    <img src="https://img.youtube.com/vi/lnUbb24xDjA/0.jpg" alt="Thumbnail 5" class="w-full h-auto">
+                    <p class="text-center mt-2">Relaxation Techniques</p>
+                </div>
+            </div>
+
+            <div class="motivational-quote" id="motivationalQuote"></div>
+        </div>
+
+        <div class="w-full md:w-1/4 space-y-4">
+            <div class="bg-gray-900 p-4 rounded-lg">
+                <h2 class="text-xl mb-4 text-center">Importance of Exercises for Blood Pressure</h2>
+                <p class="mb-4 text-sm">
+                    Regular exercise is essential for managing blood pressure. It helps lower blood pressure, improves heart health, and reduces the risk of cardiovascular diseases.
+                </p>
+                <ul class="list-disc list-inside mb-4 text-sm">
+                    <li>Lowers blood pressure levels</li>
+                    <li>Helps maintain a healthy weight</li>
+                    <li>Reduces heart disease risk</li>
+                    <li>Improves circulation</li>
+                    <li>Boosts energy and mood</li>
+                    <li>Strengthens the heart and blood vessels</li>
+                    <li>Supports healthy cholesterol levels</li>
+                    <li>Promotes better sleep</li>
+                </ul>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-lg">
+                <h2 class="text-xl mb-4 text-center">Exercise Tips</h2>
+                <ul class="list-disc list-inside text-sm">
+                    <li>Start slowly and gradually increase intensity</li>
+                    <li>Monitor your blood pressure regularly</li>
+                    <li>Stay hydrated during workouts</li>
+                    <li>Wear comfortable, supportive shoes</li>
+                    <li>Include a mix of cardio and strength training</li>
+                    <li>Warm up before and cool down after exercise</li>
+                    <li>Listen to your body and rest when needed</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <div class="floating-tip" id="floatingTip"></div>
+
+    {% block navbar %}
+    {% endblock navbar %}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainVideoFrame = document.getElementById('mainVideoFrame');
+            const videoThumbnails = document.getElementById('videoThumbnails');
+            const thumbnails = document.querySelectorAll('.video-thumbnail');
+
+            let mainVideoId = 'CQ57B9NKHeo';
+            let mainVideoTitle = 'Exercises for Managing Blood Pressure';
+
+            function swapVideo(clickedThumbnail) {
+                const clickedVideoId = clickedThumbnail.getAttribute('data-video-id');
+                const clickedVideoTitle = clickedThumbnail.querySelector('p').textContent;
+
+                // Update main video
+                mainVideoFrame.src = `https://www.youtube.com/embed/${clickedVideoId}`;
+
+                // Create new thumbnail for the video that was in the main player
+                const newThumbnail = document.createElement('div');
+                newThumbnail.className = 'video-thumbnail';
+                newThumbnail.setAttribute('data-video-id', mainVideoId);
+                newThumbnail.innerHTML = `
+                    <img src="https://img.youtube.com/vi/${mainVideoId}/0.jpg" alt="${mainVideoTitle}" class="w-full h-auto">
+                    <p class="text-center mt-2">${mainVideoTitle}</p>
+                `;
+                newThumbnail.addEventListener('click', () => swapVideo(newThumbnail));
+
+                // Replace clicked thumbnail with the new one
+                videoThumbnails.replaceChild(newThumbnail, clickedThumbnail);
+
+                // Update main video info
+                mainVideoId = clickedVideoId;
+                mainVideoTitle = clickedVideoTitle;
+            }
+
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => swapVideo(thumbnail));
+            });
+        });
+
+        const timer = document.getElementById('timer');
+        const startTimerBtn = document.getElementById('startTimer');
+        const stopTimerBtn = document.getElementById('stopTimer');
+        const resetTimerBtn = document.getElementById('resetTimer');
+        const progressBar = document.getElementById('exerciseProgress');
+        const floatingTip = document.getElementById('floatingTip');
+        const motivationalQuote = document.getElementById('motivationalQuote');
+        
+        const workoutLog = document.getElementById('workoutLog');
+        const achievementsList = document.getElementById('achievementsList');
+        const exerciseAnimation = document.getElementById('exerciseAnimation');
+        const dailyChallenge = document.getElementById('dailyChallenge');
+        const startChallengeBtn = document.getElementById('startChallenge');
+        const restartChallengeBtn = document.getElementById('restartChallenge');
+        const streakDays = document.querySelectorAll('.streak-day');
+
+        // Exercise timer functionality
+        let intervalId;
+        let seconds = 0;
+
+        startTimerBtn.addEventListener('click', function() {
+            if (!intervalId) {
+                intervalId = setInterval(updateTimer, 1000);
+            }
+        });
+
+        stopTimerBtn.addEventListener('click', function() {
+            clearInterval(intervalId);
+            intervalId = null;
+        });
+
+        resetTimerBtn.addEventListener('click', function() {
+            clearInterval(intervalId);
+            intervalId = null;
+            seconds = 0;
+            timer.textContent = '00:00';
+            progressBar.style.width = '0%';
+        });
+
+        function updateTimer() {
+            seconds++;
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            timer.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            
+            // Update progress bar (assuming 30 minutes is 100%)
+            const progress = (seconds / 1800) * 100;
+            progressBar.style.width = `${Math.min(progress, 100)}%`;
+
+            checkAchievements(seconds);
+        }
+
+        function logWorkout(duration) {
+            const minutes = Math.floor(duration / 60);
+            const entry = document.createElement('li');
+            entry.textContent = `Exercised for ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+            workoutLog.appendChild(entry);
+        }
+
+        function checkAchievements(seconds) {
+            const achievements = [
+                { time: 300, name: "5 Minute Milestone", icon: "🏅" },
+                { time: 600, name: "10 Minute Warrior", icon: "🎖️" },
+                { time: 1800, name: "30 Minute Champion", icon: "🏆" }
+            ];
+
+            achievements.forEach(achievement => {
+                if (seconds === achievement.time) {
+                    const achievementElement = document.createElement('div');
+                    achievementElement.className = 'achievement';
+                    achievementElement.innerHTML = `
+                        <span class="achievement-icon">${achievement.icon}</span>
+                        <span>${achievement.name}</span>
+                    `;
+                    achievementsList.appendChild(achievementElement);
+                }
+            });
+        }
+
+        // Floating exercise tip functionality
+        const tips = [
+            "Remember to stay hydrated during your workout!",
+            "Focus on your breathing to maximize oxygen intake.",
+            "Listen to your body and take breaks when needed.",
+            "Consistency is key - aim for regular exercise sessions.",
+            "Don't forget to warm up before and cool down after your workout.",
+            "Stretch regularly for flexibility.",
+            "Fuel your body with nutritious foods."
+        ];
+
+        function showRandomTip() {
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            floatingTip.textContent = randomTip;
+            floatingTip.style.display = 'block';
+            setTimeout(() => {
+                floatingTip.style.display = 'none';
+            }, 5000);
+        }
+
+        setInterval(showRandomTip, 30000);
+
+        // Motivational quotes
+        const quotes = [
+            "The only bad workout is the one that didn't happen.",
+            "Your health is an investment, not an expense.",
+            "Take care of your body. It's the only place you have to live.",
+            "The difference between try and triumph is a little umph.",
+            "Strive for progress, not perfection."
+        ];
+
+        function setRandomQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            motivationalQuote.textContent = `${randomQuote}`;
+        }
+
+        setRandomQuote();
+        setInterval(setRandomQuote, 24 * 60 * 60 * 1000); // Change quote daily
+
+        // Exercise animation
+        const exerciseGifs = [
+            "https://media.giphy.com/media/3o7TKwmnDgQb5jemjK/giphy.gif",
+            "https://media.giphy.com/media/l3q2Q3sUEkEyDvfPO/giphy.gif",
+            "https://media.giphy.com/media/l0HlTy9x8FZo0XO1i/giphy.gif",
+            "https://media.giphy.com/media/3oKIPavRPgJYaNI97W/giphy.gif"
+        ];
+
+        function changeExerciseAnimation() {
+            const randomGif = exerciseGifs[Math.floor(Math.random() * exerciseGifs.length)];
+            exerciseAnimation.src = randomGif;
+        }
+
+        setInterval(changeExerciseAnimation, 10000); // Change animation every 10 seconds
+
+        // Daily challenge
+        const challenges = [
+            "Do 20 jumping jacks",
+            "Walk for 15 minutes",
+            "Stretch for 10 minutes",
+            "Do 10 push-ups",
+            "Climb stairs for 5 minutes",
+            "Do 5 pull-ups",
+            "Do 15 squats"
+        ];
+
+        function setDailyChallenge() {
+            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            dailyChallenge.textContent = randomChallenge;
+        }
+
+        startChallengeBtn.addEventListener('click', () => {
+            setDailyChallenge();
+            streakCount = Math.min(streakCount + 1, streakDays.length);
+            updateStreakTracker();
+        });
+
+        restartChallengeBtn.addEventListener('click', () => {
+            setDailyChallenge();
+            streakCount = 0; // Reset the streak count
+            updateStreakTracker();
+        });
+        
+        let streakCount = 0;
+
+        function updateStreakTracker() {
+            streakDays.forEach((day, index) => {
+                if (index < streakCount) {
+                    day.classList.add('completed');
+                } else {
+                    day.classList.remove('completed');
+                }
+            });
+        }
+    </script>
+</body>
+
+{% block footer %}
+{% endblock footer %}
+
+</html>
+{% endblock basepage %}

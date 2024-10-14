@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>stage1 hypertension_breakfast</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Breakfast</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Breakfast 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Oats Idli</h2>
+                    <p>Steamed cakes made from oats and lentils
+                        Low in sodium, high in fiber for heart health
+                        Serve with sambar (lentil soup) made with less salt</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1breakfast1.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Ragi Dosa</h2>
+                    <p>Thin pancakes made from finger millet (ragi) flour
+                        Rich in calcium and potassium, beneficial for blood pressure
+                        Pair with tomato chutney prepared with minimal salt</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1breakfast2.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Vegetable Poha</h2>
+                    <p>Flattened rice cooked with vegetables and minimal spices
+                        Low-fat, easy to digest, and rich in B vitamins
+                        Add roasted peanuts for healthy fats and protein</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1breakfast3.jpeg' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+
+</body>
+
+{% endblock basepage %}

@@ -1,0 +1,25 @@
+@keyframes moveRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(10px); }
+  }
+  
+  .nav-container {
+    overflow: hidden;
+    padding-right: 10px;
+  }
+  
+  .nav-link {
+    display: inline-block;
+    position: relative;
+    padding-right: 20px;
+  }
+  
+  .animate-right {
+    animation: moveRight 5s infinite ease-in-out;
+  }
+  
+  /* Existing hover effect */
+  .hover-olive:hover {
+    color: #808000;
+    text-shadow: 0 0 10px #808000;
+  }

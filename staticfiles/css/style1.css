@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+body {
+  font-family: 'Courier Prime', monospace;
+  background-color: #000000;
+  color: #ffffff;
+  font-size: 18px; /* Adjust this value as needed */
+}
+
+.hover-olive:hover {
+  color: #808000;
+  text-shadow: 0 0 10px #808000;
+}
+
+.bg-olive:hover {
+  background-color: #808000;
+  box-shadow: 0 0 15px #808000;
+}
+
+/* Image styles */
+.image-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: -2px;
+}
+
+.image-row img {
+  width: 300px;
+  height: 300px;
+  transition: transform 0.3s ease;
+  border-radius: 0; /* Ensure corners are not rounded */
+  border: 2px solid #ffffff;
+}
+
+.image-row img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #808000;
+  z-index: 10;
+}
+
+.image-text {
+  width: 300px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  border: 2px solid #808000;
+}
+
+.image-row:hover .image-text {
+  opacity: 1;
+}
+
+.image-container {
+  margin-bottom: 0;
+}
+
+/* Floating animation for specific elements */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Typewriter effect */
+.typewriter h1, .typewriter p {
+  overflow: hidden;
+  border-right: .15em solid #808000;
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: .15em;
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #808000; }
+}
+
+/* Parallax background */
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 200px;
+}
+
+.social-icon {
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.2) rotate(15deg);
+}
+
+/* Button hover effect */
+.button-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.button-effect::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #808000; /* Olive green */
+  transition: width 0.3s ease;
+}
+
+.button-effect:hover::after {
+  width: 100%;
+}
+
+/* Input Styles */
+.custom-input {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 0;
+  width: 100%;
+  font-family: monospace;
+}
+
+.custom-input:focus {
+  outline: none;
+  border-color: #808000; /* Olive green focus */
+  box-shadow: 0 0 5px #808000;
+}
+
+/* Label Styles */
+.custom-label {
+  color: white;
+  font-family: monospace;
+  margin-bottom: 6px;
+}
+

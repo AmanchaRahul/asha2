@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>type2_dinner</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    <a href="{% url 'diabetesdietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Dinner</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Dinner 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Tandoori Chicken or Paneer</h2>
+                    <p>Marinated chicken or paneer cooked in a tandoor or oven, served with a side of cucumber salad. This dish is high in protein and low in carbohydrates</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/d3dinner1.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Baingan Bharta</h2>
+                    <p>Roasted eggplant mashed and cooked with tomatoes, onions, and spices. Serve it with whole wheat roti for a nutritious meal that’s low in glycemic index</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/d3dinner2.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Quinoa Vegetable Pulao</h2>
+                    <p>A flavorful pulao made with quinoa, mixed vegetables, and spices. This dish is rich in protein and fiber while being low in carbohydrates compared to traditional rice pulao</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/d3dinner3.gif' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+
+    {% block footer %}
+    {% endblock footer %}
+</body>
+{% endblock basepage %}

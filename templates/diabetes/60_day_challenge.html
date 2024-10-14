@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block basepage %}
+<body class="flex flex-col min-h-screen">
+    <a href="{% url 'diabeteschallenge' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <h1 class="text-4xl mb-8 text-center">60-Day Diabetes Challenge</h1>
+        <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for day in days %}
+            <div class="bg-gray-800 p-4 rounded-lg">
+                <h3 class="text-xl mb-2">Day {{ day }}</h3>
+                <div class="aspect-w-1 aspect-h-1 bg-gray-700 mb-2">
+                    {% if day in images %}
+                        <img src="{{ images|get_item:day }}" alt="Day {{ day }} Image" class="object-cover w-full h-full">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600">
+                        Day {{ day }} pic
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="flex justify-between">
+                    {% if day not in images %}
+                        <input type="file" id="file-{{ day }}" class="hidden" accept="image/*">
+                        <button onclick="document.getElementById('file-{{ day }}').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-sm">Upload</button>
+                    {% else %}
+                        <input type="file" id="file-{{ day }}" class="hidden" accept="image/*">
+                        <button onclick="document.getElementById('file-{{ day }}').click()" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-sm">Re-upload</button>
+                        <button onclick="deleteImage({{ day }})" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-sm">Delete</button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mt-8 text-center">
+            <a href="{% url 'diabetes_first_last_images' duration=60 %}" 
+               class="bg-black border border-white text-white px-6 py-3 inline-block text-lg transition duration-300 ease-in-out hover:bg-olive-600 hover:text-white">
+                Compare First and Last Day
+            </a>
+        </div>
+    </main>
+
+    <style>
+        body {
+            background-color: #000000;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .hover\:bg-olive-600:hover {
+            background-color: #808000 !important;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        for (let day = 1; day <= 60; day++) {
+            const fileInput = document.getElementById(`file-${day}`);
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const formData = new FormData();
+                        formData.append('image', file);
+
+                        fetch(`/diabetes60/upload/${day}/`, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRFToken': csrftoken
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                location.reload();
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
+        function deleteImage(day) {
+            fetch(`/diabetes60/delete/${day}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+</body>
+
+{% block navbar %}
+{% endblock navbar %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% endblock basepage %}

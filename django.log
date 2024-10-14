@@ -1,0 +1,104 @@
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 4943
+"GET / HTTP/1.1" 200 4943
+Not Found: /static/images/diabetes/d3.jpeg
+Not Found: /static/images/bloodpressure/bloodpressure1.jpeg
+Not Found: /static/images/diabetes/d3.jpeg
+Not Found: /static/images/bloodpressure/bloodpressure1.jpeg
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 404 179
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 404 179
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 404 179
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 404 179
+Not Found: /static/images/skincare/skincare1.jpeg
+Not Found: /static/js/navscript.js
+Not Found: /static/images/skincare/skincare1.jpeg
+Not Found: /static/js/navscript.js
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 404 179
+"GET /static/js/navscript.js HTTP/1.1" 404 179
+"GET /static/js/navscript.js HTTP/1.1" 404 179
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 404 179
+Not Found: /static/images/greenbackground.jpg
+Not Found: /static/images/greenbackground.jpg
+"GET /static/images/greenbackground.jpg HTTP/1.1" 404 179
+"GET /static/images/greenbackground.jpg HTTP/1.1" 404 179
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 179
+"GET /favicon.ico HTTP/1.1" 404 179
+D:\django\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 4943
+"GET / HTTP/1.1" 200 4943
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 200 74649
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 200 74649
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 200 102042
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 200 102042
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 200 74398
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 200 74398
+"GET /static/js/navscript.js HTTP/1.1" 200 1750
+"GET /static/js/navscript.js HTTP/1.1" 200 1750
+"GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894
+"GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894
+"GET /login/ HTTP/1.1" 200 4348
+"GET /login/ HTTP/1.1" 200 4348
+"GET / HTTP/1.1" 200 4943
+"GET / HTTP/1.1" 200 4943
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\wsgi.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\wsgi.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 4943
+"GET / HTTP/1.1" 200 4943
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 200 74649
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 200 74649
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 200 102042
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 200 102042
+"GET /static/js/navscript.js HTTP/1.1" 200 1693
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 200 74398
+"GET /static/js/navscript.js HTTP/1.1" 200 1693
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 200 74398
+"GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894
+"GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894

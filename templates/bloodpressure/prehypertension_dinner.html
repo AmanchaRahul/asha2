@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>prehypertension_dinner</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Dinner</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Dinner 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Baked Fish with Vegetable Upma</h2>
+                    <p>Fish seasoned with herbs and lemon, then baked
+                        Rich in omega-3 fatty acids, beneficial for heart health
+                        Serve with vegetable upma made from semolina and mixed vegetables</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/bdinner1.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Lentil and Vegetable Soup with Multigrain Roti</h2>
+                    <p>Hearty soup packed with lentils and assorted vegetables
+                        High in fiber and plant-based proteins
+                        Pair with one small multigrain roti and a side of roasted pumpkin seeds</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/bdinner2.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Tandoori Chicken with Quinoa Biryani</h2>
+                    <p>Chicken marinated in yogurt and spices, then grilled
+                        Lean protein source with flavorful spices instead of excess salt
+                        Serve with quinoa biryani cooked with vegetables and mild spices</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/bdinner3.jpeg' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+</body>
+
+{% endblock basepage %}

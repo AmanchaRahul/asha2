@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Skincare Diet</title>
+{% endblock title %}
+
+{% block basepage %}
+
+<div class="flex flex-col min-h-screen">
+    <!-- Navbar (from base.html) will be included here automatically -->
+    
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <main class="flex-grow p-4">
+        <h1 class="text-4xl mb-8 text-center">Skincare Diet</h1>
+
+        <!-- Image-Text Pairs -->
+        <div class="space-y-8 mb-12">
+            <!-- Hydration Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/skincare/hydration.jpeg' %}" alt="Hydration for skin" class="w-1/4 h-auto">
+                <p class="w-3/4">Hydration<br>
+                    Drink plenty of water and consume water-rich foods<br>
+                    Helps maintain skin elasticity and flush out toxins<br>
+                    Aim for 8-10 glasses of water per day</p>
+            </div>
+        
+            <!-- Antioxidants Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/skincare/antioxidant.jpeg' %}" alt="Antioxidant-rich foods" class="w-1/4 h-auto">
+                <p class="w-3/4">Antioxidants<br>
+                    Consume foods rich in vitamins A, C, and E<br>
+                    Protects skin from free radical damage<br>
+                    Include berries, leafy greens, and nuts in your diet</p>
+            </div>
+        
+            <!-- Healthy Fats Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/skincare/healthyfats.jpeg' %}" alt="Healthy fats for skin" class="w-1/4 h-auto">
+                <p class="w-3/4">Healthy Fats<br>
+                    Incorporate omega-3 and omega-6 fatty acids<br>
+                    Supports skin hydration and reduces inflammation<br>
+                    Sources include fatty fish, avocados, and walnuts</p>
+            </div>
+        </div>
+        
+
+        <!-- Skincare Diet Categories Section -->
+        <div class="flex flex-col items-center p-4">
+            <div class="mb-2 w-full max-w-4xl">
+                <h2 class="text-xl mb-3 text-center">Choose Your Skincare Goal:</h2>
+                <div class="flex justify-center space-x-2 mb-3">
+                    <button class="hover-olive border border-white px-3 py-1.5" id="hydration">Hydration</button>
+                    <button class="hover-olive border border-white px-3 py-1.5" id="antiAging">Anti-Aging</button>
+                    <button class="hover-olive border border-white px-3 py-1.5" id="acnePrevention">Acne Prevention</button>
+                </div>
+
+                <!-- Skincare Diet Recommendations -->
+                <div id="dietRecommendations" class="hidden mt-4">
+                    <h3 class="text-lg mb-3 text-center" id="goalTitle"></h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-bold mb-2 text-center">Fruits & Vegetables</h4>
+                            <ul id="fruitsVeggiesList" class="flex justify-center space-x-4"></ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2 text-center">Proteins</h4>
+                            <ul id="proteinsList" class="flex justify-center space-x-4"></ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2 text-center">Healthy Fats</h4>
+                            <ul id="healthyFatsList" class="flex justify-center space-x-4"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+{% block navbar %}
+
+{% endblock navbar %}
+<script>
+    (function() {
+        const recommendations = {
+            hydration: {
+                title: "Foods for Hydration",
+                fruitsVeggies: [
+                    { name: "Cucumber", image: "{% static 'images/skincare/cucumber.gif' %}" },
+                    { name: "Watermelon", image: "{% static 'images/skincare/watermelon.gif' %}" },
+                    { name: "Strawberries", image: "{% static 'images/skincare/strawberry.gif' %}" }
+                ],
+                proteins: [
+                    { name: "Greek Yogurt", image: "{% static 'images/skincare/yogurt.gif' %}" },
+                    { name: "Chicken Breast", image: "{% static 'images/skincare/chickenbreast.gif' %}" }
+                ],
+                healthyFats: [
+                    { name: "Avocado", image: "{% static 'images/skincare/avacado.gif' %}" },
+                    { name: "Chia Seeds", image: "{% static 'images/skincare/chiaseeds.gif' %}" }
+                ]
+            },
+            antiAging: {
+                title: "Anti-Aging Foods",
+                fruitsVeggies: [
+                    { name: "Blueberries", image: "{% static 'images/skincare/blueberry.gif' %}" },
+                    { name: "Spinach", image: "{% static 'images/skincare/spinach.gif' %}" },
+                    { name: "Sweet Potatoes", image: "{% static 'images/skincare/sweetpotato.gif' %}" }
+                ],
+                proteins: [
+                    { name: "Salmon", image: "{% static 'images/skincare/salmon.gif' %}" },
+                    { name: "Eggs", image: "{% static 'images/skincare/eggs.gif' %}" }
+                ],
+                healthyFats: [
+                    { name: "Walnuts", image: "{% static 'images/skincare/wallnut.gif' %}" },
+                    { name: "Olive Oil", image: "{% static 'images/skincare/oliveoil.gif' %}" }
+                ]
+            },
+            acnePrevention: {
+                title: "Acne Prevention Foods",
+                fruitsVeggies: [
+                    { name: "Tomatoes", image: "{% static 'images/skincare/tomato.gif' %}" },
+                    { name: "Kale", image: "{% static 'images/skincare/kale.gif' %}" },
+                    { name: "Red Grapes", image: "{% static 'images/skincare/redgrape.gif' %}" }
+                ],
+                proteins: [
+                    { name: "Lentils", image: "{% static 'images/skincare/lentils.gif' %}" },
+                    { name: "Turkey", image: "{% static 'images/skincare/turkey.gif' %}" }
+                ],
+                healthyFats: [
+                    { name: "Almonds", image: "{% static 'images/skincare/almonds.gif' %}" },
+                    { name: "Flaxseeds", image: "{% static 'images/skincare/flexseeds.gif' %}" }
+                ]
+            }
+        };
+
+        function createFoodItem(food) {
+            return `<li class="flex flex-col items-center">
+                <img src="${food.image}" alt="${food.name}" class="w-24 h-24 mb-2 rounded-none">
+                <span class="text-center">${food.name}</span>
+            </li>`;
+        }
+
+        function updateRecommendations(goal) {
+            const data = recommendations[goal];
+            document.getElementById('goalTitle').textContent = data.title;
+            document.getElementById('fruitsVeggiesList').innerHTML = data.fruitsVeggies.map(createFoodItem).join('');
+            document.getElementById('proteinsList').innerHTML = data.proteins.map(createFoodItem).join('');
+            document.getElementById('healthyFatsList').innerHTML = data.healthyFats.map(createFoodItem).join('');
+            document.getElementById('dietRecommendations').classList.remove('hidden');
+        }
+
+        document.querySelectorAll('#hydration, #antiAging, #acnePrevention').forEach(button => {
+            button.addEventListener('click', () => {
+                updateRecommendations(button.id);
+            });
+        });
+    })();
+</script>
+
+{% block footer %}
+
+{% endblock footer %}
+
+{% endblock basepage %}

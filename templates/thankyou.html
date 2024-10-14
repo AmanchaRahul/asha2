@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block basepage %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - For Better Tomorrow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .hover-olive:hover {
+            color: #808000;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <h1 class="text-4xl mb-8 text-center">Thank You</h1>
+        <p class="text-xl text-center mb-8">Your message has been sent successfully. We'll get back to you soon.</p>
+        <a href="{% url 'wellnessdata' %}" class="hover-olive border border-white px-4 py-2 inline-block">Back</a>
+    </main>
+</body>
+</html>
+{% endblock basepage %}

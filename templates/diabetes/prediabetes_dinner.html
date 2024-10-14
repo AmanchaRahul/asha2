@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>prediabetes_dinner</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+     <!-- Back Button on the left -->
+     <a href="{% url 'diabetesdietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Dinner</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- dinner 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Palak Paneer with Whole Wheat Roti</h2>
+                    <p>A nutritious dish made with spinach (palak) and cottage cheese (paneer), cooked with spices. Serve it with 1-2 whole wheat rotis for a balanced meal rich in fiber and protein</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/ddinner1.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- dinner 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Brown Rice Khichdi</h2>
+                    <p>A comforting one-pot dish made with brown rice, moong dal (yellow lentils), and mixed vegetables, seasoned with turmeric and cumin. This meal is high in fiber and low in glycemic index, making it ideal for blood sugar management</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/ddinner2.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- dinner 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Vegetable Stir-Fry with Quinoa</h2>
+                    <p>A colorful stir-fry of non-starchy vegetables like bell peppers, broccoli, and carrots, tossed in minimal oil and served over a bed of quinoa. This dish is packed with nutrients and provides a good source of protein and fiber</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/ddinner3.jpg' %}');">
+                </div>
+            </div>
+        </div> 
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+
+
+    {% block footer %}
+    {% endblock footer %}
+</body>
+{% endblock basepage %}

@@ -1,0 +1,20 @@
+.back-button {
+    position: fixed;
+    top: 45px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 0; /* Remove any padding */
+    border-radius: 50%; /* Keep it circular */
+    overflow: hidden; /* Hide any overflow */
+}
+
+.back-button img {
+    width: 40px; /* Set the width to match the button size */
+    height: 40px; /* Set the height to match the button size */
+    display: block; /* Removes any extra space below the image */
+    cursor: pointer;
+}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>about</title>
+{% endblock title %}
+
+{% block basepage %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+    body {
+        font-family: 'Courier Prime', monospace;
+        background-color: #000000;
+        color: #ffffff;
+    }
+
+    .hover-olive:hover {
+        color: #808000;
+    }
+
+    .focus-areas-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding-left: 100px;
+    }
+
+    .focus-areas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 0;
+        width: 600px;
+        height: 400px;
+    }
+
+    .focus-box {
+        border: 2px solid;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .focus-box:hover {
+        transform: scale(1.05);
+        z-index: 10;
+    }
+
+    .focus-box:nth-child(1) {
+        border-color: #0000FF;
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+
+    .focus-box:nth-child(2) {
+        border-color: #FF0000;
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+    }
+
+    .focus-box:nth-child(3) {
+        border-color: #FFC0CB;
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+    }
+
+    .focus-box:nth-child(4) {
+        border-color: #808000;
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+    }
+</style>
+
+<main class="flex-grow flex flex-col items-start justify-center mt-20">
+    <div class="flex flex-col md:flex-row w-full max-w-6xl mx-auto">
+        <div class="md:w-1/2 mb-8 md:mb-0">
+            <img src="{% static 'images/combo1.jpeg' %}" alt="About Us" class="w-full h-auto object-cover">
+        </div>
+        <div class="md:w-1/2 md:pl-8">
+            <h2 class="text-2xl mb-4">About Asha</h2>
+            <p class="mb-4">
+                We provide comprehensive healthcare solutions. Our mission is to empower individuals with the
+                knowledge and tools they need to lead healthier lives. We focus on diabetes management, blood
+                pressure control, and skincare. Our dedicated team offers personalized care plans tailored to your
+                unique needs, integrating the latest medical advancements with holistic approaches. By fostering a
+                supportive environment and encouraging proactive health practices, we aim to improve overall
+                well-being and enhance the quality of life for all our clients. Join us on this journey towards better
+                health and discover a new path to vitality and wellness.
+            </p>
+            <a href="{% url 'contactdata' %}">
+                <button class="px-6 py-2 border-2 border-white hover:bg-[#808000] hover:text-black transition-colors duration-300">
+                    Get in touch
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <div class="w-full max-w-6xl mx-auto mt-12 flex flex-col items-center">
+        <div class="flex justify-center">
+            <h3 class="text-xl mb-4 self-start pl-4">Our focus areas</h3>
+        </div>
+        <div class="focus-areas-container">
+            <div class="focus-areas">
+                <div class="focus-box">
+                    <h4 class="text-lg mb-2">Diabetes Information</h4>
+                    <p>Comprehensive resources for managing diabetes effectively.</p>
+                </div>
+                <div class="focus-box">
+                    <h4 class="text-lg mb-2">Blood Pressure Information</h4>
+                    <p>Strategies for maintaining healthy blood pressure levels.</p>
+                </div>
+                <div class="focus-box">
+                    <h4 class="text-lg mb-2">Skincare Information</h4>
+                    <p>Tips and products for achieving radiant, healthy skin.</p>
+                </div>
+                <div class="focus-box">
+                    <h4 class="text-lg mb-2">Wellness Resources</h4>
+                    <p>General wellness advice for a healthier lifestyle.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock basepage %}
+
+

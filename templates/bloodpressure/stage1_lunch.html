@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>stage1 hypertension_lunch</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Lunch</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Lunch 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Sprouted Moong Salad</h2>
+                    <p>Protein-rich sprouted green gram with chopped vegetables
+                        High in potassium and magnesium, important for blood pressure control
+                        Dress with lemon juice and a pinch of cumin powder instead of salt</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1lunch1.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Lunch 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Rajma Masala with Brown Rice</h2>
+                    <p>Kidney beans curry made with low-sodium tomato base
+                        Rich in fiber and plant-based protein
+                        Serve with a small portion of brown rice and cucumber raita</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1lunch2.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Lunch 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Lauki (Bottle Gourd) Kofta Curry</h2>
+                    <p>Steamed bottle gourd dumplings in a yogurt-based gravy
+                        Low in calories, high in water content, good for hydration
+                        Accompany with one small whole wheat roti and salad</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1lunch3.jpg' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+
+</body>
+
+{% endblock basepage %}

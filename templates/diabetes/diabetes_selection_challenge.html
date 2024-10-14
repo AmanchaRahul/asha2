@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block basepage %}
+
+<body class="flex flex-col min-h-screen">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <h1 class="text-4xl mb-8 text-center">Diabetes Challenge</h1>
+        <div class="w-full max-w-md space-y-6">
+            <h2 class="text-2xl mb-4 text-center">Choose Your Challenge</h2>
+            <div class="flex flex-col items-center space-y-4 w-full max-w-md mx-auto">
+                <a href="{% url 'thirty_day_challenge' %}" class="w-full bg-olive hover:bg-olive-dark text-white font-bold py-2 px-4 rounded transition duration-300 text-center">
+                    30 Days Challenge
+                </a>
+                <a href="{% url 'sixty_day_challenge' %}" class="w-full bg-olive hover:bg-olive-dark text-white font-bold py-2 px-4 rounded transition duration-300 text-center">
+                    60 Days Challenge
+                </a>
+                <a href="{% url 'ninety_day_challenge' %}" class="w-full bg-olive hover:bg-olive-dark text-white font-bold py-2 px-4 rounded transition duration-300 text-center">
+                    90 Days Challenge
+                </a>
+            </div>
+        </div>
+        
+    </main>
+</body>
+{% block navbar %}
+
+{% endblock navbar %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% endblock basepage %}

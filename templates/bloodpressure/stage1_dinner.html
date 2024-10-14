@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>stage1 hypertension_dinner</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Dinner</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Dinner 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Baked Methi Matar Paneer</h2>
+                    <p>Cottage cheese with fenugreek leaves and green peas, baked instead of fried
+                        Rich in calcium and vitamin K, beneficial for heart health
+                        Serve with a small portion of quinoa pulao made with low-sodium vegetable stock</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1dinner1.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Grilled Fish with Mint-Coriander Chutney</h2>
+                    <p>Fish marinated in yogurt and spices, then grilled
+                        High in omega-3 fatty acids, good for heart health
+                        Pair with steamed vegetables and a small serving of millet</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1dinner2.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Mixed Vegetable Daliya</h2>
+                    <p>Broken wheat cooked with assorted vegetables
+                        High in fiber and B vitamins, helps in managing blood pressure
+                        Add a side of roasted chickpeas for extra protein and fiber</p>
+                </div>
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b1dinner3.jpg' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+</body>
+
+{% endblock basepage %}

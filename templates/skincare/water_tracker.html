@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block basepage %}
+<div class="min-h-screen bg-black text-white font-mono p-8 relative">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto mt-16">
+        <h2 class="text-3xl text-center mb-8">Water Intake Tracker</h2>
+
+        <div class="text-center mb-4">
+            <h3 class="text-xl">Total Water Intake Today: {{ total_liters }} Liters</h3>
+            <h4 class="text-lg">Goal: {{ goal_liters }} Liters</h4>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="bg-green-600 text-white p-4 rounded mb-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" action="{% url 'water_intake_tracker' %}">
+            {% csrf_token %}
+            <div class="flex justify-center mb-4">
+                <input type="hidden" name="amount" value="0.25">
+                <button type="submit" class="bg-black border border-white text-white px-4 py-2 rounded transition duration-300 ease-in-out hover:bg-olive-600">Add 0.25 Liters</button>
+            </div>
+        </form>
+        <form method="POST" action="{% url 'water_intake_tracker' %}">
+            {% csrf_token %}
+            <div class="flex justify-center mb-4">
+                <input type="hidden" name="amount" value="0.5">
+                <button type="submit" class="bg-black border border-white text-white px-4 py-2 rounded transition duration-300 ease-in-out hover:bg-olive-600">Add 0.5 Liters</button>
+            </div>
+        </form>
+        <form method="POST" action="{% url 'water_intake_tracker' %}">
+            {% csrf_token %}
+            <div class="flex justify-center mb-4">
+                <input type="hidden" name="amount" value="1">
+                <button type="submit" class="bg-black border border-white text-white px-4 py-2 rounded transition duration-300 ease-in-out hover:bg-olive-600">Add 1 Liter</button>
+            </div>
+        </form>
+
+        <form method="POST" action="{% url 'reset_water_intake' %}">
+            {% csrf_token %}
+            <div class="flex justify-center mb-4">
+                <button type="submit" class="bg-red-600 border border-white text-white px-4 py-2 rounded transition duration-300 ease-in-out hover:bg-red-500">Reset All Intake</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #000000;
+        font-family: 'Courier Prime', monospace;
+    }
+    
+    .hover\:bg-olive-600:hover {
+        background-color: #808000 !important;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style>
+{% block navbar %}
+
+{% endblock navbar %}
+
+{% block footer %}
+
+{% endblock footer %}
+
+{% endblock basepage %}

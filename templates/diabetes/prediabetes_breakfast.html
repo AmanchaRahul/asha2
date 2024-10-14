@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>prediabetes_breakfast</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+     <!-- Back Button on the left -->
+     <a href="{% url 'diabetesdietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Breakfast</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Breakfast 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Overnight oats with berries and nuts</h2>
+                    <p>A fiber-rich breakfast that combines rolled oats, almond milk, Greek yogurt, chia seeds, mixed berries, and chopped nuts for a satisfying and nutritious start to the day</p>
+                </div>
+
+              <!-- <div class="mt-2">
+                    <label for="language-1" class="mr-2 text-white">Select Language:</label>
+                    <select id="language-1" class="text-black">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        
+                    </select>
+                    <button class="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded" onclick="playSpeech('desc-1', 'language-1')">
+                        🔊
+                    </button>
+                <div> --> 
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/dbreakfast.gif' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Avocado toast with egg</h2>
+                    <p>A simple yet delicious breakfast featuring whole grain toast topped with mashed avocado, a hard-boiled egg, olive oil, and seasoned with salt and pepper, providing a balance of healthy fats, protein, and complex carbohydrates</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/dbreakfast2.gif' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Greek yogurt parfait with granola and fruit</h2>
+                    <p>A layered breakfast parfait made with plain Greek yogurt, mixed berries, low-sugar granola, and sliced almonds, offering a tasty and nutrient-dense way to begin the day</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/dbreakfast3.gif' %}');">
+                </div>
+            </div>
+        </div>
+        
+    </div>
+        {% block navbar %}
+
+        {% endblock navbar %}
+    
+    <!--   <script>
+
+        function playSpeech(descId, langSelectId) {
+            // Get the description text
+            const description = document.getElementById(descId).innerText;
+        
+            // Get the selected language
+            const selectedLang = document.getElementById(langSelectId).value;
+        
+            // Use Web Speech API for basic speech synthesis
+            const utterance = new SpeechSynthesisUtterance(description);
+        
+            // Set the language based on the selected language
+            switch (selectedLang) {
+                case 'en':
+                    utterance.lang = 'en-US';
+                    break;
+                case 'es':
+                    utterance.lang = 'es-ES';
+                    break;
+                case 'fr':
+                    utterance.lang = 'fr-FR';
+                    break;
+                case 'de':
+                    utterance.lang = 'de-DE';
+                    break;
+                default:
+                    utterance.lang = 'en-US'; // Fallback to English if no valid selection
+                    break;
+            }
+        
+            // Speak the description
+            window.speechSynthesis.speak(utterance);
+        }
+        </script>
+        --> 
+        
+        {% block footer %}
+        {% endblock footer %}
+
+</body>
+{% endblock basepage %}

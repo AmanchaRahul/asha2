@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+<title>bloodpressure_diet</title>
+{% endblock title %}
+
+
+{% block basepage %}
+
+<div class="flex flex-col min-h-screen">
+    <!-- Navbar (from base.html) will be included here automatically -->
+     <!-- Back Button on the left -->
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    
+    <main class="flex-grow p-4">
+        <h1 class="text-4xl mb-8 text-center">Bloodpressure Diet</h1>
+
+        <!-- Image-Text Pairs -->
+        <div class="space-y-8 mb-12">
+            <!-- Pre-diabetes Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/bloodpressure/bloodpressure5.jpeg' %}" alt="pre diabetes" class="w-1/4 h-auto">
+                <p class="w-2/3">Pre-Hypertension (Elevated Blood Pressure)<br>
+                    Systolic blood pressure: 120-129 mmHg<br>
+                    Diastolic blood pressure: less than 80 mmHg<br>
+                    Considered a precursor to hypertension, lifestyle changes are recommended to prevent progression to stage 1 hypertension</p>
+            </div>
+
+            <!-- Type 2 Diabetes Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/bloodpressure/bloodpressure4.jpeg' %}" alt="Type 2 diabetes" class="w-1/4 h-auto">
+                <p class="w-2/3">Stage 1 Hypertension<br>
+                    Systolic blood pressure: 130-139 mmHg<br>
+                    Diastolic blood pressure: 80-89 mmHg<br>
+                    Or either number alone is in this range<br>
+                    Lifestyle changes are recommended, and medication may be prescribed based on risk factors</p>
+            </div>
+
+            <!-- Type 1 Diabetes Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/bloodpressure/bloodpressure3.jpeg' %}" alt="Type 1 diabetes" class="w-1/4 h-auto">
+                <p class="w-2/3">Stage 2 Hypertension<br>
+                    Systolic blood pressure: 140 mmHg or higher<br>
+                    Diastolic blood pressure: 90 mmHg or higher<br>
+                    Or either number alone is in this range<br>
+                    Considered a severe condition requiring prompt treatment with lifestyle changes and medication</p>
+            </div>
+        </div>
+
+        <!-- Diabetes Types Section -->
+        <div class="flex flex-col items-center p-4">
+            <div class="mb-2 w-full max-w-md">
+                <h2 class="text-xl mb-3 text-center">Type of Condition, you have:</h2>
+                <div class="flex justify-center space-x-2 mb-3">
+                    <button class="hover-olive border border-white px-3 py-1.5" id="preDiabetic">Pre hypertension</button>
+                    <button class="hover-olive border border-white px-3 py-1.5" id="type1">Stage 1</button>
+                    <button class="hover-olive border border-white px-3 py-1.5" id="type2">Stage 2</button>
+                </div>
+
+                <!-- Meal Plan Links -->
+                <div id="mealPlan" class="hidden border border-white p-3 w-64 mx-auto">
+                    <h3 class="text-lg mb-1.5 text-center">Meal Plan</h3>
+                    <a id="breakfastLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Breakfast</a>            
+                    <a id="lunchLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Lunch</a> 
+                    <a id="dinnerLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Dinner</a> 
+                </div>
+            </div>
+
+         </div>
+    </main>
+
+</div>
+{% block navbar %}
+
+{% endblock navbar %}
+
+    <script>
+        (function() {
+            const urls = {
+                preDiabetic: {
+                    breakfast: "{% url 'prehypertensionbreakfastdata' %}",
+                    lunch: "{% url 'prehypertensionlunchdata' %}",
+                    dinner: "{% url 'prehypertensiondinnerdata' %}"
+                },
+                type1: {
+                    breakfast: "{% url 'stage1breakfastdata' %}",
+                    lunch: "{% url 'stage1lunchdata' %}",
+                    dinner: "{% url 'stage1dinnerdata' %}"
+                },
+                type2: {
+                    breakfast: "{% url 'stage2breakfastdata' %}",
+                    lunch: "{% url 'stage2lunchdata' %}",
+                    dinner: "{% url 'stage2dinnerdata' %}"
+                }
+            };
+
+            document.querySelectorAll('#preDiabetic, #type1, #type2').forEach(button => {
+                button.addEventListener('click', () => {
+                    const type = button.id;
+                    console.log(`Button clicked: ${type}`);
+                    console.log(`Setting URLs: ${JSON.stringify(urls[type])}`);
+                    
+                    document.getElementById('breakfastLink').href = urls[type].breakfast;
+                    document.getElementById('lunchLink').href = urls[type].lunch;
+                    document.getElementById('dinnerLink').href = urls[type].dinner;
+                    
+                    console.log(`Breakfast link set to: ${document.getElementById('breakfastLink').href}`);
+                    console.log(`Lunch link set to: ${document.getElementById('lunchLink').href}`);
+                    console.log(`Dinner link set to: ${document.getElementById('dinnerLink').href}`);
+                    
+                    document.getElementById('mealPlan').classList.remove('hidden');
+                });
+            });
+        })();
+    </script>
+
+    {% block footer %}
+
+    {% endblock footer %}
+
+{% endblock basepage %}

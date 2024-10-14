@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>prehypertension_breakfast</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Breakfast</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Breakfast 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Multigrain Vegetable Uttapam</h2>
+                    <p>Savory pancakes made with a mix of whole grains and vegetables
+                        Rich in fiber and complex carbohydrates for sustained energy
+                        Serve with a small portion of coconut chutney and sambar (lightly salted)</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/bbreakfast1.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Besan Chilla with Mint Chutney</h2>
+                    <p>Savory pancakes made from chickpea flour (besan)
+                        High in protein and fiber, helps maintain satiety
+                        Pair with homemade mint chutney and a small bowl of yogurt</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/bbreakfast2.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Wheat Bran and Apple Porridge</h2>
+                    <p>Whole wheat porridge cooked with wheat bran and diced apples
+                        High in soluble fiber, which can help lower blood pressure
+                        Top with a handful of unsalted mixed nuts for healthy fats</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/bbreakfast3.jpg' %}');">
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+</body>
+
+{% endblock basepage %}

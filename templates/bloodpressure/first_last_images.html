@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block basepage %}
+<div class="min-h-screen bg-black text-white font-mono p-8">
+   
+    <div class="max-w-6xl mx-auto">
+
+        {% if duration == 30 %}
+        <a href="{% url 'b_thirty_day_challenge' %}" class="back-button">
+            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go to 30-Day Challenge">
+        </a>
+        {% elif duration == 60 %}
+            <a href="{% url 'b_sixty_day_challenge' %}" class="back-button">
+                <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go to 60-Day Challenge">
+            </a>
+        {% elif duration == 90 %}
+            <a href="{% url 'b_ninety_day_challenge' %}" class="back-button">
+                <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go to 90-Day Challenge">
+            </a>
+        {% endif %}
+
+
+        <h2 class="text-3xl text-center mb-8">First and Last Day Comparison for {{ duration }} Day Challenge</h2>
+        
+        <div class="flex flex-col md:flex-row justify-between gap-8">
+            <div class="flex-1 text-center">
+                <h4 class="text-xl mb-4">First Day</h4>
+                {% if first_image %}
+                    <img src="{{ first_image.image.url }}" alt="First Day Image" class="max-h-96 mx-auto mb-4 object-contain">
+                {% else %}
+                    <p class="bg-gray-800 p-4 rounded">No image uploaded for the first day yet.</p>
+                {% endif %}
+            </div>
+            <div class="flex-1 text-center">
+                <h4 class="text-xl mb-4">Last Day</h4>
+                {% if last_image %}
+                    <img src="{{ last_image.image.url }}" alt="Last Day Image" class="max-h-96 mx-auto mb-4 object-contain">
+                {% else %}
+                    <p class="bg-gray-800 p-4 rounded">No image uploaded for the last day yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+       
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #000000;
+        font-family: 'Courier Prime', monospace;
+    }
+    
+    .hover\:bg-olive-600:hover {
+        background-color: #808000;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style>
+
+
+{% block navbar %}
+{% endblock navbar %}
+
+
+{% endblock basepage %}

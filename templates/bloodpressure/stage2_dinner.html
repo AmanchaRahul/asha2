@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>stage2 hypertension_dinner</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+        
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Dinner</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Dinner 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Baked Fish in Banana Leaf</h2>
+                    <p>Fish seasoned with garlic, ginger, and lemon, wrapped and baked in banana leaf
+                        Rich in omega-3 fatty acids, beneficial for heart health
+                        Serve with steamed vegetables and a small portion of millet</p></div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3dinner1.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Tofu and Mixed Vegetable Curry</h2>
+                    <p>Firm tofu and assorted vegetables in a tomato-based curry
+                        High in plant-based protein and various vitamins and minerals
+                        Pair with one small jowar (sorghum) roti and a side of cucumber raita</p></div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3dinner2.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Mushroom and Peas Brown Rice Pulao</h2>
+                    <p>Brown rice cooked with mushrooms, green peas, and mild spices
+                        Mushrooms are a good source of potassium and antioxidants
+                        Serve with a side of roasted pumpkin seeds for extra magnesium</p>
+                </div>
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3dinner3.jpeg' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+</body>
+
+{% endblock basepage %}

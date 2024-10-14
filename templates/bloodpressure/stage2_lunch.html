@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>stage2 hypertension_lunch</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Lunch</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Lunch 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Lobia (Black-eyed Peas) Curry with Cauliflower Rice</h2>
+                    <p>Black-eyed peas curry made with low-sodium tomato base and spices
+                        High in potassium and fiber, helps in blood pressure regulation
+                        Serve over cauliflower 'rice' for a low-carb, low-sodium alternative</p></div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3lunch1.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Lunch 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Masoor Dal and Vegetable Khichdi</h2>
+                    <p>One-pot meal with red lentils, brown rice, and mixed vegetables
+                        Balanced meal rich in protein, fiber, and essential nutrients
+                        Cook with no added salt, flavor with cumin, turmeric, and fresh herbs</p></div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3lunch2.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Lunch 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Grilled Chicken Tikka with Quinoa Pulao</h2>
+                    <p>Chicken marinated in yogurt and spices, then grilled
+                        High in protein, low in saturated fat
+                        Serve with quinoa pulao cooked in low-sodium vegetable broth and mixed vegetables</p>
+                </div>
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3lunch3.jpeg' %}');">
+                </div>
+            </div>
+        </div>  
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+</body>
+
+{% endblock basepage %}

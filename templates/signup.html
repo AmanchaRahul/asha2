@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>signup</title>
+{% endblock title %}
+
+{% block basepage %}
+
+<!-- Custom CSS Styles for Hover Effects -->
+
+
+<!-- Signup Form Section -->
+<div class="relative h-screen flex justify-center items-center bg-black">
+    <div class="w-80 bg-black bg-opacity-50 backdrop-filter backdrop-blur-md shadow-lg p-6 text-white font-mono rounded-none">
+        <h2 class="text-center text-2xl font-bold mb-4">Signup</h2>
+
+        {% if messages %}
+            <div class="mb-3">
+                {% for message in messages %}
+                    <div class="p-3 mb-2 {% if message.tags == 'error' %}bg-red-500{% else %}bg-green-500{% endif %} text-white">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'signupdata' %}">
+            {% csrf_token %}
+            
+            <!-- Email Field -->
+            <div class="mb-3">
+                <label for="email" class="custom-label">Email</label>
+                <input type="email" id="email" name="email" class="custom-input" required>
+            </div>
+
+            <!-- Full Name Field -->
+            <div class="mb-3">
+                <label for="full_name" class="custom-label">Full Name</label>
+                <input type="text" id="full_name" name="full_name" class="custom-input" required>
+            </div>
+
+            <!-- Username Field -->
+            <div class="mb-3">
+                <label for="username" class="custom-label">Username</label>
+                <input type="text" id="username" name="username" class="custom-input" required>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+                <label for="password1" class="custom-label">Password</label>
+                <input type="password" id="password1" name="password1" class="custom-input" required>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-4">
+                <label for="password2" class="custom-label">Confirm Password</label>
+                <input type="password" id="password2" name="password2" class="custom-input" required>
+            </div>
+
+            <!-- Signup Button with Hover Effect -->
+            <button type="submit" class="w-full bg-black text-white py-2 px-4 border border-white rounded-none button-effect">
+                Signup
+            </button>
+        </form>
+
+        <!-- Already have an account? Login Link -->
+        <p class="text-center text-white mt-4">Already have an account? <a href="{% url "logindata" %}" class="text-white button-effect">Login</a></p>
+    </div>
+</div>
+
+{% endblock basepage %}

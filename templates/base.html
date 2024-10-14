@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Better Tomorrow</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+  <link rel="stylesheet" href="{% static 'css/navstyle.css' %}">
+  <link rel="stylesheet" href="{% static 'css/backbutton.css' %}">
+  <link rel="stylesheet" href="{% static 'css/predict.css' %}">
+  <link rel="stylesheet" href="{% static 'css/wellness_button.css' %}">
+  
+  
+
+
+  {% block title %}
+  <title>home</title>
+  {% endblock title %}
+  
+</head>
+
+
+<body class="flex flex-col justify-between min-h-screen">
+
+  <!-- Logo and Name (Top-left) -->
+  <header class="fixed top-4 left-4 z-10">
+    <div class="flex items-center space-x-4">
+        <i class="fa-solid fa-earth-americas" alt="Logo" class="w-12 h-12 float"></i>
+      <h1 class="text-xl hover-olive transition-colors duration-300">ASHA</h1>
+    </div>
+  </header>
+
+ 
+  {% block basepage %}
+
+  <!-- Main Section -->
+  <main class="flex flex-col items-center justify-center flex-grow py-16">
+    <!-- Title -->
+    <div class="typewriter mb-8">
+      <h1 class="text-4xl text-center">For better tomorrow</h1>
+    </div>
+
+    <!-- Image and Text Section -->
+    <div class="flex flex-col space-y-8 image-container">
+      
+      <!-- First Image Row (Image on Left, Text on Right) -->
+      <div class="image-row">
+        <img src="/static/images/diabetes/d3.jpeg" alt="Diabetes Management" class="bg-gray-600 object-cover rounded-lg shadow-lg">
+        <p class="image-text ml-4">Balance sugar, reduce life risks, manage diabetes with care.</p>
+      </div>
+
+      <!-- Second Image Row (Text on Left, Image on Right) -->
+      <div class="image-row">
+        <p class="image-text mr-4">Check your pressure, live well, stay vibrant and healthy.</p>
+        <img src="/static/images/bloodpressure/bloodpressure1.jpeg" alt="Blood Pressure Check" class="bg-gray-600 object-cover rounded-lg shadow-lg">
+      </div>
+
+      <!-- Third Image Row (Image on Left, Text on Right) -->
+      <div class="image-row">
+        <img src="/static/images/skincare/skincare1.jpeg" alt="Skin Care" class="bg-gray-600 object-cover rounded-lg shadow-lg">
+        <p class="image-text ml-4">Glow with care, radiant skin starts from within.</p>
+      </div>
+      
+      <!-- Get Started Button (Exactly below Third Image) -->
+      <div class="w-64 mt-8 self-start">
+        <a href="{% url 'logindata' %}">
+          <button class="w-full px-6 py-2 border border-white text-white hover:bg-olive transition duration-300 rounded-none transform hover:scale-105">
+            Get Started
+          </button>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Parallax Section -->
+  <div class="parallax my-16" style="background-image: url('/static/images/greenbackground.jpg');">
+    <div class="h-full flex items-center justify-center bg-black bg-opacity-50">
+      <h2 class="text-3xl text-white">Embrace a Healthier Lifestyle</h2>
+    </div>
+  </div>
+
+  {% endblock basepage %}
+
+  {% block navbar%}
+
+  <nav id="navbar" class="fixed bottom-4 left-4 text-white flex flex-col space-y-2 z-10">
+    <button id="nav-toggle" class="md:hidden text-white focus:outline-none">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div id="nav-menu" class="hidden md:flex flex-col space-y-2">
+      <div class="nav-container">
+        <a href="{% url 'basedata' %}" class="hover-olive nav-link animate-right">Home</a>
+      </div>
+      <div class="nav-container">
+        <a href="{% url 'aboutdata' %}" class="hover-olive nav-link animate-right">About</a>
+      </div>
+      <div class="nav-container">
+        <a href="{% url 'newsdata' %}" class="hover-olive nav-link animate-right">News</a>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="nav-container">
+          <a href="{% url 'wellnessdata' %}" class="hover-olive nav-link animate-right">Wellness</a>
+        </div>
+        <div class="nav-container">
+          <a href="{% url 'logoutdata' %}" class="hover-olive nav-link animate-right">Logout</a>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+  
+ {% endblock navbar %}
+
+ {% block footer %}
+  <!-- Footer (right-bottom) -->
+  <footer class="fixed bottom-4 right-4 text-white flex flex-col space-y-4 z-10">
+    <a href="https://www.instagram.com/03_r_a_h_u_l?igsh=MWFtbTVtcXA4eHhyNA==" class="hover-olive transition-colors duration-300 transform hover:scale-110">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.facebook.com/raina.rahul.79" class="hover-olive transition-colors duration-300 transform hover:scale-110">
+      <i class="fab fa-facebook"></i>
+    </a>
+   
+    <a href="https://api.whatsapp.com/send?phone=919032016299" class="hover-olive transition-colors duration-300 transform hover:scale-110">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+  </footer>
+  
+  {% endblock footer %}
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/586f2c924a.js" crossorigin="anonymous"></script>
+  <script src= "{% static 'js/navscript.js' %}"></script>
+  
+  {% block scripts %}{% endblock %}
+</body>
+</html>

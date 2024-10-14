@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block basepage %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Managing Diabetes Medications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .hover-olive:hover {
+            color: #808000;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+     <!-- Back Button on the left -->
+     <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <h1 class="text-4xl mb-8 text-center">Managing Diabetes Medications</h1>
+        <div class="w-full max-w-3xl space-y-8">
+            <p class="text-lg mb-6">Proper management of diabetes medications is crucial for maintaining optimal blood sugar levels and preventing complications. Here's a guide to help you understand and manage your diabetes medications effectively:</p>
+            
+            <section class="space-y-4">
+                <h2 class="text-2xl font-semibold mb-4">Types of Diabetes Medications</h2>
+                <ul class="list-disc pl-5 space-y-4">
+                    {% for medication in diabetes_medications %}
+                        <li>
+                            <h3 class="text-xl font-semibold">{{ medication.name }}</h3>
+                            <p>{{ medication.description }}</p>
+                            <p class="mt-2"><strong>Common side effects:</strong> {{ medication.side_effects }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section class="space-y-4">
+                <h2 class="text-2xl font-semibold mb-4">Tips for Managing Your Diabetes Medications</h2>
+                <ul class="list-disc pl-5 space-y-4">
+                    {% for tip in medication_tips %}
+                        <li>
+                            <h3 class="text-xl font-semibold">{{ tip.title }}</h3>
+                            <p>{{ tip.description }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4">Important Reminders</h2>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>Always consult with your healthcare provider before making any changes to your medication regimen.</li>
+                    <li>Keep a record of your blood sugar levels and share them with your doctor regularly.</li>
+                    <li>Learn to recognize the signs of hypoglycemia (low blood sugar) and hyperglycemia (high blood sugar).</li>
+                    <li>Carry identification that states you have diabetes in case of emergencies.</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+    {% block navbar %}
+
+   {% endblock navbar %}
+
+   {% block footer %}
+   {% endblock footer %}
+
+
+</body>
+</html>
+{% endblock basepage %}

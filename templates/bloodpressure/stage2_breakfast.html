@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>stage2 hypertension_breakfast</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    <a href="{% url 'bloodpressuredietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Breakfast</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Breakfast 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Daliya Khichdi</h2>
+                    <p>Broken wheat cooked with moong dal and vegetables
+                        Very low in sodium, high in fiber and plant-based protein
+                        Add a tablespoon of ground flaxseeds for omega-3 fatty acids</p></div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3breakfast1.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Spinach and Oats Dosa</h2>
+                    <p>Thin pancakes made with oats and spinach
+                        Rich in potassium, magnesium, and nitrates that help lower blood pressure
+                        Serve with homemade tomato chutney (no added salt)</p></div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3breakfast2.jpg' %}');">
+                </div>
+            </div>
+        
+            <!-- Breakfast 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Beetroot Ragi Idli</h2>
+                    <p>Steamed cakes made from finger millet and beetroot
+                        Beetroot is high in nitrates, which can help reduce blood pressure
+                        Pair with a small portion of coconut chutney (unsalted)</p>
+                </div>
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/bloodpressure/b3breakfast3.jpeg' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+
+</body>
+
+{% endblock basepage %}

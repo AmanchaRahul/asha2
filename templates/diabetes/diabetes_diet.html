@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+<title>diabetes_diet</title>
+{% endblock title %}
+
+
+{% block basepage %}
+ 
+<div class="flex flex-col min-h-screen relative">
+    <!-- Back Button on the left -->
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    
+    
+
+<div class="flex flex-col min-h-screen">
+    <!-- Navbar (from base.html) will be included here automatically -->
+    
+    <main class="flex-grow p-4">
+        <h1 class="text-4xl mb-8 text-center">Diabetes Diet</h1>
+
+        <!-- Image-Text Pairs -->
+        <div class="space-y-8 mb-12">
+            <!-- Pre-diabetes Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/diabetes/diabetesdiet1.jpeg' %}" alt="pre diabetes" class="w-1/4 h-auto">
+                <p class="w-2/3">Pre-diabetes is a condition where blood sugar levels are higher than normal but not yet high enough to be diagnosed as diabetes. Early intervention with diet and exercise can help prevent the progression to type 2 diabetes.</p>
+            </div>
+
+             <!-- Type 1 Diabetes Section -->
+             <div class="flex items-center space-x-4">
+                <img src="{% static 'images/diabetes/diabetesdiet2.jpeg' %}" alt="Type 1 diabetes" class="w-1/4 h-auto">
+                <p class="w-2/3">Type 1 diabetes is an autoimmune condition where the body's immune system attacks insulin-producing cells in the pancreas, requiring lifelong insulin therapy.</p>
+            </div>
+        </div>
+        
+            <!-- Type 2 Diabetes Section -->
+            <div class="flex items-center space-x-4">
+                <img src="{% static 'images/diabetes/diabetesdiet3.jpeg' %}" alt="Type 2 diabetes" class="w-1/4 h-auto">
+                <p class="w-2/3">Type 2 diabetes is a chronic condition where the body does not use insulin properly, leading to high blood sugar levels. Management includes lifestyle changes, medication, and regular monitoring of blood sugar levels.</p>
+            </div>
+
+           
+
+        <!-- Diabetes Types Section -->
+        <div class="flex flex-col items-center p-4">
+            <div class="mb-2 w-full max-w-md">
+                <h2 class="text-xl mb-3 text-center">Type of Diabetes you have:</h2>
+                <div class="flex justify-center space-x-2 mb-3">
+                    <button class="hover-olive border border-white px-3 py-1.5" id="preDiabetic">Pre diabetic</button>
+                    <button class="hover-olive border border-white px-3 py-1.5" id="type1">Type 1</button>
+                    <button class="hover-olive border border-white px-3 py-1.5" id="type2">Type 2</button>
+                </div>
+
+                <!-- Meal Plan Links -->
+                <div id="mealPlan" class="hidden border border-white p-3 w-64 mx-auto">
+                    <h3 class="text-lg mb-1.5 text-center">Meal Plan</h3>
+                    <a id="breakfastLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Breakfast</a>            
+                    <a id="lunchLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Lunch</a> 
+                    <a id="dinnerLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Dinner</a> 
+                </div>
+            </div>
+
+            <!-- Back Button -->
+             </div>
+    </main>
+
+</div>
+{% block navbar %}
+
+{% endblock navbar %}
+
+    <script>
+        (function() {
+            const urls = {
+                preDiabetic: {
+                    breakfast: "{% url 'prediabetesbreakfastdata' %}",
+                    lunch: "{% url 'prediabeteslunchdata' %}",
+                    dinner: "{% url 'prediabetesdinnerdata' %}"
+                },
+                type1: {
+                    breakfast: "{% url 'type1breakfastdata' %}",
+                    lunch: "{% url 'type1lunchdata' %}",
+                    dinner: "{% url 'type1dinnerdata' %}"
+                },
+                type2: {
+                    breakfast: "{% url 'type2breakfastdata' %}",
+                    lunch: "{% url 'type2lunchdata' %}",
+                    dinner: "{% url 'type2dinnerdata' %}"
+                }
+            };
+
+            document.querySelectorAll('#preDiabetic, #type1, #type2').forEach(button => {
+                button.addEventListener('click', () => {
+                    const type = button.id;
+                    console.log(`Button clicked: ${type}`);
+                    console.log(`Setting URLs: ${JSON.stringify(urls[type])}`);
+                    
+                    document.getElementById('breakfastLink').href = urls[type].breakfast;
+                    document.getElementById('lunchLink').href = urls[type].lunch;
+                    document.getElementById('dinnerLink').href = urls[type].dinner;
+                    
+                    console.log(`Breakfast link set to: ${document.getElementById('breakfastLink').href}`);
+                    console.log(`Lunch link set to: ${document.getElementById('lunchLink').href}`);
+                    console.log(`Dinner link set to: ${document.getElementById('dinnerLink').href}`);
+                    
+                    document.getElementById('mealPlan').classList.remove('hidden');
+                });
+            });
+        })();
+    </script>
+
+
+    {% block footer %}
+    {% endblock footer %}
+
+{% endblock basepage %}

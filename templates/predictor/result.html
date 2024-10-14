@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block basepage %}
+
+<body class="flex flex-col min-h-screen">
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <h1 class="text-4xl mb-8 text-center">Prediction Result</h1>
+        <div class="w-full max-w-md bg-gray-800 p-6 rounded-lg shadow-lg">
+            <p class="text-xl mb-6">{{ result }}</p>
+        </div>
+        
+        <div class="mt-8 space-x-4">
+            <a href="{% url 'predict_diabetes' %}" class="hover-olive border border-white px-4 py-2 inline-block">New Prediction</a>
+            <a href="{% url 'wellnessdata' %}" class="hover-olive border border-white px-4 py-2 inline-block">Back</a>
+        </div>
+    </main>
+</body>
+
+{% endblock basepage %}

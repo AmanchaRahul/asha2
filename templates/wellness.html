@@ -1,0 +1,206 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block basepage %}
+<div class="flex flex-col items-center justify-center min-h-screen bg-black text-white font-mono p-8">
+    <h1 class="text-6xl mb-12 text-center">
+        <span class="bg-white text-black px-2 mr-1 inline-block animate-bounce">b</span>o<span class="bg-white text-black px-2 mr-1 inline-block animate-pulse">d</span>y<span class="bg-white text-black px-2 mr-1 inline-block animate-bounce">s</span>ense
+    </h1>
+    
+    <!-- Chatbot button added here -->
+    <div class="chatbot-section">
+        <a href="{% url 'chatbot' %}" class="chatbot-btn">Explore Wellness Chatbot</a>
+    </div>
+
+    <!-- Chatbot button added here -->
+    <div class="chatbot-section">
+        <a href="{% url 'voice' %}" class="chatbot-btn">Explore Wellness voicebot</a>
+    </div>
+
+
+    
+    <div class="flex flex-col items-center w-full">
+        <!-- Center content -->
+        <div class="flex space-x-16 mb-16">
+            <!-- Left side: Images -->
+            <div class="flex flex-col space-y-8">
+                <img src="{% static 'images/diabetes/diabetes2.jpeg' %}" alt="Diabetes" class="w-32 h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="diabetes">
+                <img src="{% static 'images/bloodpressure/bloodpressure2.jpeg' %}" alt="Blood Pressure" class="w-32 h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="blood-pressure">
+                <img src="{% static 'images/skincare/skincare2.jpeg' %}" alt="Skincare" class="w-32 h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="skincare">
+            </div>
+            
+            <div class="w-96 h-96 relative">
+                <div id="diabetes-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg">
+                    <div class="grid grid-cols-2 gap-4 h-full">
+                        <a href="{% url 'diabetesdietdata' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-apple-whole text-5xl"></i>
+                        </a>
+                        <a href="{% url 'diabetesexercises' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-dumbbell text-5xl"></i>
+                        </a>
+                        <a href="{% url 'predict_diabetes' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-droplet text-5xl"></i>
+                        </a>
+                        <a href="{% url 'manage_diabetes_medications' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-hospital text-5xl"></i>
+                        </a>
+                        
+                        <a href="{% url 'diabeteschallenge' %}" class="flex items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
+                            <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" class="w-15 h-12 object-cover">
+                        </a>
+
+                        <a href="#" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-user-doctor text-5xl"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+                
+                <div id="blood-pressure-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg hidden">
+                    <div class="grid grid-cols-2 gap-4 h-full">
+                        <a href="{% url "bloodpressuredietdata" %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-apple-whole text-5xl"></i>
+                        </a>
+                        <a href="{% url "bloodpressureexercises" %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-dumbbell text-5xl"></i>
+                        </a>
+                        <a href="{% url 'blood_pressure_check' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-temperature-half text-5xl"></i>
+                        </a>
+                        <a href="{% url 'manage_stress' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-face-tired text-5xl"></i>
+                        </a> 
+                       
+                        <a href="{% url 'bloodpressurechallenge' %}" class="flex items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
+                            <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" class="w-15 h-12 object-cover">
+                        </a>
+                        
+                        <a href="#" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-user-doctor text-5xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div id="skincare-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg hidden">
+                    <div class="grid grid-cols-2 gap-4 h-full">
+                        <a href="{% url 'skincarecheckdata' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-hand-dots text-5xl"></i>
+                        </a>
+                        <a href="{% url 'skincaredietdata' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-apple-whole text-5xl"></i>
+                        </a>
+                        
+                        <a href="{% url 'skincareroutine' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-paste text-5xl"></i>
+                        </a>
+                        <a href="{% url 'anti_aging_tips' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-person-cane text-5xl"></i>
+                        </a>
+                        <a href="{% url 'water_intake_tracker' %}" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-bottle-water text-5xl"></i>
+                        </a>
+                        <a href="#" class="flex items-center justify-center hover-olive">
+                            <i class="fa-solid fa-user-doctor text-5xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- i nurture myself -->
+        <h2 class="text-center animate-pulse" style="font-size: 3.5rem;">i nurture myself</h2>
+    </div>
+</div>
+
+<style>
+    .hover-olive:hover {
+        color: #808000;
+        text-shadow: 0 0 10px #808000;
+    }
+    
+    .topic-card {
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        transform: translateY(20px);
+        border-radius: 0px;
+    }
+    
+    .topic-card.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    .floating {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .pulse {
+        animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 100% { transform: translateY(-25%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+        50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+    }
+    
+    .animate-bounce {
+        animation: bounce 1s infinite;
+    }
+    
+    .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const images = document.querySelectorAll('img[data-topic]');
+    const topicCards = document.querySelectorAll('.topic-card');
+    
+    function showTopic(topicId) {
+        topicCards.forEach(card => {
+            if (card.id === topicId + '-topics') {
+                card.classList.remove('hidden');
+                card.classList.add('active');
+            } else {
+                card.classList.add('hidden');
+                card.classList.remove('active');
+            }
+        });
+    }
+    
+    images.forEach(img => {
+        img.addEventListener('mouseenter', function() {
+            const topicId = this.getAttribute('data-topic');
+            showTopic(topicId);
+        });
+    });
+    
+    // Add click effect to D B S
+    const letters = document.querySelectorAll('.floating');
+    letters.forEach(letter => {
+        letter.addEventListener('click', function() {
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 100);
+        });
+    });
+});
+</script>
+
+{% block footer %}
+
+{% endblock footer %}
+
+{% endblock basepage %}

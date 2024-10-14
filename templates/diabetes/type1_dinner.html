@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>type1_dinner</title>
+{% endblock title %}
+
+{% block basepage %}
+<body class="bg-gray-100 text-gray-800">
+    <a href="{% url 'diabetesdietdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <div class="container mx-auto p-4">
+        <h1 class="text-4xl mb-8 text-center">Dinner</h1>
+
+        <div class="space-y-8 mb-12">
+            <!-- Dinner 1 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Ragi Idli with Sambar</h2>
+                    <p>Steamed idlis made from finger millet (ragi) served with a side of sambar (lentil soup). This combination is low in glycemic index and high in fiber</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/d1dinner1.jpeg' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 2 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Stuffed Bell Peppers</h2>
+                    <p>Bell peppers filled with a mixture of quinoa, black beans, tomatoes, and spices, baked until tender. This dish is colorful, nutritious, and provides a good source of plant-based protein</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/d1dinner2.gif' %}');">
+                </div>
+            </div>
+        
+            <!-- Dinner 3 -->
+            <div class="flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                <!-- Description -->
+                <div class="w-2/3">
+                    <h2 class="text-xl mb-2">Tofu Stir-Fry with Vegetables:</h2>
+                    <p>Cubes of tofu stir-fried with a variety of non-starchy vegetables like broccoli, bell peppers, and carrots, seasoned with soy sauce or spices. This meal is rich in protein and low in carbohydrates</p>
+                </div>
+        
+                <!-- Image -->
+                <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('{% static 'images/diabetes/d1dinner3.gif' %}');">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block navbar %}
+
+    {% endblock navbar %}
+
+
+    {% block footer %}
+    {% endblock footer %}
+</body>
+{% endblock basepage %}
