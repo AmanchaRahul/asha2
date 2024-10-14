@@ -196,7 +196,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media Files (user uploads)
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-MEDIA_URL = 'https://res.cloudinary.com/djum0pvam/'
+MEDIA_URL = 'https://res.cloudinary.com/djum0pvam/media/'
         #subdirectories should be added here (media/images)
 
 
