@@ -102,3 +102,5 @@ Watching for file changes with StatReloader
 "GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 200 74398
 "GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894
 "GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
