@@ -60,7 +60,7 @@ class DiabetesChallenge(models.Model):
 class DiabetesChallengeImage(models.Model):
     challenge = models.ForeignKey(DiabetesChallenge, on_delete=models.CASCADE, related_name='images', null=True)
     day = models.IntegerField()
-    image = models.ImageField(upload_to='media/diabetes_challenge/')
+    image = models.ImageField(upload_to='diabetes_challenge/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -84,7 +84,7 @@ class BloodpressureChallenge(models.Model):
 class BloodpressureChallengeImage(models.Model):
     challenge = models.ForeignKey(BloodpressureChallenge, on_delete=models.CASCADE, related_name='bloodpressure_images', null=True)
     day = models.IntegerField()
-    image = models.ImageField(upload_to='media/bloodpressure_challenge/')
+    image = models.ImageField(upload_to='bloodpressure_challenge/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
