@@ -45,7 +45,8 @@ SITE_ID = 2
 
 INSTALLED_APPS = [
    
-   
+    'cloudinary',
+    'cloudinary_storage',
       
     'django.contrib.admin',
     'django.contrib.auth',
@@ -176,12 +177,17 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+  # If you have local static files
+
+
  # This ensures static files are collected here
 
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 
 # Cloudinary will serve static files
@@ -189,8 +195,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # Media Files (user uploads)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')          #subdirectories should be added here (media/images)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = 'https://res.cloudinary.com/djum0pvam/'
+        #subdirectories should be added here (media/images)
 
 
 #DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
