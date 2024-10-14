@@ -62,7 +62,6 @@
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
     </style>
-
     <script>
         function getCookie(name) {
             let cookieValue = null;
@@ -78,9 +77,9 @@
             }
             return cookieValue;
         }
-
+    
         const csrftoken = getCookie('csrftoken');
-
+    
         for (let day = 1; day <= 30; day++) {
             const fileInput = document.getElementById(`file-${day}`);
             if (fileInput) {
@@ -89,7 +88,7 @@
                     if (file) {
                         const formData = new FormData();
                         formData.append('image', file);
-
+    
                         fetch(`/diabetes30/upload/${day}/`, {
                             method: 'POST',
                             body: formData,
@@ -101,13 +100,16 @@
                         .then(data => {
                             if (data.status === 'success') {
                                 location.reload();
+                            } else {
+                                console.error('Upload failed:', data.message);
                             }
-                        });
+                        })
+                        .catch(error => console.error('Error:', error));
                     }
                 });
             }
         }
-
+    
         function deleteImage(day) {
             fetch(`/diabetes30/delete/${day}/`, {
                 method: 'POST',
@@ -120,10 +122,15 @@
             .then(data => {
                 if (data.status === 'success') {
                     location.reload();
+                } else {
+                    console.error('Delete failed:', data.message);
                 }
-            });
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
+    
+
 </body>
 
 {% block navbar %}
