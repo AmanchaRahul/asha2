@@ -1814,3 +1814,331 @@ Traceback (most recent call last):
 ValueError: Missing staticfiles manifest entry for 'css/style1.css'
 "GET / HTTP/1.1" 500 145
 "GET / HTTP/1.1" 500 145
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\asha_render\ashapro1\ashapro1\ashaapp1\views.py", line 31, in base_view
+    return render(request,"base.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 170, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 162, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 938, in render
+    bit = node.render_annotated(context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 905, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 106, in render
+    url = self.url(context)
+          ^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 103, in url
+    return self.handle_simple(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 118, in handle_simple
+    return staticfiles_storage.url(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 147, in url
+    return self._url(self.stored_name, name, force)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 126, in _url
+    hashed_name = hashed_name_func(*args)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 417, in stored_name
+    raise ValueError("Missing staticfiles manifest entry for '%s'" % clean_name)
+ValueError: Missing staticfiles manifest entry for 'css/style1.css'
+Internal Server Error: /
+Traceback (most recent call last):
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\asha_render\ashapro1\ashapro1\ashaapp1\views.py", line 31, in base_view
+    return render(request,"base.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 170, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 162, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 938, in render
+    bit = node.render_annotated(context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 905, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 106, in render
+    url = self.url(context)
+          ^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 103, in url
+    return self.handle_simple(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 118, in handle_simple
+    return staticfiles_storage.url(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 147, in url
+    return self._url(self.stored_name, name, force)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 126, in _url
+    hashed_name = hashed_name_func(*args)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 417, in stored_name
+    raise ValueError("Missing staticfiles manifest entry for '%s'" % clean_name)
+ValueError: Missing staticfiles manifest entry for 'css/style1.css'
+"GET / HTTP/1.1" 500 145
+"GET / HTTP/1.1" 500 145
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 4664
+"GET / HTTP/1.1" 200 4664
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 200 102042
+"GET /static/images/bloodpressure/bloodpressure1.jpeg HTTP/1.1" 200 102042
+"GET /static/css/wellness_button.css HTTP/1.1" 200 594
+"GET /static/css/wellness_button.css HTTP/1.1" 200 594
+"GET /static/css/style1.css HTTP/1.1" 200 2785
+"GET /static/css/style1.css HTTP/1.1" 200 2785
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 200 74649
+"GET /static/images/diabetes/d3.jpeg HTTP/1.1" 200 74649
+"GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894
+"GET /static/images/greenbackground.jpg HTTP/1.1" 200 273894
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 200 74398
+"GET /static/images/skincare/skincare1.jpeg HTTP/1.1" 200 74398
+"GET /static/js/navscript.js HTTP/1.1" 200 1693
+"GET /static/js/navscript.js HTTP/1.1" 200 1693
+"GET /login/ HTTP/1.1" 200 4221
+"GET /login/ HTTP/1.1" 200 4221
+"POST /login/ HTTP/1.1" 302 0
+"POST /login/ HTTP/1.1" 302 0
+"GET /wellness/ HTTP/1.1" 200 12316
+"GET /wellness/ HTTP/1.1" 200 12316
+"GET /static/images/diabetes/diabetes2.jpeg HTTP/1.1" 200 52467
+"GET /static/images/diabetes/diabetes2.jpeg HTTP/1.1" 200 52467
+"GET /static/images/bloodpressure/bloodpressure2.jpeg HTTP/1.1" 200 77233
+"GET /static/images/bloodpressure/bloodpressure2.jpeg HTTP/1.1" 200 77233
+"GET /static/images/diabetes/challenge.jpeg HTTP/1.1" 200 43666
+"GET /static/images/skincare/skincare2.jpeg HTTP/1.1" 200 79450
+"GET /static/images/diabetes/challenge.jpeg HTTP/1.1" 200 43666
+"GET /static/images/skincare/skincare2.jpeg HTTP/1.1" 200 79450
+"GET /bloodpressurechallenge/ HTTP/1.1" 200 2522
+"GET /bloodpressurechallenge/ HTTP/1.1" 200 2522
+"GET /static/images/backbutton1.png HTTP/1.1" 200 2383
+"GET /static/images/backbutton1.png HTTP/1.1" 200 2383
+"GET /bloodpressure30/ HTTP/1.1" 200 32660
+"GET /bloodpressure30/ HTTP/1.1" 200 32660
+Not Found: /media/bloodpressure_challenge/piclumen-1726910194107.png
+Not Found: /media/bloodpressure_challenge/diabetesdiet2.jpeg
+Not Found: /media/bloodpressure_challenge/piclumen-1726910194107.png
+Not Found: /media/bloodpressure_challenge/diabetesdiet2.jpeg
+"GET /media/bloodpressure_challenge/piclumen-1726910194107.png HTTP/1.1" 404 14939
+"GET /media/bloodpressure_challenge/diabetesdiet2.jpeg HTTP/1.1" 404 14915
+"GET /media/bloodpressure_challenge/piclumen-1726910194107.png HTTP/1.1" 404 14939
+"GET /media/bloodpressure_challenge/diabetesdiet2.jpeg HTTP/1.1" 404 14915
+"POST /bloodpressure30/upload/1/ HTTP/1.1" 200 21
+"POST /bloodpressure30/upload/1/ HTTP/1.1" 200 21
+"GET /bloodpressure30/ HTTP/1.1" 200 32668
+"GET /bloodpressure30/ HTTP/1.1" 200 32668
+Not Found: /media/bloodpressure_challenge/piclumen-1726910194107.png
+Not Found: /media/bloodpressure_challenge/piclumen-1726917878661.png
+Not Found: /media/bloodpressure_challenge/piclumen-1726910194107.png
+Not Found: /media/bloodpressure_challenge/piclumen-1726917878661.png
+"GET /media/bloodpressure_challenge/piclumen-1726910194107.png HTTP/1.1" 404 14939
+"GET /media/bloodpressure_challenge/piclumen-1726917878661.png HTTP/1.1" 404 14939
+"GET /media/bloodpressure_challenge/piclumen-1726910194107.png HTTP/1.1" 404 14939
+"GET /media/bloodpressure_challenge/piclumen-1726917878661.png HTTP/1.1" 404 14939
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\urls.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\urls.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /bloodpressure30/ HTTP/1.1" 200 32668
+"GET /bloodpressure30/ HTTP/1.1" 200 32668
+Not Found: /media/bloodpressure_challenge/piclumen-1726910194107.png
+Not Found: /media/bloodpressure_challenge/piclumen-1726910194107.png
+"GET /media/bloodpressure_challenge/piclumen-1726910194107.png HTTP/1.1" 404 15311
+"GET /media/bloodpressure_challenge/piclumen-1726910194107.png HTTP/1.1" 404 15311
+"GET /media/bloodpressure_challenge/piclumen-1726917878661.png HTTP/1.1" 200 2163942
+"GET /media/bloodpressure_challenge/piclumen-1726917878661.png HTTP/1.1" 200 2163942
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\urls.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\urls.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+D:\django\asha_render\ashapro1\ashapro1\ashapro1\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Internal Server Error: /bloodpressure30/
+Traceback (most recent call last):
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\asha_render\ashapro1\ashapro1\ashaapp1\views.py", line 566, in b_thirty_day_challenge
+    return render(request, 'bloodpressure/30_day_challenge.html', {'days': days, 'bloodpressure_images': image_dict})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 170, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 162, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 938, in render
+    bit = node.render_annotated(context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 905, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 162, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 938, in render
+    bit = node.render_annotated(context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 905, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 106, in render
+    url = self.url(context)
+          ^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 103, in url
+    return self.handle_simple(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 118, in handle_simple
+    return staticfiles_storage.url(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 147, in url
+    return self._url(self.stored_name, name, force)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 126, in _url
+    hashed_name = hashed_name_func(*args)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 417, in stored_name
+    raise ValueError("Missing staticfiles manifest entry for '%s'" % clean_name)
+ValueError: Missing staticfiles manifest entry for 'css/style1.css'
+Internal Server Error: /bloodpressure30/
+Traceback (most recent call last):
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\auth\decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\asha_render\ashapro1\ashapro1\ashaapp1\views.py", line 566, in b_thirty_day_challenge
+    return render(request, 'bloodpressure/30_day_challenge.html', {'days': days, 'bloodpressure_images': image_dict})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\shortcuts.py", line 19, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 170, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 162, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 938, in render
+    bit = node.render_annotated(context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 905, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 162, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 938, in render
+    bit = node.render_annotated(context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\template\base.py", line 905, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 106, in render
+    url = self.url(context)
+          ^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 103, in url
+    return self.handle_simple(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\templatetags\static.py", line 118, in handle_simple
+    return staticfiles_storage.url(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 147, in url
+    return self._url(self.stored_name, name, force)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 126, in _url
+    hashed_name = hashed_name_func(*args)
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\django\ashaenv2\Lib\site-packages\django\contrib\staticfiles\storage.py", line 417, in stored_name
+    raise ValueError("Missing staticfiles manifest entry for '%s'" % clean_name)
+ValueError: Missing staticfiles manifest entry for 'css/style1.css'
+"GET /bloodpressure30/ HTTP/1.1" 500 145
+"GET /bloodpressure30/ HTTP/1.1" 500 145
