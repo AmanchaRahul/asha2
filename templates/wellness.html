@@ -29,7 +29,7 @@
             
             <div class="w-full md:w-96 h-96 relative">
                 <div id="diabetes-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg">
-                    <div class="grid grid-cols-2 gap-6 h-full">
+                    <div class="grid grid-cols-2 gap-20 h-full">
                         <a href="{% url 'diabetesdietdata' %}" class="flex items-center justify-center hover-olive">
                             <i class="fa-solid fa-apple-whole text-5xl"></i>
                         </a>
@@ -55,7 +55,7 @@
                 </div>
                 
                 <div id="blood-pressure-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg hidden">
-                    <div class="grid grid-cols-2 gap-6 h-full">
+                    <div class="grid grid-cols-2 gap-20 h-full">
                         <a href="{% url "bloodpressuredietdata" %}" class="flex items-center justify-center hover-olive">
                             <i class="fa-solid fa-apple-whole text-5xl"></i>
                         </a>
@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div id="skincare-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg hidden">
-                    <div class="grid grid-cols-2 gap-6 h-full">
+                    <div class="grid grid-cols-2 gap-20 h-full">
                         <a href="{% url 'skincarecheckdata' %}" class="flex items-center justify-center hover-olive">
                             <i class="fa-solid fa-hand-dots text-5xl"></i>
                         </a>
@@ -115,7 +115,19 @@
         text-shadow: 0 0 10px #808000;
     }
     
+    .w-96.h-96 {
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%; /* Maintain square aspect ratio */
+        position: relative;
+    }
+
     .topic-card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         opacity: 0;
         transition: opacity 0.5s ease, transform 0.5s ease;
         transform: translateY(20px);
@@ -131,21 +143,6 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px; /* Increased gap for better spacing */
-    }
-    
-    .w-96.h-96 {
-        width: 100%;
-        height: 0;
-        padding-bottom: 100%; /* Maintain square aspect ratio */
-        position: relative;
-    }
-    
-    .topic-card {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
     }
     
     @keyframes float {
