@@ -87,11 +87,14 @@ class BloodpressureChallenge(models.Model):
 class BloodpressureChallengeImage(models.Model):
     challenge = models.ForeignKey(BloodpressureChallenge, on_delete=models.CASCADE, related_name='bloodpressure_images', null=True)
     day = models.IntegerField()
-    image = models.ImageField(upload_to='bloodpressure_challenge/')
+    image = CloudinaryField('image', folder='bloodpressure_challenge')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ['challenge', 'day']
+        
+    def get_image_url(self):
+        return self.image.url if self.image else None
         
         
         

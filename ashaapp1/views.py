@@ -514,7 +514,7 @@ def sixty_day_challenge(request):
     )
     days = range(1, 61)
     images = DiabetesChallengeImage.objects.filter(challenge=challenge)
-    image_dict = {image.day: image.image.url for image in images}
+    image_dict = {image.day: image.get_image_url() for image in images}
     return render(request, 'diabetes/60_day_challenge.html', {'days': days, 'images': image_dict})
 
 @login_required
@@ -526,7 +526,7 @@ def ninety_day_challenge(request):
     )
     days = range(1, 91)
     images = DiabetesChallengeImage.objects.filter(challenge=challenge)
-    image_dict = {image.day: image.image.url for image in images}
+    image_dict = {image.day: image.get_image_url() for image in images}
     return render(request, 'diabetes/90_day_challenge.html', {'days': days, 'images': image_dict})
 
 
@@ -562,7 +562,7 @@ def b_thirty_day_challenge(request):
     )
     days = range(1, 31)
     bloodpressure_images = BloodpressureChallengeImage.objects.filter(challenge=challenge)
-    image_dict = {image.day: image.image.url for image in bloodpressure_images}
+    image_dict = {image.day: image.get_image_url() for image in bloodpressure_images}
     return render(request, 'bloodpressure/30_day_challenge.html', {'days': days, 'bloodpressure_images': image_dict})
 
 
@@ -575,7 +575,7 @@ def b_sixty_day_challenge(request):
     )
     days = range(1, 61)
     bloodpressure_images = BloodpressureChallengeImage.objects.filter(challenge=challenge)
-    image_dict = {image.day: image.image.url for image in bloodpressure_images}
+    image_dict = {image.day: image.get_image_url() for image in bloodpressure_images}
     return render(request, 'bloodpressure/60_day_challenge.html', {'days': days, 'bloodpressure_images': image_dict})
 
 
@@ -588,7 +588,7 @@ def b_ninety_day_challenge(request):
     )
     days = range(1, 91)
     bloodpressure_images = BloodpressureChallengeImage.objects.filter(challenge=challenge)
-    image_dict = {image.day: image.image.url for image in bloodpressure_images}
+    image_dict = {image.day: image.get_image_url() for image in bloodpressure_images}
     return render(request, 'bloodpressure/90_day_challenge.html', {'days': days, 'bloodpressure_images': image_dict})
 
 
