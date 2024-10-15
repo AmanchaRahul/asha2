@@ -2,104 +2,99 @@
 {% load static %}
 
 {% block basepage %}
-<div class="flex flex-col items-center justify-center min-h-screen bg-black text-white font-mono p-8">
-    <h1 class="text-6xl mb-12 text-center">
+<div class="flex flex-col items-center justify-center min-h-screen bg-black text-white font-mono p-4">
+    <h1 class="text-4xl md:text-6xl mb-8 text-center">
         <span class="bg-white text-black px-2 mr-1 inline-block animate-bounce">b</span>o<span class="bg-white text-black px-2 mr-1 inline-block animate-pulse">d</span>y<span class="bg-white text-black px-2 mr-1 inline-block animate-bounce">s</span>ense
     </h1>
     
-    <!-- Chatbot button added here -->
     <div class="chatbot-section mb-4">
-        <a href="{% url 'chatbot' %}" class="chatbot-btn">Explore Wellness Chatbot</a>
+        <a href="{% url 'chatbot' %}" class="chatbot-btn bg-white text-black px-4 py-2 rounded">Explore Wellness Chatbot</a>
     </div>
 
-    <!-- Chatbot button added here -->
     <div class="chatbot-section mb-8">
-        <a href="{% url 'voice' %}" class="chatbot-btn">Explore Wellness voicebot</a>
+        <a href="{% url 'voice' %}" class="chatbot-btn bg-white text-black px-4 py-2 rounded">Explore Wellness voicebot</a>
     </div>
 
-    <div class="flex flex-col items-center w-full">
-        <!-- Center content -->
-        <div class="flex flex-col md:flex-row md:space-x-16 mb-16">
-            <!-- Left side: Images -->
-            <div class="flex flex-col space-y-8 mb-8 md:mb-0">
-                <img src="{% static 'images/diabetes/diabetes2.jpeg' %}" alt="Diabetes" class="w-32 h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="diabetes">
-                <img src="{% static 'images/bloodpressure/bloodpressure2.jpeg' %}" alt="Blood Pressure" class="w-32 h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="blood-pressure">
-                <img src="{% static 'images/skincare/skincare2.jpeg' %}" alt="Skincare" class="w-32 h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="skincare">
+    <div class="flex flex-col items-center w-full max-w-md">
+        <div class="flex flex-col md:flex-row md:space-x-8 mb-8 w-full">
+            <div class="grid grid-cols-3 gap-4 mb-8 md:mb-0 w-full">
+                <img src="{% static 'images/diabetes/diabetes2.jpeg' %}" alt="Diabetes" class="w-full h-24 md:h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="diabetes">
+                <img src="{% static 'images/bloodpressure/bloodpressure2.jpeg' %}" alt="Blood Pressure" class="w-full h-24 md:h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="blood-pressure">
+                <img src="{% static 'images/skincare/skincare2.jpeg' %}" alt="Skincare" class="w-full h-24 md:h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="skincare">
             </div>
             
-            <div class="w-full md:w-96 h-96 relative">
-                <div id="diabetes-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg">
-                    <div class="grid grid-cols-3 gap-4 h-full">
+            <div class="w-full aspect-square relative bg-gray-800 rounded-lg overflow-hidden">
+                <div id="diabetes-topics" class="topic-card absolute inset-0 p-4">
+                    <div class="grid grid-cols-2 gap-4 h-full">
                         <a href="{% url 'diabetesdietdata' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-apple-whole text-4xl"></i>
+                            <i class="fa-solid fa-apple-whole text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'diabetesexercises' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-dumbbell text-4xl"></i>
+                            <i class="fa-solid fa-dumbbell text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'predict_diabetes' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-droplet text-4xl"></i>
+                            <i class="fa-solid fa-droplet text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'manage_diabetes_medications' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-hospital text-4xl"></i>
+                            <i class="fa-solid fa-hospital text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'diabeteschallenge' %}" class="flex items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
-                            <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" class="w-12 h-12 object-cover">
+                            <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" class="w-10 h-10 md:w-12 md:h-12 object-cover">
                         </a>
                         <a href="#" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-user-doctor text-4xl"></i>
+                            <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
                         </a>
                     </div>
                 </div>
                 
-                <div id="blood-pressure-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg hidden">
-                    <div class="grid grid-cols-3 gap-4 h-full">
+                <div id="blood-pressure-topics" class="topic-card absolute inset-0 p-4 hidden">
+                    <div class="grid grid-cols-2 gap-4 h-full">
                         <a href="{% url 'bloodpressuredietdata' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-apple-whole text-4xl"></i>
+                            <i class="fa-solid fa-apple-whole text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'bloodpressureexercises' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-dumbbell text-4xl"></i>
+                            <i class="fa-solid fa-dumbbell text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'blood_pressure_check' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-temperature-half text-4xl"></i>
+                            <i class="fa-solid fa-temperature-half text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'manage_stress' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-face-tired text-4xl"></i>
+                            <i class="fa-solid fa-face-tired text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'bloodpressurechallenge' %}" class="flex items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
-                            <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" class="w-12 h-12 object-cover">
+                            <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" class="w-10 h-10 md:w-12 md:h-12 object-cover">
                         </a>
                         <a href="#" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-user-doctor text-4xl"></i>
+                            <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
                         </a>
                     </div>
                 </div>
-                <div id="skincare-topics" class="topic-card absolute inset-0 bg-gray-800 p-6 rounded-lg hidden">
-                    <div class="grid grid-cols-3 gap-4 h-full">
+                <div id="skincare-topics" class="topic-card absolute inset-0 p-4 hidden">
+                    <div class="grid grid-cols-2 gap-4 h-full">
                         <a href="{% url 'skincarecheckdata' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-hand-dots text-4xl"></i>
+                            <i class="fa-solid fa-hand-dots text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'skincaredietdata' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-apple-whole text-4xl"></i>
+                            <i class="fa-solid fa-apple-whole text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'skincareroutine' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-paste text-4xl"></i>
+                            <i class="fa-solid fa-paste text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'anti_aging_tips' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-person-cane text-4xl"></i>
+                            <i class="fa-solid fa-person-cane text-3xl md:text-4xl"></i>
                         </a>
                         <a href="{% url 'water_intake_tracker' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-bottle-water text-4xl"></i>
+                            <i class="fa-solid fa-bottle-water text-3xl md:text-4xl"></i>
                         </a>
                         <a href="#" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-user-doctor text-4xl"></i>
+                            <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- i nurture myself -->
-        <h2 class="text-center animate-pulse" style="font-size: 3.5rem;">i nurture myself</h2>
+        <h2 class="text-center animate-pulse text-2xl md:text-3xl lg:text-4xl">i nurture myself</h2>
     </div>
 </div>
 
@@ -113,7 +108,6 @@
         opacity: 0;
         transition: opacity 0.5s ease, transform 0.5s ease;
         transform: translateY(20px);
-        border-radius: 0px;
     }
     
     .topic-card.active {
@@ -121,27 +115,10 @@
         transform: translateY(0);
     }
     
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
+    .aspect-square {
+        aspect-ratio: 1 / 1;
     }
-    
-    .w-96.h-96 {
-        width: 100%;
-        height: 0;
-        padding-bottom: 100%;
-        position: relative;
-    }
-    
-    .topic-card {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-    
+
     @keyframes float {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-10px); }
@@ -172,38 +149,6 @@
     .animate-pulse {
         animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .flex.space-x-16 {
-            flex-direction: column;
-            space-x-0;
-            space-y-8;
-        }
-
-        .w-96.h-96 {
-            width: 100%;
-            height: 0;
-            padding-bottom: 100%;
-        }
-
-        .text-6xl {
-            font-size: 2.5rem;
-        }
-
-        .text-4xl {
-            font-size: 1.5rem;
-        }
-
-        .w-32.h-32 {
-            width: 24vw;
-            height: 24vw;
-        }
-
-        .chatbot-section {
-            margin-bottom: 16px;
-        }
-    }
 </style>
 
 <script>
@@ -230,8 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Add click effect to D B S
-    const letters = document.querySelectorAll('.floating');
+    // Add click effect to B D S
+    const letters = document.querySelectorAll('.animate-bounce, .animate-pulse');
     letters.forEach(letter => {
         letter.addEventListener('click', function() {
             this.style.transform = 'scale(0.9)';
