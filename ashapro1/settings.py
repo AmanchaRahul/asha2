@@ -12,12 +12,17 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-import cloudinary_storage
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 
 load_dotenv()
 GROQ_API_KEY=os.getenv('GROQ_API_KEY')
 
+
+
+CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.getenv('CLOUDINARY_API_KEY'),

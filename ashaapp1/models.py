@@ -1,6 +1,7 @@
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)  # Make user optional
@@ -60,12 +61,14 @@ class DiabetesChallenge(models.Model):
 class DiabetesChallengeImage(models.Model):
     challenge = models.ForeignKey(DiabetesChallenge, on_delete=models.CASCADE, related_name='images', null=True)
     day = models.IntegerField()
-    image = models.ImageField(upload_to='diabetes_challenge/')
+    image = CloudinaryField('image', folder='diabetes_challenge')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ['challenge', 'day']
-        
+
+    def get_image_url(self):
+        return self.image.url if self.image else None
         
         
 class BloodpressureChallenge(models.Model):

@@ -502,7 +502,7 @@ def thirty_day_challenge(request):
     )
     days = range(1, 31)
     images = DiabetesChallengeImage.objects.filter(challenge=challenge)
-    image_dict = {image.day: image.image.url for image in images}
+    image_dict = {image.day: image.get_image_url() for image in images}
     return render(request, 'diabetes/30_day_challenge.html', {'days': days, 'images': image_dict})
 
 @login_required
