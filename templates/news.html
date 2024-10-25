@@ -22,11 +22,13 @@
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-    <a href="{% url 'basedata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-    </a>
-    <main class="flex-grow p-4 max-w-4xl mx-auto">
+    <div class="flex flex-col items-center">
+        <a href="{% url 'basedata' %}" class="back-button mb-4">
+            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+        </a>
         <h1 class="text-4xl mb-8 text-center">Latest Health News</h1>
+    </div>
+    <main class="flex-grow p-4 max-w-4xl mx-auto">
         
         <section class="mb-12">
             <h2 class="text-2xl mb-4 border-b border-olive pb-2">Diabetes News</h2>
@@ -67,7 +69,6 @@
             </ul>
         </section>
 
-       
     </main>
 </body>
 {% block navbar %}
@@ -76,7 +77,6 @@
 
 {% block footer %}
 {% endblock footer %}
-
 
 </html>
 {% endblock basepage %}
