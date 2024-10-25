@@ -19,16 +19,37 @@
         .hover-olive:hover {
             color: #808000;
         }
+        .header-container {
+            position: relative;
+            width: 100%;
+            padding-top: 1rem;
+        }
+        .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 10;
+        }
+        .back-button img {
+            width: 40px;
+            height: 40px;
+        }
+        @media (max-width: 640px) {
+            .header-container {
+                padding-top: 4rem;
+            }
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-    <div class="flex flex-col items-center">
-        <a href="{% url 'basedata' %}" class="back-button mb-4">
+    <div class="header-container relative">
+        <a href="{% url 'basedata' %}" class="back-button">
             <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
         </a>
-        <h1 class="text-4xl mb-8 text-center">Latest Health News</h1>
     </div>
-    <main class="flex-grow p-4 max-w-4xl mx-auto">
+
+    <main class="flex-grow p-4 max-w-4xl mx-auto mt-4">
+        <h1 class="text-4xl mb-8 text-center sm:text-4xl text-3xl">Latest Health News</h1>
         
         <section class="mb-12">
             <h2 class="text-2xl mb-4 border-b border-olive pb-2">Diabetes News</h2>
@@ -68,15 +89,13 @@
                 {% endfor %}
             </ul>
         </section>
-
     </main>
 </body>
-{% block navbar %}
 
+{% block navbar %}
 {% endblock navbar %}
 
 {% block footer %}
 {% endblock footer %}
-
 </html>
 {% endblock basepage %}
