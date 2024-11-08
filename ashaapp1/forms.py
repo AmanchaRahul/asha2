@@ -7,22 +7,20 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
 
+
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, required=True, help_text='Required. Enter a valid email address.')
-    full_name = forms.CharField(max_length=150, required=True, help_text='Required. Enter your full name.')
+    email = forms.EmailField(max_length=254, required=True)
+    full_name = forms.CharField(max_length=100, required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'full_name', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'full_name', 'password1', 'password2')
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data['email']
-        user.first_name = self.cleaned_data['full_name']  # Using first_name to store full name
-        if commit:
-            user.save()
-        return user
-    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already registered.")
+        return email  
     
     
 
@@ -52,8 +50,3 @@ class SkinCareCheckForm(forms.ModelForm):
         }
 
 
-class OTPLoginForm(forms.Form):
-    mobile_number = forms.CharField(max_length=15)
-
-class OTPVerificationForm(forms.Form):
-    otp = forms.CharField(max_length=6)

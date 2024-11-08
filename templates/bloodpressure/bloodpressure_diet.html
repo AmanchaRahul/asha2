@@ -1,125 +1,215 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block title %}
-<title>bloodpressure_diet</title>
+<title>Blood Pressure Diet Planner</title>
 {% endblock title %}
 
-
 {% block basepage %}
-
-<div class="flex flex-col min-h-screen">
-    <!-- Navbar (from base.html) will be included here automatically -->
-     <!-- Back Button on the left -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: black;
+            color: white;
+        }
+        .meal-card {
+            background-color: #111;
+            transition: all 0.3s ease;
+            border: 1px solid white;
+        }
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+        .btn {
+            border: 1px solid white;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background-color: olive;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+   
     <a href="{% url 'wellnessdata' %}" class="back-button">
         <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
-    
     <main class="flex-grow p-4">
-        <h1 class="text-4xl mb-8 text-center">Bloodpressure Diet</h1>
-
-        <!-- Image-Text Pairs -->
-        <div class="space-y-8 mb-12">
-            <!-- Pre-diabetes Section -->
-            <div class="flex items-center space-x-4">
-                <img src="{% static 'images/bloodpressure/bloodpressure5.jpeg' %}" alt="pre diabetes" class="w-1/4 h-auto">
-                <p class="w-2/3">Pre-Hypertension (Elevated Blood Pressure)<br>
-                    Systolic blood pressure: 120-129 mmHg<br>
-                    Diastolic blood pressure: less than 80 mmHg<br>
-                    Considered a precursor to hypertension, lifestyle changes are recommended to prevent progression to stage 1 hypertension</p>
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold">Bloodpressure Diet Planner</h1>
+            </div>
+            <div class="mb-8">
+                <h2 class="text-xl mb-4">Select your blood pressure condition:</h2>
+                <div class="flex space-x-4">
+                    <button class="bp-type-btn btn bg-black text-white font-bold py-2 px-4 rounded" data-type="pre">Pre-Hypertension</button>
+                    <button class="bp-type-btn btn bg-black text-white font-bold py-2 px-4 rounded" data-type="stage1">Stage 1 Hypertension</button>
+                    <button class="bp-type-btn btn bg-black text-white font-bold py-2 px-4 rounded" data-type="stage2">Stage 2 Hypertension</button>
+                </div>
             </div>
 
-            <!-- Type 2 Diabetes Section -->
-            <div class="flex items-center space-x-4">
-                <img src="{% static 'images/bloodpressure/bloodpressure4.jpeg' %}" alt="Type 2 diabetes" class="w-1/4 h-auto">
-                <p class="w-2/3">Stage 1 Hypertension<br>
-                    Systolic blood pressure: 130-139 mmHg<br>
-                    Diastolic blood pressure: 80-89 mmHg<br>
-                    Or either number alone is in this range<br>
-                    Lifestyle changes are recommended, and medication may be prescribed based on risk factors</p>
-            </div>
-
-            <!-- Type 1 Diabetes Section -->
-            <div class="flex items-center space-x-4">
-                <img src="{% static 'images/bloodpressure/bloodpressure3.jpeg' %}" alt="Type 1 diabetes" class="w-1/4 h-auto">
-                <p class="w-2/3">Stage 2 Hypertension<br>
-                    Systolic blood pressure: 140 mmHg or higher<br>
-                    Diastolic blood pressure: 90 mmHg or higher<br>
-                    Or either number alone is in this range<br>
-                    Considered a severe condition requiring prompt treatment with lifestyle changes and medication</p>
+            <div id="mealPlan" class="hidden">
+                <h2 class="text-2xl mb-4">Your Personalized Meal Plan</h2>
+                <p class="mb-4">Click on a meal type to see more options!</p>
+                <div class="space-y-8">
+                    <div id="breakfast">
+                        <h3 class="text-xl mb-4">Breakfast</h3>
+                        <div class="space-y-4"></div>
+                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded mt-4" data-meal-type="breakfast">Show Another Breakfast Option</button>
+                    </div>
+                    <div id="lunch">
+                        <h3 class="text-xl mb-4">Lunch</h3>
+                        <div class="space-y-4"></div>
+                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded mt-4" data-meal-type="lunch">Show Another Lunch Option</button>
+                    </div>
+                    <div id="dinner">
+                        <h3 class="text-xl mb-4">Dinner</h3>
+                        <div class="space-y-4"></div>
+                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded mt-4" data-meal-type="dinner">Show Another Dinner Option</button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Diabetes Types Section -->
-        <div class="flex flex-col items-center p-4">
-            <div class="mb-2 w-full max-w-md">
-                <h2 class="text-xl mb-3 text-center">Type of Condition, you have:</h2>
-                <div class="flex justify-center space-x-2 mb-3">
-                    <button class="hover-olive border border-white px-3 py-1.5" id="preDiabetic">Pre hypertension</button>
-                    <button class="hover-olive border border-white px-3 py-1.5" id="type1">Stage 1</button>
-                    <button class="hover-olive border border-white px-3 py-1.5" id="type2">Stage 2</button>
-                </div>
-
-                <!-- Meal Plan Links -->
-                <div id="mealPlan" class="hidden border border-white p-3 w-64 mx-auto">
-                    <h3 class="text-lg mb-1.5 text-center">Meal Plan</h3>
-                    <a id="breakfastLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Breakfast</a>            
-                    <a id="lunchLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Lunch</a> 
-                    <a id="dinnerLink" href="#" class="hover-olive border border-white px-3 py-1 mb-1 w-full text-left inline-block text-center">Dinner</a> 
-                </div>
-            </div>
-
-         </div>
     </main>
 
-</div>
-{% block navbar %}
-
-{% endblock navbar %}
-
     <script>
-        (function() {
-            const urls = {
-                preDiabetic: {
-                    breakfast: "{% url 'prehypertensionbreakfastdata' %}",
-                    lunch: "{% url 'prehypertensionlunchdata' %}",
-                    dinner: "{% url 'prehypertensiondinnerdata' %}"
-                },
-                type1: {
-                    breakfast: "{% url 'stage1breakfastdata' %}",
-                    lunch: "{% url 'stage1lunchdata' %}",
-                    dinner: "{% url 'stage1dinnerdata' %}"
-                },
-                type2: {
-                    breakfast: "{% url 'stage2breakfastdata' %}",
-                    lunch: "{% url 'stage2lunchdata' %}",
-                    dinner: "{% url 'stage2dinnerdata' %}"
-                }
+        const mealPlans = {
+            pre: {
+                breakfast: [
+                    { name: "Multigrain Vegetable Uttapam", description: "Savory pancakes made with a mix of whole grains and vegetables. Rich in fiber and complex carbohydrates for sustained energy. Serve with a small portion of coconut chutney and sambar (lightly salted)", image: "{% static 'images/bloodpressure/bbreakfast1.jpeg' %}" },
+                    { name: "Besan Chilla with Mint Chutney", description: "Savory pancakes made from chickpea flour (besan). High in protein and fiber, helps maintain satiety. Pair with homemade mint chutney and a small bowl of yogurt", image: "{% static 'images/bloodpressure/bbreakfast2.jpg' %}" },
+                    { name: "Wheat Bran and Apple Porridge", description: "Whole wheat porridge cooked with wheat bran and diced apples. High in soluble fiber, which can help lower blood pressure. Top with a handful of unsalted mixed nuts for healthy fats", image: "{% static 'images/bloodpressure/bbreakfast3.jpg' %}" }
+                ],
+                lunch: [
+                    { name: "Mixed Dal Khichdi with Vegetable Raita", description: "One-pot meal of rice and mixed lentils with mild spices. Balanced meal providing complete proteins and complex carbs. Serve with vegetable raita for probiotics and added nutrients", image: "{% static 'images/bloodpressure/blunch1.jpeg' %}" },
+                    { name: "Grilled Paneer and Vegetable Wrap", description: "Whole wheat roti filled with grilled paneer and mixed vegetables. Good source of calcium and various vitamins and minerals. Accompany with a small serving of cucumber and tomato salad", image: "{% static 'images/bloodpressure/blunch2.jpeg' %}" },
+                    { name: "Chickpea and Spinach Curry with Brown Rice", description: "Nutrient-dense curry rich in folate and magnesium. Use low-sodium vegetable broth for added flavor without excess salt. Serve with a small portion of brown rice and a wedge of lemon", image: "{% static 'images/bloodpressure/blunch3.jpg' %}" }
+                ],
+                dinner: [
+                    { name: "Baked Fish with Vegetable Upma", description: "Fish seasoned with herbs and lemon, then baked. Rich in omega-3 fatty acids, beneficial for heart health. Serve with vegetable upma made from semolina and mixed vegetables", image: "{% static 'images/bloodpressure/bdinner1.jpeg' %}" },
+                    { name: "Lentil and Vegetable Soup with Multigrain Roti", description: "Hearty soup packed with lentils and assorted vegetables. High in fiber and plant-based proteins. Pair with one small multigrain roti and a side of roasted pumpkin seeds", image: "{% static 'images/bloodpressure/bdinner2.jpg' %}" },
+                    { name: "Tandoori Chicken with Quinoa Biryani", description: "Chicken marinated in yogurt and spices, then grilled. Lean protein source with flavorful spices instead of excess salt. Serve with quinoa biryani cooked with vegetables and mild spices", image: "{% static 'images/bloodpressure/bdinner3.jpeg' %}" }
+                ]
+            },
+            stage1: {
+                breakfast: [
+                    { name: "Oats Idli", description: "Steamed cakes made from oats and lentils. Low in sodium, high in fiber for heart health. Serve with sambar (lentil soup) made with less salt", image: "{% static 'images/bloodpressure/b1breakfast1.jpeg' %}" },
+                    { name: "Ragi Dosa", description: "Thin pancakes made from finger millet (ragi) flour. Rich in calcium and potassium, beneficial for blood pressure. Pair with tomato chutney prepared with minimal salt", image: "{% static 'images/bloodpressure/b1breakfast2.jpg' %}" },
+                    { name: "Vegetable Poha", description: "Flattened rice cooked with vegetables and minimal spices. Low-fat, easy to digest, and rich in B vitamins. Add roasted peanuts for healthy fats and protein", image: "{% static 'images/bloodpressure/b1breakfast3.jpeg' %}" }
+                ],
+                lunch: [
+                    { name: "Sprouted Moong Salad", description: "Protein-rich sprouted green gram with chopped vegetables. High in potassium and magnesium, important for blood pressure control. Dress with lemon juice and a pinch of cumin powder instead of salt", image: "{% static 'images/bloodpressure/b1lunch1.jpg' %}" },
+                    { name: "Rajma Masala with Brown Rice", description: "Kidney beans curry made with low-sodium tomato base. Rich in fiber and plant-based protein. Serve with a small portion of brown rice and cucumber raita", image: "{% static 'images/bloodpressure/b1lunch2.jpeg' %}" },
+                    { name: "Lauki (Bottle Gourd) Kofta Curry", description: "Steamed bottle gourd dumplings in a yogurt-based gravy. Low in calories, high in water content, good for hydration. Accompany with one small whole wheat roti and salad", image: "{% static 'images/bloodpressure/b1lunch3.jpg' %}" }
+                ],
+                dinner: [
+                    { name: "Baked Methi Matar Paneer", description: "Cottage cheese with fenugreek leaves and green peas, baked instead of fried. Rich in calcium and vitamin K, beneficial for heart health. Serve with a small portion of quinoa pulao made with low-sodium vegetable stock", image: "{% static 'images/bloodpressure/b1dinner1.jpg' %}" },
+                    { name: "Grilled Fish with Mint-Coriander Chutney", description: "Fish marinated in yogurt and spices, then grilled. High in omega-3 fatty acids, good for heart health. Pair with steamed vegetables and a small serving of millet", image: "{% static 'images/bloodpressure/b1dinner2.jpeg' %}" },
+                    { name: "Mixed Vegetable Daliya", description: "Broken wheat cooked with assorted vegetables. High in fiber and B vitamins, helps in managing blood pressure. Add a side of roasted chickpeas for extra protein and fiber", image: "{% static 'images/bloodpressure/b1dinner3.jpg' %}" }
+                ]
+            },
+            stage2: {
+                breakfast: [
+                    { name: "Daliya Khichdi", description: "Broken wheat cooked with moong dal and vegetables. Very low in sodium, high in fiber and plant-based protein. Add a tablespoon of ground flaxseeds for omega-3 fatty acids", image: "{% static 'images/bloodpressure/b3breakfast1.jpg' %}" },
+                    { name: "Spinach and Oats Dosa", description: "Thin pancakes made with oats and spinach. Rich in potassium, magnesium, and nitrates that help lower blood pressure. Serve with homemade tomato chutney (no added salt)", image: "{% static 'images/bloodpressure/b3breakfast2.jpg' %}" },
+                    { name: "Beetroot Ragi Idli", description: "Steamed cakes made from finger millet and beetroot. Beetroot is high in nitrates, which can help reduce blood pressure. Pair with a small portion of coconut chutney (unsalted)", image: "{% static 'images/bloodpressure/b3breakfast3.jpeg' %}" }
+                ],
+                lunch: [
+                    { name: "Lobia (Black-eyed Peas) Curry with Cauliflower Rice", description: "Black-eyed peas curry made with low-sodium tomato base and spices. High in potassium and fiber, helps in blood pressure regulation. Serve over cauliflower 'rice' for a low-carb, low-sodium alternative", image: "{% static 'images/bloodpressure/b3lunch1.jpeg' %}" },
+                    { name: "Masoor Dal and Vegetable Khichdi", description: "One-pot meal with red lentils, brown rice, and mixed vegetables. Balanced meal rich in protein, fiber, and essential nutrients. Cook with no added salt, flavor with cumin, turmeric, and fresh herbs", image: "{% static 'images/bloodpressure/b3lunch2.jpeg' %}" },
+                    { name: "Grilled Chicken Tikka with Quinoa Pulao", description: "Chicken marinated in yogurt and spices, then grilled. High in protein, low in saturated fat. Serve with quinoa pulao cooked in low-sodium vegetable broth and mixed vegetables", image: "{% static 'images/bloodpressure/b3lunch3.jpeg' %}" }
+                ],
+                dinner: [
+                    { name: "Baked Fish in Banana Leaf", description: "Fish seasoned with garlic, ginger, and lemon, wrapped and baked in banana leaf. Rich in omega-3 fatty acids, beneficial for heart health. Serve with steamed vegetables and a small portion of millet", image: "{% static 'images/bloodpressure/b3dinner1.jpg' %}" },
+                    { name: "Tofu and Mixed Vegetable Curry", description: "Firm tofu and assorted vegetables in a tomato-based curry. High in plant-based protein and various vitamins and minerals. Pair with one small jowar (sorghum) roti and a side of cucumber raita", image: "{% static 'images/bloodpressure/b3dinner2.jpeg' %}" },
+                    { name: "Mushroom and Peas Brown Rice Pulao", description: "Brown rice cooked with mushrooms, green peas, and mild spices. Mushrooms are a good source of potassium and antioxidants. Serve with a side of roasted pumpkin seeds for extra magnesium", image: "{% static 'images/bloodpressure/b3dinner3.jpeg' %}" }
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const bpTypeBtns = document.querySelectorAll('.bp-type-btn');
+            const mealPlanDiv = document.getElementById('mealPlan');
+            const breakfastDiv = document.getElementById('breakfast').querySelector('div');
+            const lunchDiv = document.getElementById('lunch').querySelector('div');
+            const dinnerDiv = document.getElementById('dinner').querySelector('div');
+            const refreshButtons = document.querySelectorAll('.refresh-meals');
+
+            let currentType = '';
+            let currentMeals = {
+                breakfast: 0,
+                lunch: 0,
+                dinner: 0
             };
 
-            document.querySelectorAll('#preDiabetic, #type1, #type2').forEach(button => {
-                button.addEventListener('click', () => {
-                    const type = button.id;
-                    console.log(`Button clicked: ${type}`);
-                    console.log(`Setting URLs: ${JSON.stringify(urls[type])}`);
-                    
-                    document.getElementById('breakfastLink').href = urls[type].breakfast;
-                    document.getElementById('lunchLink').href = urls[type].lunch;
-                    document.getElementById('dinnerLink').href = urls[type].dinner;
-                    
-                    console.log(`Breakfast link set to: ${document.getElementById('breakfastLink').href}`);
-                    console.log(`Lunch link set to: ${document.getElementById('lunchLink').href}`);
-                    console.log(`Dinner link set to: ${document.getElementById('dinnerLink').href}`);
-                    
-                    document.getElementById('mealPlan').classList.remove('hidden');
+            bpTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type =   this.getAttribute('data-type');
+                    currentType = type;
+                    resetCurrentMeals();
+                    updateMealPlan(type);
+                    mealPlanDiv.classList.remove('hidden');
                 });
             });
-        })();
+
+            refreshButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const mealType = this.getAttribute('data-meal-type');
+                    refreshMeal(mealType);
+                });
+            });
+
+            function resetCurrentMeals() {
+                currentMeals = {
+                    breakfast: 0,
+                    lunch: 0,
+                    dinner: 0
+                };
+            }
+
+            function updateMealPlan(type) {
+                const plan = mealPlans[type];
+                updateMealSection(breakfastDiv, plan.breakfast[currentMeals.breakfast], 'Breakfast');
+                updateMealSection(lunchDiv, plan.lunch[currentMeals.lunch], 'Lunch');
+                updateMealSection(dinnerDiv, plan.dinner[currentMeals.dinner], 'Dinner');
+            }
+
+            function updateMealSection(sectionDiv, meal, mealType) {
+                sectionDiv.innerHTML = `
+                    <div class="meal-card flex items-center space-x-4 bg-black p-4 rounded-none shadow">
+                        <div class="w-2/3">
+                            <h4 class="text-lg font-bold mb-2">${mealType} Option</h4>
+                            <h3 class="text-xl mb-2">${meal.name}</h3>
+                            <p>${meal.description}</p>
+                        </div>
+                        <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('${meal.image}');"></div>
+                    </div>
+                `;
+            }
+
+            function refreshMeal(mealType) {
+                const plan = mealPlans[currentType];
+                currentMeals[mealType] = (currentMeals[mealType] + 1) % plan[mealType].length;
+                const sectionDiv = document.getElementById(mealType).querySelector('div');
+                updateMealSection(sectionDiv, plan[mealType][currentMeals[mealType]], mealType.charAt(0).toUpperCase() + mealType.slice(1));
+            }
+        });
     </script>
+</body>
+</html>
 
-    {% block footer %}
+{% block navbar %}
+{% endblock navbar %}
 
-    {% endblock footer %}
+{% block footer %}
+{% endblock footer %}
+
 
 {% endblock basepage %}

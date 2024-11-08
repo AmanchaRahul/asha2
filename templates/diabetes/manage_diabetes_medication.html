@@ -19,41 +19,64 @@
         .hover-olive:hover {
             color: #808000;
         }
+        .medication-card {
+            background-color: #111;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        .medication-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
+        }
+        .tip-card {
+            background-color: #222;
+            border-left: 4px solid #808000;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-     <!-- Back Button on the left -->
-     <a href="{% url 'wellnessdata' %}" class="back-button">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
         <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
     <main class="flex-grow flex flex-col items-center justify-center p-4">
         <h1 class="text-4xl mb-8 text-center">Managing Diabetes Medications</h1>
-        <div class="w-full max-w-3xl space-y-8">
-            <p class="text-lg mb-6">Proper management of diabetes medications is crucial for maintaining optimal blood sugar levels and preventing complications. Here's a guide to help you understand and manage your diabetes medications effectively:</p>
+        <div class="w-full max-w-4xl space-y-8">
+            <p class="text-lg mb-6">Proper management of diabetes medications is crucial for maintaining optimal blood sugar levels and preventing complications. Explore our interactive guide to understand and manage your diabetes medications effectively:</p>
             
             <section class="space-y-4">
                 <h2 class="text-2xl font-semibold mb-4">Types of Diabetes Medications</h2>
-                <ul class="list-disc pl-5 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {% for medication in diabetes_medications %}
-                        <li>
-                            <h3 class="text-xl font-semibold">{{ medication.name }}</h3>
-                            <p>{{ medication.description }}</p>
-                            <p class="mt-2"><strong>Common side effects:</strong> {{ medication.side_effects }}</p>
-                        </li>
+                        <div class="medication-card p-4 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-2">{{ medication.name }}</h3>
+                            <p class="mb-2">{{ medication.description }}</p>
+                            <details>
+                                <summary class="cursor-pointer hover-olive">Common side effects</summary>
+                                <p class="mt-2">{{ medication.side_effects }}</p>
+                            </details>
+                        </div>
                     {% endfor %}
-                </ul>
+                </div>
             </section>
 
             <section class="space-y-4">
                 <h2 class="text-2xl font-semibold mb-4">Tips for Managing Your Diabetes Medications</h2>
-                <ul class="list-disc pl-5 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {% for tip in medication_tips %}
-                        <li>
-                            <h3 class="text-xl font-semibold">{{ tip.title }}</h3>
+                        <div class="tip-card p-4 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-2">{{ tip.title }}</h3>
                             <p>{{ tip.description }}</p>
-                        </li>
+                        </div>
                     {% endfor %}
-                </ul>
+                </div>
             </section>
 
             <section class="bg-gray-800 p-6 rounded-lg">
@@ -65,16 +88,68 @@
                     <li>Carry identification that states you have diabetes in case of emergencies.</li>
                 </ul>
             </section>
+
+            <section class="mt-8">
+                <h2 class="text-2xl font-semibold mb-4">Medication Tracker</h2>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <form id="medicationForm" class="space-y-4">
+                        <div>
+                            <label for="medicationName" class="block mb-2">Medication Name:</label>
+                            <input type="text" id="medicationName" class="w-full p-2 bg-gray-700 rounded">
+                        </div>
+                        <div>
+                            <label for="dosage" class="block mb-2">Dosage:</label>
+                            <input type="text" id="dosage" class="w-full p-2 bg-gray-700 rounded">
+                        </div>
+                        <div>
+                            <label for="frequency" class="block mb-2">Frequency:</label>
+                            <input type="text" id="frequency" class="w-full p-2 bg-gray-700 rounded">
+                        </div>
+                        <button type="submit" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded">
+                            Add Medication
+                        </button>
+                    </form>
+                    <div id="medicationList" class="mt-4"></div>
+                </div>
+            </section>
         </div>
     </main>
+
+    <script>
+        document.getElementById('medicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('medicationName').value;
+            const dosage = document.getElementById('dosage').value;
+            const frequency = document.getElementById('frequency').value;
+            
+            const medicationItem = document.createElement('div');
+            medicationItem.className = 'bg-gray-700 p-2 rounded mt-2 flex justify-between items-center';
+            medicationItem.innerHTML = `
+                <span><strong>${name}</strong> - ${dosage}, ${frequency}</span>
+                <button class="delete-btn bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
+            `;
+            
+            document.getElementById('medicationList').appendChild(medicationItem);
+            
+            // Clear form
+            document.getElementById('medicationName').value = '';
+            document.getElementById('dosage').value = '';
+            document.getElementById('frequency').value = '';
+        });
+
+        // Event delegation for delete buttons
+        document.getElementById('medicationList').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-btn')) {
+                e.target.closest('div').remove();
+            }
+        });
+    </script>
+
     {% block navbar %}
+    {% endblock navbar %}
 
-   {% endblock navbar %}
-
-   {% block footer %}
-   {% endblock footer %}
-
-
+    {% block footer %}
+    {% endblock footer %}
 </body>
 </html>
 {% endblock basepage %}

@@ -22,8 +22,6 @@ from groq import Groq
 import os
 from django.views.decorators.http import require_http_methods
 import json
-from .models import MobileUser, OTPRecord
-from .forms import OTPLoginForm, OTPVerificationForm
 
 
 # Create your views here.

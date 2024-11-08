@@ -19,6 +19,25 @@
         .hover-olive:hover {
             color: #808000;
         }
+        .technique-card {
+            background-color: #111;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        .technique-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
+        }
+        .technique-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+        }
+        .hover-olive-green:hover {
+            background-color: #808000 !important;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -28,24 +47,107 @@
 
     <main class="flex-grow flex flex-col items-center justify-center p-4">
         <h1 class="text-4xl mb-8 text-center">Managing Stress and Blood Pressure</h1>
-        <div class="w-full max-w-2xl space-y-6">
-            <h2 class="text-2xl mb-4">Techniques to Reduce Stress and BP</h2>
-            <ul class="list-disc pl-5 space-y-4">
-                {% for technique in stress_techniques %}
-                    <li class="mb-4">
-                        <h3 class="text-xl font-semibold mb-2">{{ technique.name }}</h3>
-                        <p>{{ technique.description }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
+        <div class="w-full max-w-4xl space-y-6">
+            <section>
+                <h2 class="text-2xl mb-4">Interactive Stress Management Techniques</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="technique-card p-4 rounded-lg">
+                        <img src="{% static 'images/diabetes/d1breakfast2.jpg' %}" alt="Deep Breathing" class="technique-image">
+                        <h3 class="text-xl font-semibold mb-2">Deep Breathing</h3>
+                        <p class="mb-4">Practice deep breathing to reduce stress and lower blood pressure.</p>
+                    </div>
+                    <div class="technique-card p-4 rounded-lg">
+                        <img src="{% static 'images/muscle-relaxation.jpg' %}" alt="Progressive Muscle Relaxation" class="technique-image">
+                        <h3 class="text-xl font-semibold mb-2">Progressive Muscle Relaxation</h3>
+                        <p class="mb-4">Tense and relax muscle groups to reduce physical stress.</p>
+                    </div>
+                    <div class="technique-card p-4 rounded-lg">
+                        <img src="{% static 'images/mindfulness.jpg' %}" alt="Mindfulness Meditation" class="technique-image">
+                        <h3 class="text-xl font-semibold mb-2">Mindfulness Meditation</h3>
+                        <p class="mb-4">Focus on the present moment to reduce anxiety and stress.</p>
+                    </div>
+                    <div class="technique-card p-4 rounded-lg">
+                        <img src="{% static 'images/guided-imagery.jpg' %}" alt="Guided Imagery" class="technique-image">
+                        <h3 class="text-xl font-semibold mb-2">Guided Imagery</h3>
+                        <p class="mb-4">Visualize calming scenes to promote relaxation and reduce stress.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-8">
+                <h2 class="text-2xl font-semibold mb-4">Stress Log</h2>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <form id="stressLogForm" class="mb-4">
+                        <div class="flex items-center space-x-4">
+                            <label for="stressLevel" class="whitespace-nowrap">Stress Level (1-10):</label>
+                            <input type="number" id="stressLevel" name="stressLevel" min="1" max="10" required class="flex-grow p-2 bg-gray-700 rounded">
+                            <button type="submit" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                                Log Stress
+                            </button>
+                        </div>
+                    </form>
+                    <div id="stressLogEntries" class="mt-4 space-y-2 max-h-60 overflow-y-auto"></div>
+                </div>
+            </section>
+
+            <section class="mt-8">
+                <h2 class="text-2xl font-semibold mb-4">Stress Management Tips</h2>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <p id="currentTip" class="mb-4">Click the button below to get a stress management tip.</p>
+                    <button onclick="getRandomTip()" class="bg-olive-600 hover-olive-green text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Get Random Tip
+                    </button>
+                </div>
+            </section>
         </div>
-        
     </main>
+
+    <script>
+        document.getElementById('stressLogForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const level = parseInt(document.getElementById('stressLevel').value);
+            logStressLevel(level);
+            document.getElementById('stressLevel').value = '';
+        });
+
+        function logStressLevel(level) {
+            const date = new Date();
+            const time = date.toLocaleTimeString();
+            const entryDiv = document.createElement('div');
+            entryDiv.className = 'flex justify-between items-center bg-gray-700 p-2 rounded';
+            entryDiv.innerHTML = `
+                <span>Level ${level} at ${time}</span>
+                <button onclick="deleteStressLogEntry(this)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
+            `;
+            document.getElementById('stressLogEntries').prepend(entryDiv);
+        }
+
+        function deleteStressLogEntry(button) {
+            button.closest('div').remove();
+        }
+
+        function getRandomTip() {
+            const tips = [
+                "Take a short walk to clear your mind",
+                "Practice gratitude by listing three things you're thankful for",
+                "Try deep breathing exercises for 5 minutes",
+                "Listen to calming music or nature sounds",
+                "Stretch your body to release physical tension",
+                "Write down your thoughts and feelings in a journal",
+                "Limit screen time before bed for better sleep",
+                "Stay hydrated throughout the day",
+                "Practice saying 'no' to unnecessary commitments",
+                "Take regular breaks during work hours"
+            ];
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            document.getElementById('currentTip').textContent = randomTip;
+        }
+    </script>
+
     {% block navbar %}
-
     {% endblock navbar %}
-    {% block footer %}
 
+    {% block footer %}
     {% endblock footer %}
 </body>
 </html>
