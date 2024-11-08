@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anti-Aging Tips</title>
+    <title>Anti-Aging Secrets</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
     <style>
@@ -19,6 +19,29 @@
         .hover-olive:hover {
             color: #808000;
         }
+        .tip-card {
+            background-color: #111;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
+        }
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #808000, 0 0 20px #808000;
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #808000, 0 0 40px #808000;
+            }
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
@@ -27,25 +50,124 @@
     </a>
 
     <main class="flex-grow flex flex-col items-center justify-center p-4">
-        <h1 class="text-4xl mb-8 text-center">Anti-Aging Tips</h1>
-        <div class="w-full max-w-2xl space-y-6">
-            <h2 class="text-2xl mb-4">Strategies to Maintain Youthful Skin</h2>
-            <ul class="list-disc pl-5 space-y-4">
-                {% for tip in anti_aging_tips %}
-                    <li class="mb-4">
-                        <h3 class="text-xl font-semibold mb-2">{{ tip.name }}</h3>
-                        <p>{{ tip.description }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
+        <h1 class="text-4xl mb-6 text-center glow">Unlock the Secrets of Ageless Beauty</h1>
+        <div class="w-full max-w-4xl space-y-6">
+            <!-- Tip Carousel Section -->
+            <section>
+                <h2 class="text-2xl mb-2">Timeless Anti-Aging Strategies</h2>
+                <div id="tip-carousel" class="relative overflow-hidden h-64">
+                    {% for tip in anti_aging_tips %}
+                        <div class="tip-card p-4 rounded-lg absolute w-full transition-all duration-500" style="transform: translateX(100%);">
+                            <h3 class="text-xl font-semibold mb-2">{{ tip.name }}</h3>
+                            <p>{{ tip.description }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="flex justify-center mt-2">
+                    <button onclick="prevTip()" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2">
+                        Previous
+                    </button>
+                    <button onclick="nextTip()" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Next
+                    </button>
+                </div>
+            </section>
+
+            <!-- Skin Age Calculator Section -->
+            <section class="mt-8">
+                <h2 class="text-2xl font-semibold mb-4">Discover Your Skin's True Age</h2>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <form id="skin-age-form" class="space-y-4">
+                        <div>
+                            <label for="chronological-age" class="block mb-2">Your Age:</label>
+                            <input type="number" id="chronological-age" name="chronological-age" required class="p-2 bg-gray-700 rounded w-full">
+                        </div>
+                        <div>
+                            <label for="sun-exposure" class="block mb-2">Daily Sun Exposure (hours):</label>
+                            <input type="number" id="sun-exposure" name="sun-exposure" required class="p-2 bg-gray-700 rounded w-full">
+                        </div>
+                        <div>
+                            <label for="sleep-hours" class="block mb-2">Average Sleep (hours):</label>
+                            <input type="number" id="sleep-hours" name="sleep-hours" required class="p-2 bg-gray-700 rounded w-full">
+                        </div>
+                        <div>
+                            <label for="water-intake" class="block mb-2">Daily Water Intake (glasses):</label>
+                            <input type="number" id="water-intake" name="water-intake" required class="p-2 bg-gray-700 rounded w-full">
+                        </div>
+                        <button type="submit" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300 w-full">
+                            Reveal My Skin's Age
+                        </button>
+                    </form>
+                    <div id="skin-age-result" class="mt-4 hidden">
+                        <h3 class="text-xl font-semibold mb-2">Your Skin Age Results</h3>
+                        <p id="skin-age-value" class="text-2xl font-bold mb-2"></p>
+                        <p id="skin-age-advice" class="italic"></p>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
-    {% block navbar %}
 
-    {% endblock navbar %}
-    {% block footer %}
+    <script>
+        // Tip Carousel
+        let currentTipIndex = 0;
+        const tips = document.querySelectorAll('#tip-carousel .tip-card');
 
-    {% endblock footer %}
+        function showTip(index) {
+            tips.forEach((tip, i) => {
+                if (i === index) {
+                    tip.style.transform = 'translateX(0)';
+                } else {
+                    tip.style.transform = 'translateX(100%)';
+                }
+            });
+        }
+
+        function nextTip() {
+            currentTipIndex = (currentTipIndex + 1) % tips.length;
+            showTip(currentTipIndex);
+        }
+
+        function prevTip() {
+            currentTipIndex = (currentTipIndex - 1 + tips.length) % tips.length;
+            showTip(currentTipIndex);
+        }
+
+        showTip(currentTipIndex);
+
+        // Skin Age Calculator
+        document.getElementById('skin-age-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const age = parseInt(document.getElementById('chronological-age').value);
+            const sunExposure = parseInt(document.getElementById('sun-exposure').value);
+            const sleep = parseInt(document.getElementById('sleep-hours').value);
+            const water = parseInt(document.getElementById('water-intake').value);
+
+            let skinAge = age;
+            skinAge += sunExposure > 2 ? (sunExposure - 2) * 2 : 0;
+            skinAge -= sleep >= 7 ? 1 : 0;
+            skinAge -= water >= 8 ? 1 : 0;
+
+            const resultDiv = document.getElementById('skin-age-result');
+            const skinAgeValue = document.getElementById('skin-age-value');
+            const skinAgeAdvice = document.getElementById('skin-age-advice');
+
+            skinAgeValue.textContent = `Your estimated skin age: ${skinAge} years old`;
+
+            if (skinAge < age) {
+                skinAgeAdvice.textContent = "Great job! Your skin is younger than your chronological age. Keep up your healthy habits!";
+            } else if (skinAge === age) {
+                skinAgeAdvice.textContent = "Your skin age matches your chronological age. There's room for improvement in your skincare routine.";
+            } else {
+                skinAgeAdvice.textContent = "Your skin age is higher than your chronological age. Consider adjusting your lifestyle and skincare habits for better results.";
+            }
+
+            resultDiv.classList.remove('hidden');
+        });
+    </script>
+
+    {% block navbar %}{% endblock navbar %}
+    {% block footer %}{% endblock footer %}
 </body>
 </html>
 {% endblock basepage %}

@@ -1,3 +1,5 @@
+
+
 {% extends 'base.html' %}
 {% load static %}
 
@@ -19,55 +21,37 @@
         .hover-olive:hover {
             color: #808000;
         }
-        .header-nav {
+        .speech-controls {
             display: flex;
-            align-items: center;
-            padding: 1rem;
-            position: relative;
-            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
         }
-        .back-button {
-            flex-shrink: 0;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
+        .speech-button {
+            background-color: #808000;
+            color: white;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .back-button img {
-            width: 100%;
-            height: 100%;
-        }
-        .site-logo {
-            font-size: 1.5rem;
-            white-space: nowrap;
-            margin-left: 0.5rem;
-        }
-        @media (max-width: 640px) {
-            .header-nav {
-                padding: 0.75rem;
-            }
-            .back-button {
-                width: 32px;
-                height: 32px;
-            }
-            .site-logo {
-                font-size: 1.25rem;
-            }
+        .speech-button:hover {
+            background-color: #5a5a00;
         }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-    <!-- Header Navigation -->
-    <nav class="header-nav">
-        <a href="{% url 'basedata' %}" class="back-button">
-            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-        </a>
-        <span class="site-logo">ASHA</span>
-    </nav>
-
+    <a href="{% url 'basedata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
     <main class="flex-grow p-4 max-w-4xl mx-auto">
-        <h1 class="text-4xl mb-8 text-center sm:text-4xl text-3xl">Latest Health News</h1>
+        <h1 class="text-4xl mb-8 text-center">Latest Health News</h1>
         
+        <div class="speech-controls">
+            <button id="playButton" class="speech-button">Play</button>
+            <button id="stopButton" class="speech-button">Stop</button>
+        </div>
+
         <section class="mb-12">
             <h2 class="text-2xl mb-4 border-b border-olive pb-2">Diabetes News</h2>
             <ul class="space-y-4">
@@ -106,9 +90,39 @@
                 {% endfor %}
             </ul>
         </section>
-    </main>
-</body>
 
+       
+    </main>
+
+    <script>
+        let synth = window.speechSynthesis;
+        let utterance = new SpeechSynthesisUtterance();
+        let isPlaying = false;
+
+        function getAllText() {
+            let allText = '';
+            document.querySelectorAll('h2, a.text-xl, p').forEach(element => {
+                allText += element.textContent + '. ';
+            });
+            return allText;
+        }
+
+        document.getElementById('playButton').addEventListener('click', function() {
+            if (!isPlaying) {
+                utterance.text = getAllText();
+                synth.speak(utterance);
+                isPlaying = true;
+            }
+        });
+
+        document.getElementById('stopButton').addEventListener('click', function() {
+            if (isPlaying) {
+                synth.cancel();
+                isPlaying = false;
+            }
+        });
+    </script>
+</body>
 {% block navbar %}
 {% endblock navbar %}
 

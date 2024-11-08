@@ -14,15 +14,17 @@ def predict_diabetes(request):
     if request.method == 'POST':
         form = DiabetesForm(request.POST)
         if form.is_valid():
-            # Get data from the form
-            user_data = np.array([[form.cleaned_data['Pregnancies'],
-                                   form.cleaned_data['Glucose'],
-                                   form.cleaned_data['BloodPressure'],
-                                   form.cleaned_data['SkinThickness'],
-                                   form.cleaned_data['Insulin'],
-                                   form.cleaned_data['BMI'],
-                                   form.cleaned_data['DiabetesPedigreeFunction'],
-                                   form.cleaned_data['Age']]])
+            # Get data from the form and set default values for missing fields
+            user_data = np.array([[
+                0,  # Pregnancies (default)
+                form.cleaned_data['Glucose'],
+                form.cleaned_data['BloodPressure'],
+                23,  # SkinThickness (default average)
+                30,  # Insulin (default average)
+                form.cleaned_data['BMI'],
+                0.5,  # DiabetesPedigreeFunction (default average)
+                form.cleaned_data['Age']
+            ]])
             
             # Preprocess the input
             user_data_scaled = scaler.transform(user_data)

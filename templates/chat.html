@@ -1,232 +1,393 @@
-{% extends 'base.html' %}
 {% load static %}
 
-
-
-{% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wellness Chatbot</title>
+    <title>Wellness Information Assistant</title>
+
     <style>
-        body {
-            font-family: 'Courier New', monospace;
-            margin: 0;
-            padding: 0;
+
+        /* Logo Header Styles */
+        .logo-header {
+            position: fixed;
+            top: 10px;
+            left: 20px;
+            z-index: 1010;
             display: flex;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-color: black;
+            gap: 10px;
             color: white;
         }
-        .chat-container {
-            width: 100%;
-            max-width: 950px; /* Increased max-width for larger chatbot box */
-            background-color: #111;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+
+        /* Back Button Styles */
+        .back-button {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            padding: 0;
+            border-radius: 50%;
             overflow: hidden;
-            margin-top: 50px;
         }
-        .chat-header {
-            background-color: #444;
-            color: white;
-            padding: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .chat-box {
-            height: calc(100vh - 240px);
-            overflow-y: auto;
-            padding: 15px;
-            color: #ddd; /* Default color for messages */
-        }
-        .message {
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            line-height: 1.6;
-        }
-        .user-message {
-            background-color: #222;
-            text-align: right;
-        }
-        .ai-message {
-            background-color: #333; 
-            text-align: left; 
-            color: white; /* Set bot message text to white */
-        }
-        .ai-message h3 {
-            margin-top: 15px;
-            margin-bottom: 10px;
-            color: white; /* Header color */
-        }
-        .ai-message strong {
-            font-weight: bold; 
-            color: white; /* Strong text color */
-        }
-        .chat-input {
-            display: flex; 
-            padding: 15px; 
-            background-color: #222; 
-        }
-        .chat-input input {
-            flex: 1; 
-            padding: 10px; 
-            border: 1px solid #444; 
-            border-radius: 4px; 
-            font-size: 16px; 
-            background-color: #333; 
-            color: white; 
-        }
-        .chat-input button {
-             padding: 10px 20px; 
-             background-color:#444; 
-             color:white; 
-             border:none; 
-             border-radius:4px; 
-             margin-left :15px; /* Increased margin for more space */
-             cursor:pointer; 
-             font-size :16px; 
-         }
-         .chat-input button:hover { 
-             background-color :#666; /* Hover effect for button */
-         }  
-     </style>  
-</head>  
-<body>  
-    
-    <div class="chat-container">  
-        <a href="{% url 'wellnessdata' %}" class="back-button">
-            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-        </a>
-        <div class="chat-header">Wellness Chatbot</div>  
         
-        <div class="chat-box" id="chat-box">  
-           <!-- Chat messages will be appended here -->  
-           {% if user_input %}  
-                <div class="message user-message"><strong>YOU:</strong> {{ user_input }}</div>  
-           {% endif %}  
-           {% if response %}  
-                <div class="message ai-message"><strong>AI:</strong> {{ response }}</div>  
-           {% endif %}  
-       </div>  
+        .back-button img {
+            width: 40px; /* Set the width to match the button size */
+            height: 40px; /* Set the height to match the button size */
+            display: block; /* Removes any extra space below the image */
+            cursor: pointer;
+        }
 
-       <div class="chat-input">  
-           <input type="text" id="message-input" placeholder="Ask about information..." aria-label="Type your message">  
-           <button onclick="sendMessage()">Send</button>  
-       </div>  
-   </div>  
+    body {
+        font-family: 'Courier New', monospace;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: black;
+        color: white;
+    }
+    .chat-container {
+        width: 100%;
+        max-width: 950px;
+        background-color: #111;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 50px;
+    }
+    .chat-header {
+        background-color: #444;
+        color: white;
+        padding: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .chat-box {
+        height: calc(100vh - 240px);
+        overflow-y: auto;
+        padding: 15px;
+        color: #ddd;
+    }
+    .message {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 8px;
+        line-height: 1.6;
+    }
+    .user-message {
+        background-color: #222;
+        text-align: right;
+    }
+    .ai-message {
+        background-color: #333;
+        text-align: left;
+        color: white;
+    }
+    .chat-input {
+        display: flex;
+        padding: 15px;
+        background-color: #222;
+        align-items: center;
+    }
+    .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #444;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: #333;
+        color: white;
+    }
+    .chat-input button {
+        padding: 10px 20px;
+        background-color: #444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .chat-input button:hover {
+        background-color: #666;
+    }
+    .voice-controls {
+        display: flex;
+        gap: 10px;
+    }
+    .mic-button, .stop-button {
+        width: 40px;
+        height: 40px;
+        padding: 8px;
+        border-radius: 50%;
+        background-color: #555;  /* Slightly lighter background */
+        border: 2px solid #fff;  /* White border for contrast */
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Add shadow for better visibility */
+    }
+    .mic-button img, .stop-button img {
+        width: 40px;
+        height: 40px;
+        filter: invert(1);  /* Invert colors for better visibility */
+    }
+    .mic-button.active {
+        background-color: #808000;
+        animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+</style>    
+        
+</head>
+<body>
+     <!-- Logo Header -->
+    <header class="logo-header">
+        <i class="fa-solid fa-earth-americas" alt="Logo" style="font-size: 24px;"></i>
+        <h1 class="text-xl hover-olive transition-colors duration-300">ASHA</h1>
+    </header>
 
-   <script>
-       function getCookie(name) {  
-           let cookieValue = null;  
-           if (document.cookie && document.cookie !== '') {  
-               const cookies = document.cookie.split(';');  
-               for (let i = 0; i < cookies.length; i++) {  
-                   const cookie = cookies[i].trim();  
-                   if (cookie.substring(0, name.length + 1) === (name + '=')) {  
-                       cookieValue = decodeURIComponent(cookie.substring(name.length + 1));  
-                       break;  
-                   }  
-               }  
-           }  
-           return cookieValue;   
-       }  
+          <!-- Back Button -->
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
 
-       const csrftoken = getCookie('csrftoken');  
 
-       function sendMessage() {   
-           const messageInput = document.getElementById('message-input');   
-           const message = messageInput.value.trim();   
-           if (message === '') return;
+    <div class="chat-container">
+        
+        <div class="chat-header">Wellness Assistant</div>
+        
+        <div class="chat-box" id="chat-box">
+            <div id="messages"></div>
+        </div>
 
-           appendMessage('user', message);   
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Type your message or click mic to speak..." aria-label="Type your message">
+            <button onclick="sendMessage()">Send</button>
+            <div class="voice-controls">
+                <button class="mic-button" id="start-voice-chat" title="Start voice input">
+                    <img src="{% static 'images/mic-start.png' %}" alt="Microphone">
+                </button>
+                <button class="stop-button" id="stop-voice" title="Stop voice">
+                    <img src="{% static 'images/mic-stop.png' %}" alt="Stop">
+                </button>
+            </div>
+        </div>
+    </div>
 
-           fetch('{% url "chatbot" %}', {   
-               method:'POST',   
-               headers:{   
-                   'Content-Type':'application/json', // Changed to application/json
-                   'X-CSRFToken': csrftoken   
-               },   
-               body: JSON.stringify({ user_input: message }) // Properly formatted JSON payload
-           })   
-           .then(response => {    
-               if (!response.ok) {    
-                   throw new Error(`HTTP error! status:${response.status}`);    
-               }    
-               return response.json();    
-           })    
-           .then(data => {    
-               appendMessage('ai', data.response);    
-           })    
-           .catch(error => {    
-               console.error('Error:', error);    
-               appendMessage('error', `Error:${error.message}`);    
-           });    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function getCookie(name) {  
+            let cookieValue = null;  
+            if (document.cookie && document.cookie !== '') {  
+                const cookies = document.cookie.split(';');  
+                for (let i = 0; i < cookies.length; i++) {  
+                    const cookie = cookies[i].trim();  
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {  
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));  
+                        break;  
+                    }  
+                }  
+            }  
+            return cookieValue;   
+        }  
+ 
+        const csrftoken = getCookie('csrftoken');  
+ 
+        function sendMessage() {   
+            const messageInput = document.getElementById('message-input');   
+            const message = messageInput.value.trim();   
+            if (message === '') return;
+ 
+            appendMessage('user', message);   
+ 
+            fetch('{% url "chatbot" %}', {   
+                method:'POST',   
+                headers:{   
+                    'Content-Type':'application/json', // Changed to application/json
+                    'X-CSRFToken': csrftoken   
+                },   
+                body: JSON.stringify({ user_input: message }) // Properly formatted JSON payload
+            })   
+            .then(response => {    
+                if (!response.ok) {    
+                    throw new Error(`HTTP error! status:${response.status}`);    
+                }    
+                return response.json();    
+            })    
+            .then(data => {    
+                appendMessage('ai', data.response);    
+            })    
+            .catch(error => {    
+                console.error('Error:', error);    
+                appendMessage('error', `Error:${error.message}`);    
+            });    
+ 
+            messageInput.value = '';   
+        }    
+ 
+        function appendMessage(type, content) {    
+            const chatBox = document.getElementById('chat-box');    
+            const messageElement = document.createElement('div');    
+            messageElement.classList.add('message');    
+            messageElement.classList.add(type === 'user' ? 'user-message' : 'ai-message');    
+ 
+            if (type === 'user') {    
+                messageElement.innerHTML = `<strong>You:</strong> ${content}`;    
+            } else {    
+                messageElement.innerHTML = `<strong>Bot:</strong> ${formatAIResponse(content)}`;    
+            }    
+ 
+            chatBox.appendChild(messageElement);    
+            chatBox.scrollTop = chatBox.scrollHeight;    
+        }    
+ 
+        function formatAIResponse(content) {    
+           // Remove all asterisks and extra spaces
+           content = content.replace(/\*/g, '').replace(/\s+/g, ' ').trim();
+ 
+           // Split content into lines
+           const lines = content.split(/\.\s+/);
+ 
+           let formattedContent = '';
+ 
+           lines.forEach(line => {
+               line = line.trim();
+               if (line) {
+                   // Check if the line is a header (starts with a capital letter)
+                   if (/^[A-Z]/.test(line)) {
+                       formattedContent += `<h3>${line}</h3>`;
+                   } else {
+                       formattedContent += `<p>${line}.</p>`;
+                   }
+               }
+           });
+ 
+           return formattedContent;
+ 
+       }
+ 
+       // Add event listener for Enter key
+       document.getElementById('message-input').addEventListener('keypress', function(event) {     
+           if (event.key === 'Enter') {     
+               sendMessage();     
+           }     
+       });   
+        
+        $(document).ready(function() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            
+            let synth = window.speechSynthesis;
+            let utterance;
+            
+            $('#start-voice-chat').click(function() {
+                recognition.start();
+                $(this).addClass('active');
+            });
+            
+            $('#stop-voice').click(function() {
+                synth.cancel();
+                recognition.stop();
+                $('#start-voice-chat').removeClass('active');
+            });
+            
+            recognition.onresult = function(event) {
+                const userText = event.results[0][0].transcript;
+                $('#message-input').val(userText);
+                sendMessage();
+            };
+            
+            recognition.onerror = function(event) {
+                alert('Error occurred in recognition: ' + event.error);
+                $('#start-voice-chat').removeClass('active');
+            };
+        });
 
-           messageInput.value = '';   
-       }    
+        $(document).ready(function() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+        
+            let synth = window.speechSynthesis;
+            let utterance;
+        
+            $('#start-voice-chat').click(function() {
+                recognition.start();
+                $(this).addClass('active');
+            });
+        
+            $('#stop-voice').click(function() {
+                synth.cancel();
+                recognition.stop();
+            });
+        
+            recognition.onresult = function(event) {
+                const userText = event.results[0][0].transcript;
+                $('#user-text').text(userText);
+        
+                // Send the transcribed text to the server
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "voice" %}',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        user_text: userText,
+                    },
+                    success: function(response) {
+                        if (response.should_stop) {
+                            synth.cancel();
+                            $('#bot-response').text('Voice command recognized: Stopping.');
+                        } else {
+                            const llamaResponse = response.llama_response;
+                            $('#bot-response').text(llamaResponse);
+        
+                            // Convert bot response to speech
+                            utterance = new SpeechSynthesisUtterance(llamaResponse);
+                            utterance.lang = 'en-US';
+                            synth.speak(utterance);
+                        }
+        
+                        // Scroll to the bottom of the chat box
+                        const chatBox = document.getElementById('chat-box');
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    },
+                    error: function() {
+                        alert("Something went wrong. Please try again.");
+                    },
+                    complete: function() {
+                        $('#start-voice-chat').removeClass('active');
+                    }
+                });
+            };
+        
+            recognition.onerror = function(event) {
+                alert('Error occurred in recognition: ' + event.error);
+                $('#start-voice-chat').removeClass('active');
+            };
+        });
+    </script>
 
-       function appendMessage(type, content) {    
-           const chatBox = document.getElementById('chat-box');    
-           const messageElement = document.createElement('div');    
-           messageElement.classList.add('message');    
-           messageElement.classList.add(type === 'user' ? 'user-message' : 'ai-message');    
+    {% block navbar %}
+    {% endblock navbar %}
 
-           if (type === 'user') {    
-               messageElement.innerHTML = `<strong>You:</strong> ${content}`;    
-           } else {    
-               messageElement.innerHTML = `<strong>Bot:</strong> ${formatAIResponse(content)}`;    
-           }    
+    {% block footer %}
+    {% endblock footer %}
 
-           chatBox.appendChild(messageElement);    
-           chatBox.scrollTop = chatBox.scrollHeight;    
-       }    
+</body>
 
-       function formatAIResponse(content) {    
-          // Remove all asterisks and extra spaces
-          content = content.replace(/\*/g, '').replace(/\s+/g, ' ').trim();
-
-          // Split content into lines
-          const lines = content.split(/\.\s+/);
-
-          let formattedContent = '';
-
-          lines.forEach(line => {
-              line = line.trim();
-              if (line) {
-                  // Check if the line is a header (starts with a capital letter)
-                  if (/^[A-Z]/.test(line)) {
-                      formattedContent += `<h3>${line}</h3>`;
-                  } else {
-                      formattedContent += `<p>${line}.</p>`;
-                  }
-              }
-          });
-
-          return formattedContent;
-
-      }
-
-      // Add event listener for Enter key
-      document.getElementById('message-input').addEventListener('keypress', function(event) {     
-          if (event.key === 'Enter') {     
-              sendMessage();     
-          }     
-      });     
-   </script>     
-</body> 
-{% block navbar %}
-
-{% endblock navbar %}
-
-{% block footer %}
-{% endblock footer %}    
-</html>
-
-{% endblock basepage %}

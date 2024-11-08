@@ -220,7 +220,6 @@ class DiabetesCheckView(View):
 
 
   # Make sure this import is correct
-
 def health_news(request):
     diabetes_news = get_news('diabetes')  # More specific query
     blood_pressure_news = get_news('blood pressure OR hypertension OR high blood pressure OR low blood pressure')
@@ -238,7 +237,6 @@ def health_news(request):
     }
     
     return render(request, 'news.html', context)
-
 
 def contact_view(request):
     if request.method == 'POST':
@@ -322,6 +320,7 @@ def manage_stress(request):
     ]
     return render(request, 'bloodpressure/manage_stress.html', {'stress_techniques': stress_techniques})
 
+
 def anti_aging_tips(request):
     anti_aging_tips = [
         {
@@ -342,8 +341,6 @@ def anti_aging_tips(request):
         }
     ]
     return render(request, 'skincare/anti_aging_tips.html', {'anti_aging_tips': anti_aging_tips})
-
-
 
 
 
@@ -415,72 +412,6 @@ def manage_diabetes_medication(request):
 
     return render(request, 'diabetes/manage_diabetes_medication.html', context)
 
-
-
-# def generate_otp():
-#     return str(random.randint(100000, 999999))
-
-# @csrf_exempt
-# def send_otp(request):
-#     if request.method == 'POST':
-#         mobile = request.POST.get('mobile')
-#         otp = generate_otp()
-
-#         # Find or create the User first (this depends on your application logic)
-#         user, created = User.objects.get_or_create(username=mobile)
-        
-#         if created:
-#             # You can set other fields for the User here if necessary
-#             user.set_unusable_password()  # Set an unusable password for now, as user is created via mobile
-#             user.save()
-
-#         # Save OTP to user profile or session
-#         user_profile, created = UserProfile.objects.get_or_create(user=user, mobile=mobile)
-
-#         if created:
-#             print(f"New profile created for mobile: {mobile}")
-
-#         user_profile.otp = otp
-#         user_profile.save()
-
-#         # Send OTP using MSG91 API
-#         url = "http://control.msg91.com/api/sendotp.php?otp="+otp+'&sender=ABC&messaage='+'Your otp is '+otp+'&mobile='+mobile+'&authkey='+'&contry=91'
-#         headers = {
-#             "authkey": settings.MSG91_AUTH_KEY,
-#             "Content-Type": "application/json"
-#         }
-#         payload = {
-#             "template_id": settings.MSG91_TEMPLATE_ID,
-#             "mobile": mobile,
-#             "OTP": otp
-#         }
-#         response = requests.post(url, json=payload, headers=headers)
-
-#         if response.status_code == 200:
-#             return JsonResponse({"success": True, "message": "OTP sent successfully"})
-#         else:
-#             return JsonResponse({"success": False, "message": "Failed to send OTP"})
-
-#     return JsonResponse({"success": False, "message": "Invalid request method"})
-
-
-# @csrf_exempt
-# def verify_otp(request):
-#     if request.method == 'POST':
-#         mobile = request.POST.get('mobile')
-#         otp = request.POST.get('otp')
-        
-#         try:
-#             user_profile = UserProfile.objects.get(mobile=mobile, otp=otp)
-#             user = user_profile.user
-#             login(request, user)
-#             user_profile.otp = None  # Clear the OTP after successful verification
-#             user_profile.save()
-#             return JsonResponse({"success": True, "message": "OTP verified successfully"})
-#         except UserProfile.DoesNotExist:
-#             return JsonResponse({"success": False, "message": "Invalid OTP"})
-    
-#     return JsonResponse({"success": False, "message": "Invalid request method"})
 
 
 def diabetes_challenge(request):
@@ -655,24 +586,36 @@ def first_last_day_bloodpressure_images(request, duration):
 
 
 #====================================================================================
-
 import logging
 
-logger = logging.getLogger(__name__)
+
 
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY"),
 )
 
+# Make sure to import your client correctly
+
+logger = logging.getLogger(__name__)
+
+SYSTEM_PROMPT = """
+You are an AI assistant for a Asha wellness webapp that focuses on providing information about diabetes, blood pressure, and skincare. Your responses should be limited to these topics and general information about the company and its services. Do not provide any information outside of these areas. Be concise, accurate, and helpful.
+
+Key points:
+1. Only discuss diabetes, blood pressure, and skincare.
+2. Provide information about the company's wellness services related to these topics.
+3. Do not offer medical advice or diagnoses.
+4. If asked about topics outside your scope, politely redirect to the main topics.
+5. Keep responses brief and to the point.
+"""
+
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def chatbot(request):
     logger.info(f"Request method: {request.method}")
-    logger.info(f"Request headers: {request.headers}")
 
     if request.method == 'POST':
         logger.info("Received POST request")
-        logger.info(f"Request body: {request.body}")
 
         try:
             data = json.loads(request.body)
@@ -687,9 +630,12 @@ def chatbot(request):
             try:
                 chat_completion = client.chat.completions.create(
                     model="llama3-8b-8192",
-                    messages=[{"role": "user", "content": user_input}],
-                    temperature=1,
-                    max_tokens=1024,
+                    messages=[
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": user_input}
+                    ],
+                    temperature=0.7,
+                    max_tokens=512,
                     top_p=1,
                     stream=False,
                     stop=None,
@@ -709,133 +655,52 @@ def chatbot(request):
 
 
 
-
+@csrf_exempt
 def voice_view(request):
     if request.method == 'POST':
-        user_text = request.POST.get('user_text', '')
+        user_text = request.POST.get('user_text', '').lower()
 
         if not user_text:
             return JsonResponse({'error': 'No input provided'}, status=400)
 
-        # Get LLaMA response
-        chat_completion = client.chat.completions.create(
-            model="llama3-8b-8192",
-            messages=[{"role": "user", "content": user_text}],
-            temperature=1,
-            max_tokens=1024,
-            top_p=1,
-            stream=False,
-            stop=None,
-        )
-        llama_response = chat_completion.choices[0].message.content
+        # Check for stop command
+        if 'stop' in user_text:
+            return JsonResponse({
+                'status': 'Speech stopped',
+                'llama_response': 'Voice command recognized: Stopping.',
+                'should_stop': True
+            })
 
-        return JsonResponse({'llama_response': llama_response})
+        try:
+            # Get LLaMA response with SYSTEM_PROMPT
+            chat_completion = client.chat.completions.create(
+                model="llama3-8b-8192",
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_text}
+                ],
+                temperature=0.7,
+                max_tokens=512,
+                top_p=1,
+                stream=False,
+                stop=None,
+            )
+            llama_response = chat_completion.choices[0].message.content
+            logger.info(f"LLaMA response: {llama_response}")
+
+            return JsonResponse({
+                'llama_response': llama_response,
+                'should_stop': False
+            })
+        except Exception as e:
+            logger.error(f"Error in voice_view: {str(e)}")
+            return JsonResponse({'error': 'Failed to get response from chatbot'}, status=500)
 
     return render(request, 'voice.html')
 
 
 
 
-'''
-
-def generate_otp():
-    return ''.join([str(random.randint(0, 9)) for _ in range(6)])
-
-
-
-logger = logging.getLogger(__name__)
-
-def send_otp(mobile_number, otp):
-    url = "https://api.msg91.com/api/v5/otp"
-    headers = {
-        "authkey": settings.MSG91_API_KEY,
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "template_id": settings.MSG91_TEMPLATE_ID,
-        "mobile": f"{settings.MSG91_COUNTRY}{mobile_number}",
-        "OTP": otp,
-        "authkey": settings.MSG91_API_KEY,  # Add authkey to the payload
-        "DLT_TE_ID": settings.MSG91_TEMPLATE_ID,  # Add DLT_TE_ID
-    }
-    
-    try:
-        logger.info(f"Sending OTP request to MSG91 for mobile: {mobile_number}")
-        logger.debug(f"Request payload: {payload}")
-        response = requests.post(url, json=payload, headers=headers)
-        logger.info(f"MSG91 API response status code: {response.status_code}")
-        logger.info(f"MSG91 API response content: {response.text}")
-        
-        response_data = response.json()
-        if response.status_code == 200 and response_data.get('type') == 'success':
-            logger.info(f"OTP {otp} sent successfully to {mobile_number}")
-            return True
-        else:
-            logger.error(f"Failed to send OTP. MSG91 response: {response_data}")
-            return False
-    except requests.RequestException as e:
-        logger.error(f"Error sending OTP: {str(e)}")
-        return False
-    except ValueError as e:
-        logger.error(f"Error parsing JSON response: {str(e)}")
-        return False
-
-
-
-import logging
-
-logger = logging.getLogger(__name__)
-
-def mobile_login(request):
-    logger.info("mobile_login view called")
-    if request.method == 'POST':
-        logger.info(f"Received POST request: {request.POST}")
-        form = OTPLoginForm(request.POST)
-        if form.is_valid():
-            mobile_number = form.cleaned_data['mobile_number']
-            logger.info(f"Form is valid. Mobile number: {mobile_number}")
-            
-            user, created = MobileUser.objects.get_or_create(mobile_number=mobile_number)
-            otp = generate_otp()
-            logger.info(f"Generated OTP: {otp} for mobile: {mobile_number}")
-            
-            if send_otp(mobile_number, otp):
-                OTPRecord.objects.create(user=user, otp=otp)
-                request.session['mobile_number'] = mobile_number
-                logger.info(f"OTP sent successfully. Redirecting to verify_otp.")
-                return redirect('verify_otp')
-            else:
-                logger.error(f"Failed to send OTP to {mobile_number}")
-                messages.error(request, "Failed to send OTP. Please try again.")
-        else:
-            logger.warning(f"Invalid form submission: {form.errors}")
-    else:
-        form = OTPLoginForm()
-        logger.info("Rendering login form for GET request")
-    return render(request, 'mobilelogin.html', {'form': form})
-
-def verify_otp(request):
-    if request.method == 'POST':
-        form = OTPVerificationForm(request.POST)
-        if form.is_valid():
-            user_otp = form.cleaned_data['otp']
-            mobile_number = request.session.get('mobile_number')
-            user = MobileUser.objects.get(mobile_number=mobile_number)
-            otp_record = OTPRecord.objects.filter(user=user, otp=user_otp, is_used=False).order_by('-created_at').first()
-            
-            if otp_record and (timezone.now() - otp_record.created_at).total_seconds() < 300:  # OTP valid for 5 minutes
-                otp_record.is_used = True
-                otp_record.save()
-                user.last_login = timezone.now()
-                user.save()
-                request.session['user_id'] = str(user.id)
-                del request.session['mobile_number']
-                return redirect('/wellness/')  # Replace 'home' with your home page URL name
-    else:
-        form = OTPVerificationForm()
-    return render(request, 'verify_otp.html', {'form': form})
-    '''
-    
     
 @login_required
 def water_intake_tracker(request):
