@@ -80,6 +80,14 @@ body {
     blink-caret .75s step-end infinite;
 }
 
+
+@media (max-width: 768px) {
+  .typewriter h1 {
+    font-size: 1.5rem; /* Adjust this size as needed */
+  }
+}
+
+
 @keyframes typing {
   from { width: 0 }
   to { width: 100% }
