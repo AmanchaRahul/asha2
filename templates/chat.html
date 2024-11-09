@@ -1,5 +1,8 @@
+{% extends 'base.html' %}
 {% load static %}
 
+
+{% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,17 +12,6 @@
 
     <style>
 
-        /* Logo Header Styles */
-        .logo-header {
-            position: fixed;
-            top: 10px;
-            left: 20px;
-            z-index: 1010;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-        }
 
         /* Back Button Styles */
         .back-button {
@@ -43,17 +35,6 @@
             cursor: pointer;
         }
 
-    body {
-        font-family: 'Courier New', monospace;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background-color: black;
-        color: white;
-    }
     .chat-container {
         width: 100%;
         max-width: 950px;
@@ -155,19 +136,13 @@
         
 </head>
 <body>
-     <!-- Logo Header -->
-    <header class="logo-header">
-        <i class="fa-solid fa-earth-americas" alt="Logo" style="font-size: 24px;"></i>
-        <h1 class="text-xl hover-olive transition-colors duration-300">ASHA</h1>
-    </header>
-
           <!-- Back Button -->
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-    </a>
+        <a href="{% url 'wellnessdata' %}" class="back-button">
+            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+        </a>
 
 
-    <div class="chat-container">
+    <div class="chat-container" style="margin-top: 25px;">
         
         <div class="chat-header">Wellness Assistant</div>
         
@@ -390,4 +365,6 @@
     {% endblock footer %}
 
 </body>
+
+{% endblock basepage %}
 
