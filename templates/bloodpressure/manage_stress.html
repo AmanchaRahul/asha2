@@ -38,19 +38,31 @@
         .hover-olive-green:hover {
             background-color: #808000 !important;
         }
+        @media (max-width: 640px) {
+            .technique-image {
+                width: 60px;
+                height: 60px;
+            }
+            .text-4xl {
+                font-size: 1.875rem;
+            }
+            .text-2xl {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-10">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
     </a>
 
-    <main class="flex-grow flex flex-col items-center justify-center p-4">
-        <h1 class="text-4xl mb-8 text-center">Managing Stress and Blood Pressure</h1>
-        <div class="w-full max-w-4xl space-y-6">
+    <main class="flex-grow flex flex-col items-center justify-center p-4 mt-16 sm:mt-8">
+        <h1 class="text-4xl mb-8 text-center px-4">Managing Stress and Blood Pressure</h1>
+        <div class="w-full max-w-4xl space-y-6 px-4">
             <section>
                 <h2 class="text-2xl mb-4">Interactive Stress Management Techniques</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="technique-card p-4 rounded-lg">
                         <img src="{% static 'images/diabetes/d1breakfast2.jpg' %}" alt="Deep Breathing" class="technique-image">
                         <h3 class="text-xl font-semibold mb-2">Deep Breathing</h3>
@@ -74,14 +86,17 @@
                 </div>
             </section>
 
+
             <section class="mt-8">
                 <h2 class="text-2xl font-semibold mb-4">Stress Log</h2>
                 <div class="bg-gray-800 p-4 rounded-lg">
                     <form id="stressLogForm" class="mb-4">
-                        <div class="flex items-center space-x-4">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <label for="stressLevel" class="whitespace-nowrap">Stress Level (1-10):</label>
-                            <input type="number" id="stressLevel" name="stressLevel" min="1" max="10" required class="flex-grow p-2 bg-gray-700 rounded">
-                            <button type="submit" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                            <input type="number" id="stressLevel" name="stressLevel" min="1" max="10" required 
+                                class="w-full sm:w-auto p-2 bg-gray-700 rounded">
+                            <button type="submit" 
+                                    class="w-full sm:w-auto bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300">
                                 Log Stress
                             </button>
                         </div>
@@ -94,20 +109,25 @@
                 <h2 class="text-2xl font-semibold mb-4">Stress Management Tips</h2>
                 <div class="bg-gray-800 p-4 rounded-lg">
                     <p id="currentTip" class="mb-4">Click the button below to get a stress management tip.</p>
-                    <button onclick="getRandomTip()" class="bg-olive-600 hover-olive-green text-white font-bold py-2 px-4 rounded transition duration-300">
+                    <button onclick="getRandomTip()" 
+                            class="w-full sm:w-auto bg-olive-600 hover-olive-green text-white font-bold py-2 px-4 rounded transition duration-300">
                         Get Random Tip
                     </button>
                 </div>
             </section>
         </div>
-    </main>
+        </main>
 
-    <script>
+        <script>
         document.getElementById('stressLogForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const level = parseInt(document.getElementById('stressLevel').value);
-            logStressLevel(level);
-            document.getElementById('stressLevel').value = '';
+            if (level >= 1 && level <= 10) {
+                logStressLevel(level);
+                document.getElementById('stressLevel').value = '';
+            } else {
+                alert('Please enter a stress level between 1 and 10');
+            }
         });
 
         function logStressLevel(level) {
@@ -126,29 +146,40 @@
             button.closest('div').remove();
         }
 
-        function getRandomTip() {
-            const tips = [
-                "Take a short walk to clear your mind",
-                "Practice gratitude by listing three things you're thankful for",
-                "Try deep breathing exercises for 5 minutes",
-                "Listen to calming music or nature sounds",
-                "Stretch your body to release physical tension",
-                "Write down your thoughts and feelings in a journal",
-                "Limit screen time before bed for better sleep",
-                "Stay hydrated throughout the day",
-                "Practice saying 'no' to unnecessary commitments",
-                "Take regular breaks during work hours"
-            ];
-            const randomTip = tips[Math.floor(Math.random() * tips.length)];
-            document.getElementById('currentTip').textContent = randomTip;
-        }
-    </script>
+                function getRandomTip() {
+                    const tips = [
+                        "Take a short walk to clear your mind",
+                        "Practice gratitude by listing three things you're thankful for",
+                        "Try deep breathing exercises for 5 minutes",
+                        "Listen to calming music or nature sounds",
+                        "Stretch your body to release physical tension",
+                        "Write down your thoughts and feelings in a journal",
+                        "Limit screen time before bed for better sleep",
+                        "Stay hydrated throughout the day",
+                        "Practice saying 'no' to unnecessary commitments",
+                        "Take regular breaks during work hours"
+                    ];
+                    const randomTip = tips[Math.floor(Math.random() * tips.length)];
+                    document.getElementById('currentTip').textContent = randomTip;
+                }
+            </script>
 
     {% block navbar %}
     {% endblock navbar %}
 
     {% block footer %}
     {% endblock footer %}
+    
 </body>
 </html>
 {% endblock basepage %}
+
+
+
+
+
+
+
+
+
+
