@@ -1,18 +1,16 @@
+{% extends 'base.html' %}
 {% load static %}
 
+{% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skincare Diet Planner</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Anti-Aging Secrets</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="{% static 'css/style1.css' %}">
     <style>
-        body {
-            font-family: 'Courier Prime', monospace;
-            background-color: #000000;
-            color: #ffffff;
-        }
         .hover-olive:hover {
             background-color: #808000;
             color: white;
@@ -45,39 +43,16 @@
         .pulse {
             animation: pulse 2s infinite;
         }
-
-        .back-button {
-            position: fixed;
-            top: 45px;
-            left: 20px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: white;
-            padding: 0; /* Remove any padding */
-            border-radius: 50%; /* Keep it circular */
-            overflow: hidden; /* Hide any overflow */
-        }
-        
-        .back-button img {
-            width: 40px; /* Set the width to match the button size */
-            height: 40px; /* Set the height to match the button size */
-            display: block; /* Removes any extra space below the image */
-            cursor: pointer;
-        }
-
-        
+ 
     </style>
 </head>
 
 
-<body class="flex flex-col">
-  
+<body class="flex flex-col min-h-screen">
     <a href="{% url 'wellnessdata' %}" class="back-button">
         <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
-    <main class="flex-grow p-4 mt-4">
+    <main class="flex-grow p-4 mt-4" style="margin-top: 2rem;">
         
         <div class="max-w-6xl mx-auto">
            
@@ -273,5 +248,14 @@
             }
         });
     </script>
+
+    {% block navbar %}
+
+    {% endblock navbar %}
+
+    {% block footer %}
+
+    {% endblock footer %}
 </body>
 </html>
+{% endblock basepage %}
