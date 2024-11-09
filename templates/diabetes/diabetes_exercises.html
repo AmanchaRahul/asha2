@@ -113,10 +113,12 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="{% url 'wellnessdata' %}" class="back-button">
-            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-        </a>
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+
+    <div class="container" style="margin-top: 2rem;">
+        
         <h1 class="text-4xl font-bold text-center mb-8">Diabetes Exercise Planner</h1>
         
         <div class="exercise-grid">
