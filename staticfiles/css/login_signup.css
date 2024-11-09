@@ -1,0 +1,77 @@
+/* Reset default styles for inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+textarea {
+  all: unset;
+  box-sizing: border-box;
+}
+
+/* Input Styles */
+.custom-input,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+textarea {
+  background-color: transparent !important;
+  border: 1px solid white !important;
+  color: white !important;
+  padding: 6px 10px !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  font-family: monospace !important;
+  font-size: 16px !important;
+  margin-bottom: 10px !important;
+  transition: border-color 0.3s, box-shadow 0.3s !important;
+}
+
+.custom-input:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: #808000 !important; /* Olive green focus */
+  box-shadow: 0 0 5px #808000 !important;
+}
+
+/* Label Styles */
+.custom-label,
+label {
+  color: white !important;
+  font-family: monospace !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+  font-size: 17px !important;
+}
+
+/* Placeholder Styles */
+.custom-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Button Styles */
+button[type="submit"],
+input[type="submit"] {
+  background-color: transparent; /* Olive green */
+  border: 1px solid white !important;
+  color: white !important;
+  padding: 8px 16px !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  font-family: monospace !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s, color 0.3s !important;
+}
+
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+  background-color: #808000; /* Olive green */
+  color: black !important;
+}
