@@ -1,15 +1,16 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
 {% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Anti-Aging Secrets</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti-Aging Secrets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style1.css' %}">
     <style>
         .hover-olive:hover {
             background-color: #808000;
@@ -19,6 +20,7 @@
             background-color: #111;
             transition: all 0.3s ease;
             border: 1px solid #333;
+            width: 100%;
         }
         .diet-card:hover {
             transform: translateY(-5px);
@@ -26,9 +28,14 @@
         }
         .btn {
             transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 0.5rem;
         }
-        .btn:hover {
-            background-color: #808000;
+        @media (min-width: 768px) {
+            .btn {
+                width: auto;
+                margin-bottom: 0;
+            }
         }
         .progress-bar {
             height: 4px;
@@ -43,69 +50,69 @@
         .pulse {
             animation: pulse 2s infinite;
         }
- 
     </style>
 </head>
 
-
 <body class="flex flex-col min-h-screen">
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-50">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" class="w-8 h-8" title="Go back">
     </a>
-    <main class="flex-grow p-4 mt-4" style="margin-top: 2rem;">
-        
-        <div class="max-w-6xl mx-auto">
-           
+
+    <main class="flex-grow p-4 mt-16">
+        <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-8">
-                
-                <h1 class="text-4xl font-bold">Skincare Diet Planner</h1>
+                <h1 class="text-3xl md:text-4xl font-bold">Skincare Diet Planner</h1>
             </div>
-            <div class="mb-8">
+
+            <!-- Mobile-responsive button container -->
+            <div class="mb-8 text-center">
                 <h2 class="text-xl mb-4">Select your skincare goal:</h2>
-                <div class="flex space-x-4">
+                <div class="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0">
                     <button class="skincare-goal-btn btn bg-gray-800 text-white font-bold py-2 px-4 rounded" data-goal="hydration">Hydration</button>
                     <button class="skincare-goal-btn btn bg-gray-800 text-white font-bold py-2 px-4 rounded" data-goal="antiAging">Anti-Aging</button>
                     <button class="skincare-goal-btn btn bg-gray-800 text-white font-bold py-2 px-4 rounded" data-goal="acnePrevention">Acne Prevention</button>
                 </div>
             </div>
 
+            <!-- Mobile-responsive diet plan -->
             <div id="dietPlan" class="hidden">
-                <h2 class="text-2xl mb-4">Your Personalized Skincare Diet</h2>
-                <p class="mb-4">Discover foods that nourish your skin from within!</p>
+                <h2 class="text-xl md:text-2xl mb-4 text-center">Your Personalized Skincare Diet</h2>
+                <p class="mb-4 text-center">Discover foods that nourish your skin from within!</p>
                 <div class="space-y-8">
                     <div id="fruitsVeggies">
-                        <h3 class="text-xl mb-4">Fruits & Vegetables</h3>
+                        <h3 class="text-lg md:text-xl mb-4 text-center">Fruits & Vegetables</h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
                     </div>
                     <div id="proteins">
-                        <h3 class="text-xl mb-4">Proteins</h3>
+                        <h3 class="text-lg md:text-xl mb-4 text-center">Proteins</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
                     <div id="healthyFats">
-                        <h3 class="text-xl mb-4">Healthy Fats</h3>
+                        <h3 class="text-lg md:text-xl mb-4 text-center">Healthy Fats</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                     </div>
                 </div>
             </div>
 
-            <div id="engagementFeatures" class="mt-8 hidden">
-                <h3 class="text-xl mb-4">Track Your Progress</h3>
+            <!-- Mobile-responsive engagement features -->
+            <div id="engagementFeatures" class="mt-8 hidden px-4">
+                <h3 class="text-xl mb-4 text-center">Track Your Progress</h3>
                 <div class="bg-gray-800 p-4 rounded-lg">
-                    <p class="mb-2">Days following the skincare diet:</p>
-                    <div class="w-full bg-gray-700 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+                    <p class="mb-2 text-center">Days following the skincare diet:</p>
+                    <div class="w-full bg-gray-700 rounded-full h-2.5 mb-4">
                         <div class="progress-bar rounded-full" style="width: 0%"></div>
                     </div>
-                    <button id="checkIn" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Daily Check-in</button>
+                    <div class="text-center">
+                        <button id="checkIn" class="btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded max-w-xs mx-auto">Daily Check-in</button>
+                    </div>
                 </div>
                 <div id="achievement" class="mt-4 bg-gray-800 p-4 rounded-lg hidden">
-                    <h4 class="text-lg font-bold mb-2">Achievement Unlocked!</h4>
-                    <p id="achievementText"></p>
+                    <h4 class="text-lg font-bold mb-2 text-center">Achievement Unlocked!</h4>
+                    <p id="achievementText" class="text-center"></p>
                 </div>
             </div>
         </div>
     </main>
-
-   
 
     <script>
         const skincareDiets = {
@@ -250,12 +257,13 @@
     </script>
 
     {% block navbar %}
-
     {% endblock navbar %}
 
     {% block footer %}
-
     {% endblock footer %}
 </body>
 </html>
 {% endblock basepage %}
+
+
+   
