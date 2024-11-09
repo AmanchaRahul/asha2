@@ -2,65 +2,78 @@
 {% load static %}
 
 {% block basepage %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Anti-Aging Secrets</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="{% static 'css/style1.css' %}">
+    </head>
 
- <main class="flex-grow flex flex-col items-center justify-center p-4">
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-    </a>
-  <h1 class="text-4xl mb-8 text-center">Your Daily Skincare Ritual</h1>
+    <body class="flex flex-col min-h-screen">
+        <a href="{% url 'wellnessdata' %}" class="back-button">
+            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+        </a>
+
+    <main class="flex-grow flex flex-col items-center justify-center p-4" style="margin-top: 2rem;">
+        <h1 class="text-4xl mb-8 text-center" style="margin-top: 2rem;">Your Daily Skincare Ritual</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl" style="margin-top: 2rem;">
+                <div class="routine-step bg-gray-900 p-6 rounded-lg">
+                    <h2 class="text-2xl mb-4 text-olive">1. Cleanse</h2>
+                    <p class="mb-4">Start with a gentle cleanser to remove impurities and prepare your skin.</p>
+                    <img src="/static/images/skincare/cleanse.gif" alt="Cleansing" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <p class="text-sm italic">Pro tip: Use lukewarm water to avoid stripping natural oils.</p>
+                </div>
+                
+                <div class="routine-step bg-gray-900 p-6 rounded-lg">
+                    <h2 class="text-2xl mb-4 text-olive">2. Tone</h2>
+                    <p class="mb-4">Balance your skin's pH and add a layer of hydration with a toner.</p>
+                    <img src="/static/images/skincare/toner.gif" alt="Toning" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <p class="text-sm italic">Pro tip: Pat, don't rub, for gentle application.</p>
+                </div>
+                
+                <div class="routine-step bg-gray-900 p-6 rounded-lg">
+                    <h2 class="text-2xl mb-4 text-olive">3. Treat</h2>
+                    <p class="mb-4">Apply serums or treatments targeting your specific skin concerns.</p>
+                    <img src="/static/images/skincare/serum.gif" alt="Treatment" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <p class="text-sm italic">Pro tip: Layer from thinnest to thickest consistency.</p>
+                </div>
+                
+                <div class="routine-step bg-gray-900 p-6 rounded-lg">
+                    <h2 class="text-2xl mb-4 text-olive">4. Moisturize</h2>
+                    <p class="mb-4">Lock in hydration and strengthen your skin barrier with a moisturizer.</p>
+                    <img src="/static/images/skincare/moisturing.gif" alt="Moisturizing" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <p class="text-sm italic">Pro tip: Don't forget your neck and décolletage!</p>
+                </div>
+                
+                <div class="routine-step bg-gray-900 p-6 rounded-lg">
+                    <h2 class="text-2xl mb-4 text-olive">5. Protect (AM)</h2>
+                    <p class="mb-4">Shield your skin from UV damage with a broad-spectrum sunscreen.</p>
+                    <img src="/static/images/skincare/sunscreen.gif" alt="Sun Protection" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <p class="text-sm italic">Pro tip: Reapply every 2 hours when outdoors.</p>
+                </div>
+                
+                <div class="routine-step bg-gray-900 p-6 rounded-lg">
+                    <h2 class="text-2xl mb-4 text-olive">6. Nourish (PM)</h2>
+                    <p class="mb-4">Apply a night cream or facial oil to support skin regeneration while you sleep.</p>
+                    <img src="/static/images/skincare/nourish.gif" alt="Night Care" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <p class="text-sm italic">Pro tip: Gently massage to boost circulation.</p>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="bg-olive hover:bg-olive-dark text-white font-bold py-2 px-4 rounded transition duration-300">
+                    Remember, consistency is key to achieving your skincare goals!</p>
+            </div>
+
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl">
-            <div class="routine-step bg-gray-900 p-6 rounded-lg">
-                <h2 class="text-2xl mb-4 text-olive">1. Cleanse</h2>
-                <p class="mb-4">Start with a gentle cleanser to remove impurities and prepare your skin.</p>
-                <img src="/static/images/skincare/cleanse.gif" alt="Cleansing" class="w-full h-40 object-cover rounded-lg mb-4">
-                <p class="text-sm italic">Pro tip: Use lukewarm water to avoid stripping natural oils.</p>
-            </div>
             
-            <div class="routine-step bg-gray-900 p-6 rounded-lg">
-                <h2 class="text-2xl mb-4 text-olive">2. Tone</h2>
-                <p class="mb-4">Balance your skin's pH and add a layer of hydration with a toner.</p>
-                <img src="/static/images/skincare/toner.gif" alt="Toning" class="w-full h-40 object-cover rounded-lg mb-4">
-                <p class="text-sm italic">Pro tip: Pat, don't rub, for gentle application.</p>
-            </div>
-            
-            <div class="routine-step bg-gray-900 p-6 rounded-lg">
-                <h2 class="text-2xl mb-4 text-olive">3. Treat</h2>
-                <p class="mb-4">Apply serums or treatments targeting your specific skin concerns.</p>
-                <img src="/static/images/skincare/serum.gif" alt="Treatment" class="w-full h-40 object-cover rounded-lg mb-4">
-                <p class="text-sm italic">Pro tip: Layer from thinnest to thickest consistency.</p>
-            </div>
-            
-            <div class="routine-step bg-gray-900 p-6 rounded-lg">
-                <h2 class="text-2xl mb-4 text-olive">4. Moisturize</h2>
-                <p class="mb-4">Lock in hydration and strengthen your skin barrier with a moisturizer.</p>
-                <img src="/static/images/skincare/moisturing.gif" alt="Moisturizing" class="w-full h-40 object-cover rounded-lg mb-4">
-                <p class="text-sm italic">Pro tip: Don't forget your neck and décolletage!</p>
-            </div>
-            
-            <div class="routine-step bg-gray-900 p-6 rounded-lg">
-                <h2 class="text-2xl mb-4 text-olive">5. Protect (AM)</h2>
-                <p class="mb-4">Shield your skin from UV damage with a broad-spectrum sunscreen.</p>
-                <img src="/static/images/skincare/sunscreen.gif" alt="Sun Protection" class="w-full h-40 object-cover rounded-lg mb-4">
-                <p class="text-sm italic">Pro tip: Reapply every 2 hours when outdoors.</p>
-            </div>
-            
-            <div class="routine-step bg-gray-900 p-6 rounded-lg">
-                <h2 class="text-2xl mb-4 text-olive">6. Nourish (PM)</h2>
-                <p class="mb-4">Apply a night cream or facial oil to support skin regeneration while you sleep.</p>
-                <img src="/static/images/skincare/nourish.gif" alt="Night Care" class="w-full h-40 object-cover rounded-lg mb-4">
-                <p class="text-sm italic">Pro tip: Gently massage to boost circulation.</p>
-            </div>
-        </div>
+        </main>
 
-        <div class="mt-12 text-center">
-            <p class="bg-olive hover:bg-olive-dark text-white font-bold py-2 px-4 rounded transition duration-300">
-                Remember, consistency is key to achieving your skincare goals!</p>
-        </div>
-
-       
-        
-    </main>
+    
     {% block navbar %}
 
     {% endblock navbar %}
@@ -69,6 +82,7 @@
 
     {% endblock footer %}
 
-
+</body>
+</html>
    
 {% endblock basepage %}
