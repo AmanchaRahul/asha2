@@ -112,13 +112,6 @@ urlpatterns = [
     
     path('voice/', views.voice_view, name='voice'),
     
-    
-    # path('mobilelogin/', views.mobile_login, name='mobilelogin'),
-    # path('verify-otp/', views.verify_otp, name='verify_otp'),
- 
-
-     # path('send-otp/', views.send_otp, name='send_otp'),
-    # path('verify-otp/', views.verify_otp, name='verify_otp'),
 ]
     
 
