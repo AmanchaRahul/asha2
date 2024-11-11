@@ -107,31 +107,6 @@ admin.site.register(BloodPressureCheck, BloodPressureCheckAdmin)
 admin.site.register(SkinCareCheck, SkinCareCheckAdmin)
 
 
-from .models import MobileUser, OTPRecord
-
-@admin.register(MobileUser)
-class MobileUserAdmin(admin.ModelAdmin):
-    list_display = ('mobile_number', 'is_active', 'is_admin', 'created_at', 'last_login')
-    list_filter = ('is_active', 'is_admin')
-    search_fields = ('mobile_number',)
-    readonly_fields = ('id', 'created_at', 'last_login')
-    fieldsets = (
-        (None, {'fields': ('id', 'mobile_number', 'is_active', 'is_admin')}),
-        ('Timestamps', {'fields': ('created_at', 'last_login')}),
-    )
-
-@admin.register(OTPRecord)
-class OTPRecordAdmin(admin.ModelAdmin):
-    list_display = ('user', 'otp', 'created_at', 'is_used')
-    list_filter = ('is_used',)
-    search_fields = ('user__mobile_number', 'otp')
-    readonly_fields = ('created_at',)
-    fieldsets = (
-        (None, {'fields': ('user', 'otp', 'is_used')}),
-        ('Timestamps', {'fields': ('created_at',)}),
-    )
-    
-    
     
 from .models import WaterIntake
 
