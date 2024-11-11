@@ -107,21 +107,24 @@ def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.userprofile.email_verified = True
-        user.save()
-        user.userprofile.save()
-        # Log in the user, specifying the backend
-        backend = 'django.contrib.auth.backends.ModelBackend'  # Or your custom backend if you have one
-        login(request, user, backend=backend)
-        return redirect('/wellness/')
-      
-    else:
-        return render(request, 'account_activation_invalid.html')
+        logger.info(f"Attempting to activate user {uid}")
+        
+        if user is not None and account_activation_token.check_token(user, token):
+            logger.info("Token check passed")
+            user.is_active = True
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            profile.email_verified = True
+            user.save()
+            profile.save()
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('/wellness/')
+        else:
+            logger.warning("Token check failed")
+            
+    except Exception as e:
+        logger.error(f"Activation error: {str(e)}")
+        
+    return render(request, 'account_activation_invalid.html')
     
     
 def logout_view(request):
