@@ -50,8 +50,7 @@ urlpatterns = [
     path('bloodpressurecheck/', BloodPressureCheckView.as_view(), name='blood_pressure_check'),
     
     
-   
-    path('activate/<str:uidb64>/<str:token>/', views.activate, name='activate'),
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'), 
 
 
     path('diabetescheck/', DiabetesCheckView.as_view(), name='diabetes_check'),
