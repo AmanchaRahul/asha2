@@ -96,29 +96,7 @@ class BloodpressureChallengeImage(models.Model):
     def get_image_url(self):
         return self.image.url if self.image else None
         
-        
-        
-import uuid
-
-class MobileUser(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    mobile_number = models.CharField(max_length=15, unique=True)
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_login = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self):
-        return self.mobile_number
-
-class OTPRecord(models.Model):
-    user = models.ForeignKey(MobileUser, on_delete=models.CASCADE)
-    otp = models.CharField(max_length=6)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_used = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"OTP for {self.user.mobile_number}"
+    
     
     
 class WaterIntake(models.Model):
