@@ -9,7 +9,7 @@
 <a href="{% url 'basedata' %}" class="back-button">
     <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
 </a>
-<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 bg-black shadow-lg p-8 text-white font-mono rounded-none">
+<div class="max-w-md mx-auto bg-black shadow-lg p-6 sm:p-8 text-white font-mono rounded-none">
    
   <h3 class="text-2xl font-bold text-center mb-6">Signup</h3>
   
@@ -49,13 +49,10 @@
   </div>
 </div>
 
-
 {% block navbar %}
 {% endblock navbar %}
 
-
 {% block footer %}
 {% endblock footer %}
-
 
 {% endblock basepage %}
