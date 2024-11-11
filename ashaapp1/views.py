@@ -618,41 +618,38 @@ def chatbot(request):
         try:
             data = json.loads(request.body)
             user_input = data.get('user_input')
-            is_voice = data.get('is_voice', False)
-        except json.JSONDecodeError:
-            logger.error("Failed to parse JSON from request body")
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+            
+            if not user_input:
+                return JsonResponse({'error': 'No user input provided'}, status=400)
 
-        logger.info(f"User input: {user_input} (Voice: {is_voice})")
+            logger.info(f"Processing user input: {user_input}")
 
-        if user_input:
-            try:
-                chat_completion = client.chat.completions.create(
-                    model="llama3-8b-8192",
-                    messages=[
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {"role": "user", "content": user_input}
-                    ],
-                    temperature=0.7,
-                    max_tokens=512,
-                    top_p=1,
-                    stream=False,
-                    stop=None,
-                )
-                
-                response = chat_completion.choices[0].message.content
-                logger.info(f"Bot response: {response}")
+            chat_completion = client.chat.completions.create(
+                model="llama3-8b-8192",
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_input}
+                ],
+                temperature=0.7,
+                max_tokens=512,
+                top_p=1,
+                stream=False,
+                stop=None,
+            )
+            
+            response = chat_completion.choices[0].message.content
+            logger.info(f"Bot response: {response}")
 
-                return JsonResponse({
-                    'user_input': user_input,
-                    'response': response,
-                    'is_voice': is_voice
-                })
-            except Exception as e:
-                logger.error(f"Error calling Groq API: {str(e)}")
-                return JsonResponse({'error': 'Failed to get response from chatbot'}, status=500)
-        else:
-            return JsonResponse({'error': 'No user input provided'}, status=400)
+            return JsonResponse({
+                'response': response
+            })
+
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON decode error: {str(e)}")
+            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+        except Exception as e:
+            logger.error(f"Error processing request: {str(e)}")
+            return JsonResponse({'error': 'Internal server error'}, status=500)
 
     return render(request, 'chat.html')
 
