@@ -251,7 +251,7 @@ def contact_view(request):
             subject = f"New contact form submission: {topic}"
             email_message = f"Name: {name}\nEmail: {frommail}\nTopic: {topic}\n\nMessage:\n{message}"
             
-            send_mail(subject, email_message, frommail, ['amancharahul25@gmail.com',frommail] )
+            send_mail(subject, email_message, settings.EMAIL_HOST_USER, ['amancharahul25@gmail.com',frommail] )
             # Redirect to a thank you page or show a success message
             return redirect('/thankyou/')  # You'll need to create this view and template
     else:
