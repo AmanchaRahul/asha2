@@ -2,15 +2,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
+import uuid
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)  # Make user optional
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=100, blank=True, null=True)
-    mobile = models.CharField(max_length=15, null=True)  # Added mobile field
+    email_token = models.UUIDField(default=uuid.uuid4, editable=False)
+    email_verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.mobile  # Changed to mobile because user might be None
-
+        return self.user.email if self.user else str(self.email_token)
     
     
     
