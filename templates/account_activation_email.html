@@ -1,0 +1,13 @@
+<!-- templates/account_activation_email.html -->
+{% autoescape off %}
+Hi {{ user.username }},
+
+Please click on the link below to confirm your registration:
+
+https://asha2.onrender.com{% url 'activate' uidb64=uid token=token %}
+
+If you did not make this request, you can simply ignore this email.
+
+Sincerely,
+Your Asha Team
+{% endautoescape %}
