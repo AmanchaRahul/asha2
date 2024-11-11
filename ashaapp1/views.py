@@ -594,8 +594,6 @@ client = Groq(
     api_key=os.environ.get("GROQ_API_KEY"),
 )
 
-# Make sure to import your client correctly
-
 logger = logging.getLogger(__name__)
 
 SYSTEM_PROMPT = """
@@ -620,11 +618,12 @@ def chatbot(request):
         try:
             data = json.loads(request.body)
             user_input = data.get('user_input')
+            is_voice = data.get('is_voice', False)
         except json.JSONDecodeError:
             logger.error("Failed to parse JSON from request body")
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-        logger.info(f"User input: {user_input}")
+        logger.info(f"User input: {user_input} (Voice: {is_voice})")
 
         if user_input:
             try:
@@ -644,7 +643,11 @@ def chatbot(request):
                 response = chat_completion.choices[0].message.content
                 logger.info(f"Bot response: {response}")
 
-                return JsonResponse({'user_input': user_input, 'response': response})
+                return JsonResponse({
+                    'user_input': user_input,
+                    'response': response,
+                    'is_voice': is_voice
+                })
             except Exception as e:
                 logger.error(f"Error calling Groq API: {str(e)}")
                 return JsonResponse({'error': 'Failed to get response from chatbot'}, status=500)
@@ -652,7 +655,6 @@ def chatbot(request):
             return JsonResponse({'error': 'No user input provided'}, status=400)
 
     return render(request, 'chat.html')
-
 
 
 @csrf_exempt

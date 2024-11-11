@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load static %}
         
@@ -11,6 +12,7 @@
 
     <style>
         /* Mobile-first approach */
+        /* Existing styles remain the same */
         .back-button {
             position: fixed;
             top: 3rem;
@@ -76,6 +78,12 @@
             background-color: #333;
             text-align: left;
             margin-right: 20%;
+        }
+
+        .voice-indicator {
+            font-style: monospace;
+            color: #888;
+            margin-left: 5px;
         }
 
         .chat-input {
@@ -170,38 +178,34 @@
     </style>    
         </head>
         
-   <body>
-          <!-- Back Button -->
-        <a href="{% url 'wellnessdata' %}" class="back-button">
-            <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-        </a>
-
-
-    <div class="chat-container" style="margin-top: 105px;">
+        <body>
+            <a href="{% url 'wellnessdata' %}" class="back-button">
+                <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+            </a>
         
-        <div class="chat-header">Wellness Assistant</div>
+            <div class="chat-container" style="margin-top: 105px;">
+                <div class="chat-header">Wellness Assistant</div>
+                <div class="chat-box" id="chat-box">
+                    <div id="messages"></div>
+                </div>
         
-        <div class="chat-box" id="chat-box">
-            <div id="messages"></div>
-        </div>
-
-        <div class="chat-input">
-            <input type="text" id="message-input" placeholder="Type your message or click mic to speak..." aria-label="Type your message">
-            <button onclick="sendMessage()">Send</button>
-            <div class="voice-controls">
-                <button class="mic-button" id="start-voice-chat" title="Start voice input">
-                    <img src="{% static 'images/m11.jpeg' %}" alt="Microphone">
-                </button>
-                <button class="stop-button" id="stop-voice" title="Stop voice">
-                    <img src="{% static 'images/m22.jpeg' %}" alt="Stop">
-                </button>
+                <div class="chat-input">
+                    <input type="text" id="message-input" placeholder="Type your message or click mic to speak..." aria-label="Type your message">
+                    <button onclick="sendMessage()">Send</button>
+                    <div class="voice-controls">
+                        <button class="mic-button" id="start-voice-chat" title="Start voice input">
+                            <img src="{% static 'images/m11.jpeg' %}" alt="Microphone">
+                        </button>
+                        <button class="stop-button" id="stop-voice" title="Stop voice">
+                            <img src="{% static 'images/m22.jpeg' %}" alt="Stop">
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function getCookie(name) {  
+        
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                function getCookie(name) { 
             let cookieValue = null;  
             if (document.cookie && document.cookie !== '') {  
                 const cookies = document.cookie.split(';');  
@@ -216,176 +220,88 @@
             return cookieValue;   
         }  
  
-        const csrftoken = getCookie('csrftoken');  
- 
-        function sendMessage() {   
-            const messageInput = document.getElementById('message-input');   
-            const message = messageInput.value.trim();   
+        const csrftoken = getCookie('csrftoken');
+
+        function sendMessage(isVoice = false) {
+            const messageInput = document.getElementById('message-input');
+            const message = messageInput.value.trim();
             if (message === '') return;
- 
-            appendMessage('user', message);   
- 
-            fetch('{% url "chatbot" %}', {   
-                method:'POST',   
-                headers:{   
-                    'Content-Type':'application/json', // Changed to application/json
-                    'X-CSRFToken': csrftoken   
-                },   
-                body: JSON.stringify({ user_input: message }) // Properly formatted JSON payload
-            })   
-            .then(response => {    
-                if (!response.ok) {    
-                    throw new Error(`HTTP error! status:${response.status}`);    
-                }    
-                return response.json();    
-            })    
-            .then(data => {    
-                appendMessage('ai', data.response);    
-            })    
-            .catch(error => {    
-                console.error('Error:', error);    
-                appendMessage('error', `Error:${error.message}`);    
-            });    
- 
-            messageInput.value = '';   
-        }    
- 
-        function appendMessage(type, content) {    
-            const chatBox = document.getElementById('chat-box');    
-            const messageElement = document.createElement('div');    
-            messageElement.classList.add('message');    
-            messageElement.classList.add(type === 'user' ? 'user-message' : 'ai-message');    
- 
-            if (type === 'user') {    
-                messageElement.innerHTML = `<strong>You:</strong> ${content}`;    
-            } else {    
-                messageElement.innerHTML = `<strong>Bot:</strong> ${formatAIResponse(content)}`;    
-            }    
- 
-            chatBox.appendChild(messageElement);    
-            chatBox.scrollTop = chatBox.scrollHeight;    
-        }    
- 
-        function formatAIResponse(content) {    
-           // Remove all asterisks and extra spaces
-           content = content.replace(/\*/g, '').replace(/\s+/g, ' ').trim();
- 
-           // Split content into lines
-           const lines = content.split(/\.\s+/);
- 
-           let formattedContent = '';
- 
-           lines.forEach(line => {
-               line = line.trim();
-               if (line) {
-                   // Check if the line is a header (starts with a capital letter)
-                   if (/^[A-Z]/.test(line)) {
-                       formattedContent += `<h3>${line}</h3>`;
-                   } else {
-                       formattedContent += `<p>${line}.</p>`;
-                   }
-               }
-           });
- 
-           return formattedContent;
- 
-       }
- 
-       // Add event listener for Enter key
-       document.getElementById('message-input').addEventListener('keypress', function(event) {     
-           if (event.key === 'Enter') {     
-               sendMessage();     
-           }     
-       });   
-        
+
+            appendMessage('user', message, isVoice);
+
+            fetch('{% url "chatbot" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ 
+                    user_input: message,
+                    is_voice: isVoice
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage('ai', data.response, isVoice);
+                if (isVoice && data.response) {
+                    speakResponse(data.response);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                appendMessage('error', `Error: ${error.message}`, isVoice);
+            });
+
+            messageInput.value = '';
+        }
+
+        function appendMessage(type, content, isVoice = false) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(type === 'user' ? 'user-message' : 'ai-message');
+
+            const voiceIndicator = isVoice ? '<span class="voice-indicator">(Voice)</span>' : '';
+
+            if (type === 'user') {
+                messageElement.innerHTML = `<strong>You${voiceIndicator}:</strong> ${content}`;
+            } else {
+                messageElement.innerHTML = `<strong>Bot${voiceIndicator}:</strong> ${formatAIResponse(content)}`;
+            }
+
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function speakResponse(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Voice recognition setup
         $(document).ready(function() {
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.interimResults = false;
             recognition.lang = 'en-US';
-            
-            let synth = window.speechSynthesis;
-            let utterance;
-            
+
             $('#start-voice-chat').click(function() {
                 recognition.start();
                 $(this).addClass('active');
             });
-            
+
             $('#stop-voice').click(function() {
-                synth.cancel();
+                window.speechSynthesis.cancel();
                 recognition.stop();
                 $('#start-voice-chat').removeClass('active');
             });
-            
+
             recognition.onresult = function(event) {
                 const userText = event.results[0][0].transcript;
                 $('#message-input').val(userText);
-                sendMessage();
+                sendMessage(true);
             };
-            
-            recognition.onerror = function(event) {
-                alert('Error occurred in recognition: ' + event.error);
-                $('#start-voice-chat').removeClass('active');
-            };
-        });
 
-        $(document).ready(function() {
-            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.interimResults = false;
-            recognition.lang = 'en-US';
-        
-            let synth = window.speechSynthesis;
-            let utterance;
-        
-            $('#start-voice-chat').click(function() {
-                recognition.start();
-                $(this).addClass('active');
-            });
-        
-            $('#stop-voice').click(function() {
-                synth.cancel();
-                recognition.stop();
-            });
-        
-            recognition.onresult = function(event) {
-                const userText = event.results[0][0].transcript;
-                $('#user-text').text(userText);
-        
-                // Send the transcribed text to the server
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "voice" %}',
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        user_text: userText,
-                    },
-                    success: function(response) {
-                        if (response.should_stop) {
-                            synth.cancel();
-                            $('#bot-response').text('Voice command recognized: Stopping.');
-                        } else {
-                            const llamaResponse = response.llama_response;
-                            $('#bot-response').text(llamaResponse);
-        
-                            // Convert bot response to speech
-                            utterance = new SpeechSynthesisUtterance(llamaResponse);
-                            utterance.lang = 'en-US';
-                            synth.speak(utterance);
-                        }
-        
-                        // Scroll to the bottom of the chat box
-                        const chatBox = document.getElementById('chat-box');
-                        chatBox.scrollTop = chatBox.scrollHeight;
-                    },
-                    error: function() {
-                        alert("Something went wrong. Please try again.");
-                    },
-                    complete: function() {
-                        $('#start-voice-chat').removeClass('active');
-                    }
-                });
-            };
-        
             recognition.onerror = function(event) {
                 alert('Error occurred in recognition: ' + event.error);
                 $('#start-voice-chat').removeClass('active');
@@ -393,13 +309,9 @@
         });
     </script>
 
-    {% block navbar %}
-    {% endblock navbar %}
-
-    {% block footer %}
-    {% endblock footer %}
-
+    {% block navbar %}{% endblock navbar %}
+    {% block footer %}{% endblock footer %}
 </body>
-
+</html>
 {% endblock basepage %}
 
