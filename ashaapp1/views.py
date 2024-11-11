@@ -73,11 +73,11 @@ def signup_view(request):
             UserProfile.objects.create(user=user, full_name=form.cleaned_data.get('full_name'))
             
             # Email activation setup
-            current_site = get_current_site(request)
+            domain = 'asha2.onrender.com'
             mail_subject = 'Activate your account'
             message = render_to_string('account_activation_email.html', {
                 'user': user,
-                'domain': current_site.domain,
+                'domain': domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             })
