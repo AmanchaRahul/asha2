@@ -3,7 +3,7 @@
     text-align: center;
     margin-top: 0rem; /* Add space above the button */
     margin-bottom: 2rem; /* Add space below the button */
-    border-radius: 0px;
+    border-radius: none;
   }
   
   .chatbot-btn {
@@ -13,7 +13,7 @@
     background-color: #333333;
     padding: 12px 24px;
     text-decoration: none;
-    border-radius: 0px !important; /* Forcefully remove rounding */
+    border-radius: none; /* Forcefully remove rounding */
     transition: color 0.3s ease, background-color 0.3s ease;
     display: inline-block;
   }
