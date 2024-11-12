@@ -59,22 +59,22 @@
             <section>
                 <h2 class="text-2xl mb-4">Interactive Stress Management Techniques</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="technique-card p-4 rounded-lg">
+                    <div class="technique-card p-4">
                         <img src="{% static 'images/bloodpressure/deepbreath.jpeg' %}" alt="Deep Breathing" class="technique-image">
                         <h3 class="text-xl font-semibold mb-2">Deep Breathing</h3>
                         <p class="mb-4">Practice deep breathing to reduce stress and lower blood pressure.</p>
                     </div>
-                    <div class="technique-card p-4 rounded-lg">
+                    <div class="technique-card p-4">
                         <img src="{% static 'images/bloodpressure/relax.jpeg' %}" alt="Progressive Muscle Relaxation" class="technique-image">
                         <h3 class="text-xl font-semibold mb-2">Progressive Muscle Relaxation</h3>
                         <p class="mb-4">Tense and relax muscle groups to reduce physical stress.</p>
                     </div>
-                    <div class="technique-card p-4 rounded-lg">
+                    <div class="technique-card p-4">
                         <img src="{% static 'images/bloodpressure/meditation.jpeg' %}" alt="Mindfulness Meditation" class="technique-image">
                         <h3 class="text-xl font-semibold mb-2">Mindfulness Meditation</h3>
                         <p class="mb-4">Focus on the present moment to reduce anxiety and stress.</p>
                     </div>
-                    <div class="technique-card p-4 rounded-lg">
+                    <div class="technique-card p-4">
                         <img src="{% static 'images/bloodpressure/guide2.jpeg' %}" alt="Guided Imagery" class="technique-image">
                         <h3 class="text-xl font-semibold mb-2">Guided Imagery</h3>
                         <p class="mb-4">Visualize calming scenes to promote relaxation and reduce stress.</p>
@@ -85,7 +85,7 @@
 
             <section class="mt-8">
                 <h2 class="text-2xl font-semibold mb-4">Stress Log</h2>
-                <div class="bg-gray-800 p-4 rounded-lg">
+                <div class="bg-gray-800 p-4">
                     <form id="stressLogForm" class="mb-4">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <label for="stressLevel" class="whitespace-nowrap">Stress Level (1-10):</label>
@@ -106,7 +106,7 @@
                 <div class="bg-gray-800 p-4 rounded-lg">
                     <p id="currentTip" class="mb-4">Click the button below to get a stress management tip.</p>
                     <button onclick="getRandomTip()" 
-                            class="w-full sm:w-auto bg-olive-600 hover-olive-green text-white font-bold py-2 px-4 rounded transition duration-300">
+                            class="w-full sm:w-auto bg-olive-600 hover-olive-green text-white font-bold py-2 px-4 rounded-none transition duration-300">
                         Get Random Tip
                     </button>
                 </div>
