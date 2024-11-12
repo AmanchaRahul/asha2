@@ -33,6 +33,29 @@
         .progress-bar {
             transition: width 0.5s ease-in-out;
         }
+
+
+        .message-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1f2937;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #556B2F;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            text-align: center;
+            display: none;
+        }
+        .message-content {
+            margin: 10px;
+        }
+        .message-content button {
+            margin-top: 15px;
+        }
+
         @media (max-width: 640px) {
             .exercise-type-btn {
                 padding: 0.5rem 1rem;
@@ -85,6 +108,13 @@
             <button id="resetStreakButton" class="btn bg-red-600 text-white font-bold py-2 px-4 rounded mt-4 w-full">
                 Reset Streak
             </button>
+        </div>
+    </div>
+
+    <div id="messageContainer" class="message-container">
+        <div class="message-content">
+            <p id="messageText"></p>
+            <button class="btn bg-olive-600 text-white font-bold py-2 px-4 rounded" onclick="hideMessage()">OK</button>
         </div>
     </div>
 
@@ -161,15 +191,38 @@
           });
       });
 
+
+        function showMessage(message) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageText = document.getElementById('messageText');
+            messageText.textContent = message;
+            messageContainer.style.display = 'block';
+        }
+
+        function hideMessage() {
+            document.getElementById('messageContainer').style.display = 'none';
+        }
+
+      // Update tip button click handler
       document.getElementById('tipButton').addEventListener('click', () => {
-          alert('Tip: Always consult with your doctor before starting a new exercise routine, especially if you have high blood pressure!');
+        showMessage('Tip: Always consult with your doctor before starting a new exercise routine, especially if you have high blood pressure!');
       });
 
-      document.getElementById('resetStreakButton').addEventListener('click', () => {
-        currentExercises = 0;
-        streak = 0;
-        updateProgress();
-    });
+        // Update reset streak button click handler
+        document.getElementById('resetStreakButton').addEventListener('click', () => {
+            currentExercises = 0;
+            streak = 0;
+            updateProgress();
+            showMessage('Your streak has been reset to zero.');
+        });
+
+        // Add click outside to close message
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('messageContainer')) {
+                hideMessage();
+            }
+        }
+
 
     updateProgress();
 
