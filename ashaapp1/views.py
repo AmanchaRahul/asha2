@@ -222,7 +222,18 @@ def skincare_diet_view(request):
 
 
 def diabetes_exercises_view(request):
-    return render(request,"diabetes/diabetes_exercises.html")
+    context = {
+        'tips': [
+            "Stay hydrated during exercise to help regulate blood sugar.",
+            "Check your blood sugar before and after exercising.",
+            "Wear comfortable, supportive shoes to protect your feet.",
+            "Start slowly and gradually increase intensity over time.",
+            "Always carry a fast-acting carbohydrate snack with you.",
+            "Listen to your body and rest when needed."
+        ]
+    }
+    return render(request, "diabetes/diabetes_exercises.html", context)
+
 
 
 def bloodpressure_exercises_view(request):

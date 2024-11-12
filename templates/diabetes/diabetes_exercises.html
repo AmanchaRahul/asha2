@@ -102,6 +102,26 @@
         .close:hover {
             color: #fff;
         }
+        .message-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #111;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #556B2F;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            text-align: center;
+            display: none;
+        }
+        .message-content {
+            margin: 10px;
+        }
+        .message-content button {
+            margin-top: 15px;
+        }
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -118,7 +138,6 @@
     </a>
 
     <div class="container" style="margin-top: 2rem;">
-        
         <h1 class="text-4xl font-bold text-center mb-8">Diabetes Exercise Planner</h1>
         
         <div class="exercise-grid">
@@ -164,11 +183,15 @@
             <p>Your Exercise Streak: <span id="streakCount">0</span> days</p>
         </div>
 
-        <button class="btn pulse" onclick="showTip()">Daily Tip</button>
+        <button class="btn pulse" onclick="showTip()">Daily Tip</button class="btn" onclick="resetStreak()" style="background-color: #8B0000; margin-top: 20px;">Reset Streak</button>
 
-        <!-- New Reset Streak button -->
-        <button class="btn" onclick="resetStreak()" style="background-color: #8B0000; margin-top: 20px;">Reset Streak</button>
-    
+        <!-- Custom message container -->
+        <div id="messageContainer" class="message-container">
+            <div class="message-content">
+                <p id="messageText"></p>
+                <button class="btn" onclick="hideMessage()">OK</button>
+            </div>
+        </div>
     </div>
 
     <div id="exerciseModal" class="modal">
@@ -251,30 +274,36 @@
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        function showTip() {
-            const tips = [
-                "Stay hydrated during exercise to help regulate blood sugar.",
-                "Check your blood sugar before and after exercising.",
-                "Wear comfortable, supportive shoes to protect your feet.",
-                "Start slowly and gradually increase intensity over time.",
-                "Always carry a fast-acting carbohydrate snack with you.",
-                "Listen to your body and rest when needed."
-            ];
-            const randomTip = tips[Math.floor(Math.random() * tips.length)];
-            alert(randomTip);
+        function showMessage(message) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageText = document.getElementById('messageText');
+            messageText.textContent = message;
+            messageContainer.style.display = 'block';
         }
 
-           // New function to reset the streak
+        function hideMessage() {
+            document.getElementById('messageContainer').style.display = 'none';
+        }
+
+        function showTip() {
+            const tips = {{ tips|safe }};  // Using the tips from context
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            showMessage(randomTip);
+        }
+
         function resetStreak() {
             streak = 0;
             progress = 0;
             updateStreak();
             updateProgressBar();
-            alert("Your streak has been reset to zero.");
+            showMessage("Your streak has been reset to zero.");
         }
 
-        // Close modal when clicking outside of it
+        // Add this to handle clicking outside the message
         window.onclick = function(event) {
+            if (event.target == document.getElementById('messageContainer')) {
+                hideMessage();
+            }
             if (event.target == document.getElementById('exerciseModal')) {
                 closeModal();
             }
@@ -285,9 +314,7 @@
 {% block navbar %}
 {% endblock navbar %}
 
-
 {% block footer %}
 {% endblock footer %}
-
 
 {% endblock basepage %}
