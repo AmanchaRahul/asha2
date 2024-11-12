@@ -112,6 +112,11 @@ urlpatterns = [
     
     path('voice/', views.voice_view, name='voice'),
     
+    
+    
+    path('update-streak/', views.update_streak, name='update_streak'),
+
+    
 ]
     
 

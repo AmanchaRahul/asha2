@@ -107,3 +107,11 @@ class WaterIntake(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.total_liters} liters on {self.date.date()}"
+    
+    
+    
+
+class ExerciseStreak(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    streak_count = models.IntegerField(default=0)
+    progress = models.FloatField(default=0)

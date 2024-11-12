@@ -114,7 +114,6 @@
             z-index: 1000;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
             text-align: center;
-            display: none;
         }
         .message-content {
             margin: 10px;
@@ -206,8 +205,38 @@
     </div>
 
     <script>
-        let streak = 0;
-        let progress = 0;
+           // Initialize with server values
+           let streak = {{ initial_streak }};
+           let progress = {{ initial_progress }};
+           
+           // Helper function to get CSRF token
+           function getCookie(name) {
+               let cookieValue = null;
+               if (document.cookie && document.cookie !== '') {
+                   const cookies = document.cookie.split(';');
+                   for (let i = 0; i < cookies.length; i++) {
+                       const cookie = cookies[i].trim();
+                       if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                           break;
+                       }
+                   }
+               }
+               return cookieValue;
+           }
+   
+           // Function to update server with new streak and progress
+           function updateServerStreak() {
+               fetch('{% url "update_streak" %}', {
+                   method: 'POST',
+                   headers: {
+                       'X-CSRFToken': getCookie('csrftoken'),
+                       'Content-Type': 'application/x-www-form-urlencoded',
+                   },
+                   body: `streak=${streak}&progress=${progress}`
+               });
+           }
+
         const exercises = {
             walking: {
                 title: "Brisk Walking",
@@ -260,17 +289,31 @@
 
         function completeExercise() {
             streak++;
-            progress += 12.5; // 100% / 8 exercises
+            progress += 12.5;
             if (progress > 100) progress = 100;
             
             updateStreak();
             updateProgressBar();
+            updateServerStreak();  // Added server update
             closeModal();
         }
 
-        function updateStreak() {
-            document.getElementById('streakCount').textContent = streak;
+        function resetStreak() {
+            streak = 0;
+            progress = 0;
+            updateStreak();
+            updateProgressBar();
+            updateServerStreak();  // Added server update
+            showMessage("Your streak has been reset to zero.");
         }
+
+        // Initialize the display when page loads
+        window.onload = function() {
+            updateStreak();
+            updateProgressBar();
+        };
+
+       
 
         function updateProgressBar() {
             document.getElementById('progressBar').style.width = progress + '%';
@@ -293,14 +336,6 @@
             showMessage(randomTip);
         }
 
-        function resetStreak() {
-            streak = 0;
-            progress = 0;
-            updateStreak();
-            updateProgressBar();
-            showMessage("Your streak has been reset to zero.");
-        }
-        
 
         // Add this to handle clicking outside the message
         window.onclick = function(event) {
@@ -311,6 +346,88 @@
                 closeModal();
             }
         }
+    </script>
+</body>
+</html>
+{% block navbar %}
+{% endblock navbar %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% endblock basepage %}
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        // Initialize with server values
+        let streak = {{ initial_streak }};
+        let progress = {{ initial_progress }};
+        
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Function to update server with new streak and progress
+        function updateServerStreak() {
+            fetch('{% url "update_streak" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `streak=${streak}&progress=${progress}`
+            });
+        }
+
+        // [All other existing JavaScript functions remain the same]
+        
+        function completeExercise() {
+            streak++;
+            progress += 12.5;
+            if (progress > 100) progress = 100;
+            
+            updateStreak();
+            updateProgressBar();
+            updateServerStreak();  // Added server update
+            closeModal();
+        }
+
+        function resetStreak() {
+            streak = 0;
+            progress = 0;
+            updateStreak();
+            updateProgressBar();
+            updateServerStreak();  // Added server update
+            showMessage("Your streak has been reset to zero.");
+        }
+
+        // Initialize the display when page loads
+        window.onload = function() {
+            updateStreak();
+            updateProgressBar();
+        };
     </script>
 </body>
 </html>
