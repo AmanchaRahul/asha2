@@ -3,6 +3,7 @@
     text-align: center;
     margin-top: 0rem; /* Add space above the button */
     margin-bottom: 2rem; /* Add space below the button */
+    border-radius: 0px;
   }
   
   .chatbot-btn {

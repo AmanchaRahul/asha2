@@ -4,7 +4,7 @@
     max-width: 900px; /* Increased max-width for larger chatbot box */
     background-color: #111;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    border-radius: 0px;
     overflow: hidden;
     margin-top: 70px;
 }
@@ -25,7 +25,7 @@
 .message {
     margin-bottom: 15px;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 0px;
     line-height: 1.6;
 }
 .user-message {
@@ -55,7 +55,7 @@
     flex: 1; 
     padding: 10px; 
     border: 1px solid #444; 
-    border-radius: 4px; 
+    border-radius: 0px; 
     font-size: 16px; 
     background-color: #333; 
     color: white; 
@@ -65,7 +65,7 @@
      background-color:#444; 
      color:white; 
      border:none; 
-     border-radius:4px; 
+     border-radius:0px; 
      margin-left :15px; /* Increased margin for more space */
      cursor:pointer; 
      font-size :16px; 
