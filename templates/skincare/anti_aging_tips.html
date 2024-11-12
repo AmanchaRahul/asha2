@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
@@ -7,25 +8,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anti-Aging Secrets</title>
+    <title>Skincare Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/style1.css' %}">
     <style>
-        
         .hover-olive:hover {
             color: #808000;
         }
-        .tip-card {
+        .task-card {
             background-color: #111;
             border: 1px solid #333;
             transition: all 0.3s ease;
         }
-        .tip-card:hover {
+        .task-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
-        }
-        .progress-bar {
-            transition: width 0.5s ease-in-out;
         }
         .glow {
             animation: glow 2s ease-in-out infinite alternate;
@@ -46,32 +43,31 @@
     </a>
 
     <main class="flex-grow flex flex-col items-center justify-center p-4" style="margin-top: 2rem;">
-        <h1 class="text-4xl mb-6 text-center glow">Unlock the Secrets of Ageless Beauty</h1>
+        <h1 class="text-4xl mb-6 text-center glow">Your Skincare Journey Tracker</h1>
         <div class="w-full max-w-4xl space-y-6">
-            <!-- Tip Carousel Section -->
-            <section>
-                <h2 class="text-2xl mb-2">Timeless Anti-Aging Strategies</h2>
-                <div id="tip-carousel" class="relative overflow-hidden h-64">
-                    {% for tip in anti_aging_tips %}
-                        <div class="tip-card p-4 rounded-lg absolute w-full transition-all duration-500" style="transform: translateX(100%);">
-                            <h3 class="text-xl font-semibold mb-2">{{ tip.name }}</h3>
-                            <p>{{ tip.description }}</p>
+            <!-- Skincare To-Do List Section -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold mb-4">Daily Skincare Checklist</h2>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <form id="skincare-task-form" class="mb-4">
+                        <div class="flex gap-2">
+                            <input type="text" id="new-task" placeholder="Add new skincare task..." 
+                                   class="p-2 bg-gray-700 rounded flex-grow">
+                            <button type="submit" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded">
+                                Add
+                            </button>
                         </div>
-                    {% endfor %}
-                </div>
-                <div class="flex justify-center mt-2">
-                    <button onclick="prevTip()" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2">
-                        Previous
-                    </button>
-                    <button onclick="nextTip()" class="bg-olive-600 hover:bg-olive-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Next
-                    </button>
+                    </form>
+                    <div id="task-list" class="space-y-2">
+                        <!-- Tasks will be added here dynamically -->
+                    </div>
                 </div>
             </section>
 
-            <!-- Skin Age Calculator Section -->
+            <!-- Skin Age Calculator Section (Unchanged) -->
             <section class="mt-8">
                 <h2 class="text-2xl font-semibold mb-4">Discover Your Skin's True Age</h2>
+                <!-- [Previous Age Calculator Code Remains the Same] -->
                 <div class="bg-gray-800 p-4 rounded-lg">
                     <form id="skin-age-form" class="space-y-4">
                         <div>
@@ -104,7 +100,79 @@
         </div>
     </main>
 
+
     <script>
+
+         // Skincare To-Do List Functionality
+         const taskForm = document.getElementById('skincare-task-form');
+         const taskInput = document.getElementById('new-task');
+         const taskList = document.getElementById('task-list');
+ 
+         // Load tasks from localStorage
+         let tasks = JSON.parse(localStorage.getItem('skincareTasks')) || [
+             { id: 1, text: 'Morning Cleanser', completed: false },
+             { id: 2, text: 'Apply Sunscreen', completed: false },
+             { id: 3, text: 'Evening Double Cleanse', completed: false },
+             { id: 4, text: 'Apply Moisturizer', completed: false }
+         ];
+ 
+         function renderTasks() {
+             taskList.innerHTML = '';
+             tasks.forEach(task => {
+                 const taskElement = document.createElement('div');
+                 taskElement.className = 'task-card p-3 rounded flex items-center justify-between';
+                 taskElement.innerHTML = `
+                     <div class="flex items-center gap-2">
+                         <input type="checkbox" ${task.completed ? 'checked' : ''} 
+                                onchange="toggleTask(${task.id})" class="w-4 h-4">
+                         <span class="${task.completed ? 'line-through text-gray-500' : ''}">${task.text}</span>
+                     </div>
+                     <button onclick="deleteTask(${task.id})" class="text-red-500 hover:text-red-700">×</button>
+                 `;
+                 taskList.appendChild(taskElement);
+             });
+             saveTasks();
+         }
+ 
+         function saveTasks() {
+             localStorage.setItem('skincareTasks', JSON.stringify(tasks));
+         }
+ 
+         function addTask(text) {
+             const newTask = {
+                 id: Date.now(),
+                 text: text,
+                 completed: false
+             };
+             tasks.push(newTask);
+             renderTasks
+         }
+ 
+         function toggleTask(id) {
+             tasks = tasks.map(task => 
+                 task.id === id ? {...task, completed: !task.completed} : task
+             );
+             renderTasks();
+         }
+ 
+         function deleteTask(id) {
+             tasks = tasks.filter(task => task.id !== id);
+             renderTasks();
+         }
+ 
+         taskForm.addEventListener('submit', (e) => {
+             e.preventDefault();
+             const text = taskInput.value.trim();
+             if (text) {
+                 addTask(text);
+                 taskInput.value = '';
+             }
+         });
+ 
+         // Initialize tasks
+         renderTasks();
+
+
         // Tip Carousel
         let currentTipIndex = 0;
         const tips = document.querySelectorAll('#tip-carousel .tip-card');
