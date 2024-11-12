@@ -114,7 +114,7 @@ urlpatterns = [
     
     
     
-    path('update-streak/', views.update_streak, name='update_streak'),
+   
 
     
 ]

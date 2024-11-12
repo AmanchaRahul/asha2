@@ -22,7 +22,7 @@ from groq import Groq
 import os
 from django.views.decorators.http import require_http_methods
 import json
-from .models import ExerciseStreak
+
 
 
 
@@ -224,20 +224,10 @@ def skincare_diet_view(request):
 
 
 
-@login_required
-def update_streak(request):
-    if request.method == 'POST':
-        streak = request.POST.get('streak')
-        progress = request.POST.get('progress')
-        streak_obj, created = ExerciseStreak.objects.get_or_create(user=request.user)
-        streak_obj.streak_count = streak
-        streak_obj.progress = progress
-        streak_obj.save()
-        return JsonResponse({'status': 'success'})
 
 @login_required
 def diabetes_exercises_view(request):
-    streak_obj, created = ExerciseStreak.objects.get_or_create(user=request.user)
+    
     context = {
         'tips': [
             "Stay hydrated during exercise to help regulate blood sugar.",
@@ -247,9 +237,8 @@ def diabetes_exercises_view(request):
             "Always carry a fast-acting carbohydrate snack with you.",
             "Listen to your body and rest when needed."
         ],
-        'initial_streak': streak_obj.streak_count,
-        'initial_progress': streak_obj.progress
     }
+    
     return render(request, "diabetes/diabetes_exercises.html", context)
 
 

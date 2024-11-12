@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareCheck, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage
-from .models import ExerciseStreak
+
 
 
 class UserProfileAdmin(admin.ModelAdmin):
@@ -20,23 +20,6 @@ class BloodPressureCheckAdmin(admin.ModelAdmin):
     list_filter = ('timestamp', 'result')  # Filter checks by timestamp and result
     search_fields = ('systolic', 'diastolic', 'result')  # Enable search by blood pressure levels and result
     ordering = ('-timestamp',)  # Order by the most recent check first
-
-
-
-
-
-
-@admin.register(ExerciseStreak)
-class ExerciseStreakAdmin(admin.ModelAdmin):
-    list_display = ('user', 'streak_count', 'progress')
-    list_filter = ('streak_count',)
-    search_fields = ('user__username',)
-    
-    def get_readonly_fields(self, request, obj=None):
-        if obj:  # editing an existing object
-            return ('user',)
-        return ()
-
 
 
 

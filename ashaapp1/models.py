@@ -111,7 +111,4 @@ class WaterIntake(models.Model):
     
     
 
-class ExerciseStreak(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    streak_count = models.IntegerField(default=0)
-    progress = models.FloatField(default=0)
+
