@@ -98,30 +98,31 @@
 
   {% block navbar%}
 
-  <nav id="navbar" class="fixed bottom-4 left-4 text-white flex flex-col space-y-2 z-10">
+  <nav id="navbar" class="fixed top-4 right-4 text-white flex flex-col space-y-2 z-10">
     <button id="nav-toggle" class="md:hidden text-white focus:outline-none">
       <i class="fas fa-bars"></i>
     </button>
     <div id="nav-menu" class="hidden md:flex flex-col space-y-2">
       <div class="nav-container">
-        <a href="{% url 'basedata' %}" class="hover-olive nav-link animate-right">Home</a>
+        <a href="{% url 'basedata' %}" class="hover-olive nav-link animate-left">Home</a>
       </div>
       <div class="nav-container">
-        <a href="{% url 'aboutdata' %}" class="hover-olive nav-link animate-right">About</a>
+        <a href="{% url 'aboutdata' %}" class="hover-olive nav-link animate-left">About</a>
       </div>
       <div class="nav-container">
-        <a href="{% url 'newsdata' %}" class="hover-olive nav-link animate-right">News</a>
+        <a href="{% url 'newsdata' %}" class="hover-olive nav-link animate-left">News</a>
       </div>
       {% if user.is_authenticated %}
         <div class="nav-container">
-          <a href="{% url 'wellnessdata' %}" class="hover-olive nav-link animate-right">Wellness</a>
+          <a href="{% url 'wellnessdata' %}" class="hover-olive nav-link animate-left">Wellness</a>
         </div>
         <div class="nav-container">
-          <a href="{% url 'logoutdata' %}" class="hover-olive nav-link animate-right">Logout</a>
+          <a href="{% url 'logoutdata' %}" class="hover-olive nav-link animate-left">Logout</a>
         </div>
       {% endif %}
     </div>
-  </nav>
+</nav>
+
   
  {% endblock navbar %}
 
