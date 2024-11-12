@@ -205,8 +205,22 @@
 
       // Update tip button click handler
       document.getElementById('tipButton').addEventListener('click', () => {
-        showMessage('Tip: Always consult with your doctor before starting a new exercise routine, especially if you have high blood pressure!');
+        const tips = [
+          'Tip: Start with gentle exercises like walking or stretching to ease your body into movement.',
+          'Tip: Aim for at least 30 minutes of moderate exercise most days of the week for optimal blood pressure control.',
+          'Tip: Deep breathing exercises can help reduce stress and stabilize blood pressure levels.',
+          'Tip: Avoid holding your breath during exercises, as it can cause sudden spikes in blood pressure.',
+          'Tip: Stay hydrated during workouts, as dehydration can elevate blood pressure.',
+          'Tip: Choose low-impact activities, such as cycling or swimming, which are easier on the heart.',
+          'Tip: Listen to your body—if you feel dizzy or lightheaded, stop exercising and rest.',
+          'Tip: Include relaxation techniques, like yoga or tai chi, in your routine to support cardiovascular health.',
+          'Tip: Stretch before and after each workout to improve flexibility and reduce muscle tension.',
+        ];
+      
+        const randomTip = tips[Math.floor(Math.random() * tips.length)];
+        showMessage(randomTip);
       });
+      
 
         // Update reset streak button click handler
         document.getElementById('resetStreakButton').addEventListener('click', () => {
