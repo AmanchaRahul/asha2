@@ -224,10 +224,7 @@ def skincare_diet_view(request):
 
 
 
-
-@login_required
 def diabetes_exercises_view(request):
-    
     context = {
         'tips': [
             "Stay hydrated during exercise to help regulate blood sugar.",
@@ -236,10 +233,10 @@ def diabetes_exercises_view(request):
             "Start slowly and gradually increase intensity over time.",
             "Always carry a fast-acting carbohydrate snack with you.",
             "Listen to your body and rest when needed."
-        ],
+        ]
     }
-    
     return render(request, "diabetes/diabetes_exercises.html", context)
+
 
 
 
