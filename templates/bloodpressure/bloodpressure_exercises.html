@@ -149,9 +149,9 @@
         exerciseList.innerHTML = '';
         exerciseTypes[type].forEach((exercise, index) => {
             const card = document.createElement('div');
-            card.className = 'exercise-card rounded-lg overflow-hidden shadow-lg p-4 md:p-6';
+            card.className = 'exercise-card overflow-hidden shadow-lg p-4 md:p-6';
             card.innerHTML = `
-                <img src="${exercise.image}" alt="${exercise.name}" class="w-full h-32 md:h-40 object-cover mb-4 rounded">
+                <img src="${exercise.image}" alt="${exercise.name}" class="w-full h-32 md:h-40 object-cover mb-4 rounded-none">
                 <h3 class="text-lg md:text-xl font-bold mb-2">${exercise.name}</h3>
                 <p class="text-gray-400 mb-4 text-sm md:text-base">${exercise.duration}</p>
                 <p class="text-sm md:text-base"><strong>Intensity:</strong> ${exercise.intensity}</p>

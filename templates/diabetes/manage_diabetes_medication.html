@@ -55,7 +55,7 @@
                 <h2 class="text-2xl font-semibold mb-4">Types of Diabetes Medications</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {% for medication in diabetes_medications %}
-                        <div class="medication-card p-4 rounded-lg">
+                        <div class="medication-card p-4">
                             <h3 class="text-xl font-semibold mb-2">{{ medication.name }}</h3>
                             <p class="mb-2">{{ medication.description }}</p>
                             <details>
@@ -71,7 +71,7 @@
                 <h2 class="text-2xl font-semibold mb-4">Tips for Managing Your Diabetes Medications</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {% for tip in medication_tips %}
-                        <div class="tip-card p-4 rounded-lg">
+                        <div class="tip-card p-4">
                             <h3 class="text-xl font-semibold mb-2">{{ tip.title }}</h3>
                             <p>{{ tip.description }}</p>
                         </div>
@@ -79,7 +79,7 @@
                 </div>
             </section>
 
-            <section class="bg-gray-800 p-6 rounded-lg">
+            <section class="bg-gray-800 p-6">
                 <h2 class="text-2xl font-semibold mb-4">Important Reminders</h2>
                 <ul class="list-disc pl-5 space-y-2">
                     <li>Always consult with your healthcare provider before making any changes to your medication regimen.</li>
@@ -95,17 +95,17 @@
                     <form id="medicationForm" class="space-y-4">
                         <div>
                             <label for="medicationName" class="block mb-2">Medication Name:</label>
-                            <input type="text" id="medicationName" class="w-full p-2 bg-gray-700 rounded">
+                            <input type="text" id="medicationName" class="w-full p-2 bg-gray-700 rounded-none">
                         </div>
                         <div>
                             <label for="dosage" class="block mb-2">Dosage:</label>
-                            <input type="text" id="dosage" class="w-full p-2 bg-gray-700 rounded">
+                            <input type="text" id="dosage" class="w-full p-2 bg-gray-700 rounded-none">
                         </div>
                         <div>
                             <label for="frequency" class="block mb-2">Frequency:</label>
-                            <input type="text" id="frequency" class="w-full p-2 bg-gray-700 rounded">
+                            <input type="text" id="frequency" class="w-full p-2 bg-gray-700 rounded-none">
                         </div>
-                        <button type="submit" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded">
+                        <button type="submit" class="bg-olive-600 hover-olive text-white font-bold py-2 px-4 rounded-none">
                             Add Medication
                         </button>
                     </form>
@@ -123,10 +123,10 @@
             const frequency = document.getElementById('frequency').value;
             
             const medicationItem = document.createElement('div');
-            medicationItem.className = 'bg-gray-700 p-2 rounded mt-2 flex justify-between items-center';
+            medicationItem.className = 'bg-gray-700 p-2 rounded-none mt-2 flex justify-between items-center';
             medicationItem.innerHTML = `
                 <span><strong>${name}</strong> - ${dosage}, ${frequency}</span>
-                <button class="delete-btn bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
+                <button class="delete-btn bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-none">Delete</button>
             `;
             
             document.getElementById('medicationList').appendChild(medicationItem);
