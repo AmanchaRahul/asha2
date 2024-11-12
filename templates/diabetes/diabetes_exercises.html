@@ -17,6 +17,30 @@
             padding: 0;
             overflow-x: hidden;
         }
+
+        .message-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #111;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #556B2F;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        
+        .message-content {
+            margin: 10px;
+        }
+        
+        .message-content button {
+            margin-top: 15px;
+        }
+
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -178,6 +202,15 @@
             <p id="modalDescription"></p>
             <button class="btn" onclick="completeExercise()">Complete Exercise</button>
         </div>
+
+        <!-- Custom message container -->
+    <div id="messageContainer" class="message-container" style="display: none;">
+        <div class="message-content">
+            <p id="messageText"></p>
+            <button class="btn" onclick="hideMessage()">OK</button>
+        </div>
+    </div>
+
     </div>
 
     <script>
@@ -251,6 +284,18 @@
             document.getElementById('progressBar').style.width = progress + '%';
         }
 
+
+        function showMessage(message) {
+            const messageContainer = document.getElementById('messageContainer');
+            const messageText = document.getElementById('messageText');
+            messageText.textContent = message;
+            messageContainer.style.display = 'block';
+        }
+        
+        function hideMessage() {
+            document.getElementById('messageContainer').style.display = 'none';
+        }
+        
         function showTip() {
             const tips = [
                 "Stay hydrated during exercise to help regulate blood sugar.",
@@ -261,17 +306,17 @@
                 "Listen to your body and rest when needed."
             ];
             const randomTip = tips[Math.floor(Math.random() * tips.length)];
-            alert(randomTip);
+            showMessage(randomTip);
         }
-
-           // New function to reset the streak
+        
         function resetStreak() {
             streak = 0;
             progress = 0;
             updateStreak();
             updateProgressBar();
-            alert("Your streak has been reset to zero.");
+            showMessage("Your streak has been reset to zero.");
         }
+        
 
         // Close modal when clicking outside of it
         window.onclick = function(event) {
