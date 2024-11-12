@@ -183,7 +183,9 @@
             <p>Your Exercise Streak: <span id="streakCount">0</span> days</p>
         </div>
 
-        <button class="btn pulse" onclick="showTip()">Daily Tip</button class="btn" onclick="resetStreak()" style="background-color: #8B0000; margin-top: 20px;">Reset Streak</button>
+       <!-- Replace the malformed button with this correct version -->
+        <button class="btn pulse" onclick="showTip()">Daily Tip</button>
+        <button class="btn" onclick="resetStreak()" style="background-color: #8B0000; margin-top: 20px;">Reset Streak</button>
 
         <!-- Custom message container -->
         <div id="messageContainer" class="message-container">
@@ -298,6 +300,7 @@
             updateProgressBar();
             showMessage("Your streak has been reset to zero.");
         }
+        
 
         // Add this to handle clicking outside the message
         window.onclick = function(event) {
