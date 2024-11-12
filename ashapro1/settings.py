@@ -75,9 +75,6 @@ INSTALLED_APPS = [
 
 
 
-
-
-
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         "SCOPE": [

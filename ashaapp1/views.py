@@ -22,6 +22,13 @@ from groq import Groq
 import os
 from django.views.decorators.http import require_http_methods
 import json
+from supabase import create_client, Client
+
+
+# Initialize Supabase client
+supabase_url = 'https://byfrbfbdvwgetvzvczpa.supabase.co'
+supabase_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ5ZnJiZmJkdndnZXR2enZjenBhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzA5NjgyNzMsImV4cCI6MjA0NjU0NDI3M30.xaiVZUUxvG9_aAxeeXZ9jwqYuULougbjb9tU5B4OUfE'
+supabase: Client = create_client(supabase_url, supabase_key)
 
 
 # Create your views here.
