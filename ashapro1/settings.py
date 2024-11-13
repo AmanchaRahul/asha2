@@ -45,7 +45,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1','localhost','asha2.onrender.com']
 
-SITE_ID = 1
+SITE_ID = 2
 # Application definition
 
 
@@ -72,11 +72,11 @@ INSTALLED_APPS = [
   
 ]
 
-SOCIAL_AUTH_GOOGLE_CLIENT_ID = '779188846891-al5ispsfj3pijqs6912nh13ot2pd4r4k.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_SECRET = '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'
+#SOCIAL_AUTH_GOOGLE_CLIENT_ID = '779188846891-al5ispsfj3pijqs6912nh13ot2pd4r4k.apps.googleusercontent.com'
+#SOCIAL_AUTH_GOOGLE_SECRET = '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'
 
 
-SOCIAL_AUTH_GOOGLE_REDIRECT_URI = 'https://asha2.onrender.com/accounts/google/login/callback/'
+#SOCIAL_AUTH_GOOGLE_REDIRECT_URI = 'https://asha2.onrender.com/accounts/google/login/callback/'
 
 
 SOCIALACCOUNT_PROVIDERS = {
