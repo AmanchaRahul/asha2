@@ -130,13 +130,28 @@ WSGI_APPLICATION = 'ashapro1.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}'''
+
+
+# settings.py
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',       # Replace with your PostgreSQL database name
+        'USER': 'postgres.byfrbfbdvwgetvzvczpa',       # Replace with your PostgreSQL username
+        'PASSWORD': 'Ramgopalvarma@3',        # Replace with your PostgreSQL password
+        'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',            # Replace with your PostgreSQL host URL, e.g., 'db.supabase.co'
+        'PORT': '6543',                # Default PostgreSQL port is usually '5432'
+    }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
