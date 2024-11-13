@@ -75,8 +75,6 @@ INSTALLED_APPS = [
 #SOCIAL_AUTH_GOOGLE_SECRET = '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'
 
 
-
-
 #SOCIAL_AUTH_GOOGLE_REDIRECT_URI = 'https://asha2.onrender.com/accounts/google/login/callback/'
 
 
@@ -92,10 +90,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
-# Skip intermediate pages and force immediate login/signup if allowed
-SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically sign up users if they don't exist
-SOCIALACCOUNT_LOGIN_ON_GET = True  # Allow login directly on GET request
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 
 MIDDLEWARE = [
@@ -253,17 +249,6 @@ LOGOUT_REDIRECT_URL = '/'
 # New settings to skip intermediate pages
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
-
-
-
-
-SOCIALACCOUNT_QUERY_EMAIL = True  # Ensure email is pulled for OAuth users
-ACCOUNT_EMAIL_REQUIRED = True  # Ensure email is required for login/signup
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Ensure that emails are verified before login/signup
-
-# settings.py
-ACCOUNT_USERNAME_REQUIRED = False  # Avoid asking users for a username after OAuth login
-
 
 
 # yourproject/settings.py
