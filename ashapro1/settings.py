@@ -45,7 +45,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','localhost','asha2.onrender.com']
 
-SITE_ID = 1
+SITE_ID = 2
 # Application definition
 
 
