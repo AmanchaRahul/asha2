@@ -242,7 +242,7 @@ SOCIALACCOUNT_ADAPTER = 'ashaapp1.adapters.MySocialAccountAdapter'
 
 
 
-LOGIN_URL = '/login/'  # Or the URL name you have for your login view
+
 
 LOGIN_REDIRECT_URL = '/wellness/'
 LOGOUT_REDIRECT_URL = '/'
