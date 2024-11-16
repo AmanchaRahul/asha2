@@ -166,6 +166,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Show diabetes content by default on page load
+    showTopic('diabetes');
+
     images.forEach(img => {
         img.addEventListener('mouseenter', function() {
             const topicId = this.getAttribute('data-topic');
