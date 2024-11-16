@@ -939,3 +939,8 @@ def reset_progress(request):
     user_checkin = DailyCheckIn.objects.get(user=request.user)
     user_checkin.reset_count()
     return redirect('track_progress')
+
+
+
+def ddoctor_view(request):
+    return render(request, 'diabetes/ddoctor.html')

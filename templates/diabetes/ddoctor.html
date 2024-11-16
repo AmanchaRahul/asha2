@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block basepage %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Jane Smith - Nutritionist Consultant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .hover-olive:hover {
+            color: #808000;
+        }
+        .bg-olive {
+            background-color: #808000;
+        }
+        .bg-olive:hover {
+            background-color: #6a6a00;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <h1 class="text-4xl mb-8 text-center">Meet Our Nutritionist Consultant</h1>
+        
+        <div class="w-full max-w-4xl bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+            <div class="md:flex">
+                <div class="md:flex-shrink-0">
+                    <img class="h-48 w-full object-cover md:w-48" src="/images/doctor.jpg" alt="Dr. Jane Smith" width="192" height="192">
+                </div>
+                <div class="p-8">
+                    <div class="uppercase tracking-wide text-sm text-olive font-semibold">Dr. Jane Smith</div>
+                    <h2 class="block mt-1 text-lg leading-tight font-medium hover-olive">Certified Nutritionist Consultant</h2>
+                    <p class="mt-2 text-gray-300">
+                        Dr. Jane Smith is a highly qualified nutritionist with over 15 years of experience in the field of dietary and nutritional counseling.
+                    </p>
+                </div>
+            </div>
+            <div class="px-8 py-4">
+                <h3 class="text-xl font-semibold mb-2">Qualifications:</h3>
+                <ul class="list-disc list-inside space-y-1 text-gray-300">
+                    <li>Ph.D. in Nutritional Sciences, Stanford University</li>
+                    <li>Master's in Dietetics, Harvard University</li>
+                    <li>Bachelor's in Food Science, MIT</li>
+                </ul>
+            </div>
+            <div class="px-8 py-4">
+                <h3 class="text-xl font-semibold mb-2">Specializations:</h3>
+                <ul class="list-disc list-inside space-y-1 text-gray-300">
+                    <li>Weight Management</li>
+                    <li>Sports Nutrition</li>
+                    <li>Diabetes Management</li>
+                    <li>Heart-Healthy Diets</li>
+                </ul>
+            </div>
+            <div class="px-8 py-4">
+                <h3 class="text-xl font-semibold mb-2">Professional Memberships:</h3>
+                <ul class="list-disc list-inside space-y-1 text-gray-300">
+                    <li>American Society for Nutrition</li>
+                    <li>Academy of Nutrition and Dietetics</li>
+                    <li>International Society of Sports Nutrition</li>
+                </ul>
+            </div>
+            <div class="px-8 py-4">
+                <button
+                    id="toggleDetailsBtn"
+                    class="w-full bg-olive hover:bg-olive-dark text-white font-bold py-2 px-4 rounded transition duration-300"
+                    aria-expanded="false"
+                    aria-controls="doctor-details"
+                >
+                    Book a Consultation
+                </button>
+            </div>
+            <div id="doctor-details" class="px-8 py-4 bg-gray-800 border-t border-gray-700 hidden">
+                <h3 class="text-xl font-semibold mb-2">Contact Details:</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li>
+                        <span class="font-semibold">Phone:</span> (555) 123-4567
+                    </li>
+                    <li>
+                        <span class="font-semibold">Email:</span> dr.janesmith@healthapp.com
+                    </li>
+                    <li>
+                        <span class="font-semibold">Address:</span> 123 Nutrition St., Healthy City, HC 12345
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggleDetailsBtn');
+            const detailsSection = document.getElementById('doctor-details');
+
+            toggleBtn.addEventListener('click', function() {
+                const expanded = toggleBtn.getAttribute('aria-expanded') === 'true' || false;
+                toggleBtn.setAttribute('aria-expanded', !expanded);
+                detailsSection.classList.toggle('hidden');
+                toggleBtn.textContent = expanded ? 'Book a Consultation' : 'Hide Contact Details';
+            });
+        });
+    </script>
+</body>
+</html>
+
+    {% block navbar %}
+    {% endblock navbar %}
+
+    {% block footer %}
+    {% endblock footer %}
+</body>
+</html>
+{% endblock basepage %}
