@@ -6,6 +6,16 @@ import uuid
 from django.contrib.auth import get_user_model
 
 
+class DailyCheckIn(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    check_in_count = models.PositiveIntegerField(default=0)
+
+    def reset_count(self):
+        self.check_in_count = 0
+        self.save()
+
+
+
 User = get_user_model()
 
 

@@ -118,7 +118,8 @@ urlpatterns = [
     path('get-bp-exercise-streak/', views.get_bp_exercise_streak, name='get_bp_exercise_streak'),
 
     
-   
+    path('track-progress/', views.track_progress, name='track_progress'),
+    path('reset-progress/', views.reset_progress, name='reset_progress'),
 
     
 ]

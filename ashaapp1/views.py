@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm, ContactForm
 from django.contrib import messages
-from .models import BloodPressureCheck, DiabetesCheck, SkinCareCheck, UserProfile, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage, WaterIntake
+from .models import BloodPressureCheck, DiabetesCheck, SkinCareCheck, UserProfile, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage, WaterIntake, DailyCheckIn
 from datetime import date
 from django.views import View
 from .services.news_service import get_news
@@ -34,6 +34,8 @@ def base_view(request):
     return render(request,"base.html")
 
 
+
+@login_required
 def wellness_view(request):
     return render(request,"wellness.html")
 
@@ -106,7 +108,6 @@ def signup_view(request):
 # views.py
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-from django.contrib.auth import login
 from django.contrib.auth.models import User
 
 def activate(request, uidb64, token):
@@ -140,6 +141,8 @@ def about_view(request):
     return render(request, "about.html")
 
 
+
+@login_required
 def diabetes_diet_view(request):
     return render(request,"diabetes/diabetes_diet.html")
 
@@ -179,7 +182,7 @@ def type2_dinner_view(request):
     return render(request,'diabetes/type2_dinner.html')
 
 
-
+@login_required
 def bloodpressure_diet_view(request):
     return render(request,"bloodpressure/bloodpressure_diet.html")
 
@@ -223,7 +226,7 @@ def skincare_diet_view(request):
 
 
 
-
+@login_required
 def diabetes_exercises_view(request):
     context = {
         'tips': [
@@ -240,9 +243,10 @@ def diabetes_exercises_view(request):
 
 
 
-
+@login_required
 def bloodpressure_exercises_view(request):
     return render(request,"bloodpressure/bloodpressure_exercises.html")
+
 
 
 
@@ -492,10 +496,11 @@ def manage_diabetes_medication(request):
     return render(request, 'diabetes/manage_diabetes_medication.html', context)
 
 
-
+@login_required
 def diabetes_challenge(request):
     return render(request,"diabetes/diabetes_selection_challenge.html")
 
+@login_required
 def bloodpressure_challenge(request):
     return render(request,"bloodpressure/bloodpressure_selection_challenge.html")
 
@@ -916,3 +921,21 @@ def get_exercise_streak(request):
     return JsonResponse({
         'streak': streak.current_streak if streak else 0
     })
+
+
+@login_required
+def track_progress(request):
+    user_checkin, created = DailyCheckIn.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        user_checkin.check_in_count += 1
+        user_checkin.save()
+        return JsonResponse({'check_in_count': user_checkin.check_in_count})
+
+    return render(request, 'track_progress.html', {'check_in_count': user_checkin.check_in_count})
+
+@login_required
+def reset_progress(request):
+    user_checkin = DailyCheckIn.objects.get(user=request.user)
+    user_checkin.reset_count()
+    return redirect('track_progress')

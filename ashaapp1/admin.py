@@ -1,6 +1,26 @@
 from django.contrib import admin
 from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareCheck, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage
-from .models import ExerciseStreak, BPExerciseStreak
+from .models import ExerciseStreak, BPExerciseStreak, DailyCheckIn
+
+
+# Define a custom admin class for DailyCheckIn
+class DailyCheckInAdmin(admin.ModelAdmin):
+    list_display = ('user', 'check_in_count', 'reset_count')
+    list_filter = ('user',)
+    search_fields = ('user__username',)
+    actions = ['reset_check_in_count']
+
+    # Custom action to reset the check-in count
+    def reset_check_in_count(self, request, queryset):
+        for obj in queryset:
+            obj.reset_count()
+        self.message_user(request, "Selected check-in counts have been reset.")
+
+    reset_check_in_count.short_description = "Reset check-in count to 0"
+
+# Register the model with the custom admin class
+admin.site.register(DailyCheckIn, DailyCheckInAdmin)
+
 
 
 @admin.register(BPExerciseStreak)

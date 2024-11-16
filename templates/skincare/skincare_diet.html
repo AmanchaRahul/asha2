@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -64,7 +63,7 @@
                 <h1 class="text-3xl md:text-4xl font-bold">Skincare Diet Planner</h1>
             </div>
 
-            <!-- Mobile-responsive button container -->
+            <!-- Skincare Goal Selection -->
             <div class="mb-8 text-center">
                 <h2 class="text-xl mb-4">Select your skincare goal:</h2>
                 <div class="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0">
@@ -74,7 +73,7 @@
                 </div>
             </div>
 
-            <!-- Mobile-responsive diet plan -->
+            <!-- Diet Plan -->
             <div id="dietPlan" class="hidden">
                 <h2 class="text-xl md:text-2xl mb-4 text-center">Your Personalized Skincare Diet</h2>
                 <p class="mb-4 text-center">Discover foods that nourish your skin from within!</p>
@@ -94,7 +93,7 @@
                 </div>
             </div>
 
-            <!-- Mobile-responsive engagement features -->
+            <!-- Engagement Features -->
             <div id="engagementFeatures" class="mt-8 hidden px-4">
                 <h3 class="text-xl mb-4 text-center">Track Your Progress</h3>
                 <div class="bg-gray-800 p-4 rounded-lg">
@@ -175,86 +174,89 @@
             const achievement = document.getElementById('achievement');
             const achievementText = document.getElementById('achievementText');
 
-            let currentGoal = '';
-            let streakDays = 0;
+            
+        let currentGoal = '';
+        let streakDays = 0;
 
-            skinGoalBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const goal = this.getAttribute('data-goal');
-                    currentGoal = goal;
-                    updateDietPlan(goal);
-                    dietPlanDiv.classList.remove('hidden');
-                    engagementFeatures.classList.remove('hidden');
-                });
+        // Handle goal button clicks
+        skinGoalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentGoal = btn.getAttribute('data-goal');
+                updateDietPlan(currentGoal);
+                dietPlanDiv.classList.remove('hidden');
+                engagementFeatures.classList.remove('hidden');
             });
-
-            function updateDietPlan(goal) {
-                const plan = skincareDiets[goal];
-                updateFoodSection(fruitsVeggiesDiv, plan.fruitsVeggies);
-                updateFoodSection(proteinsDiv, plan.proteins);
-                updateFoodSection(healthyFatsDiv, plan.healthyFats);
-            }
-
-            function updateFoodSection(sectionDiv, foods) {
-                sectionDiv.innerHTML = foods.map(food => `
-                    <div class="diet-card p-4 rounded-lg">
-                        <img src="${food.image}" alt="${food.name}" class="w-full h-32 object-cover mb-2 rounded-lg">
-                        <h4 class="text-lg font-bold mb-1">${food.name}</h4>
-                        <p class="text-sm">${food.description}</p>
-                    </div>
-                `).join('');
-            }
-
-            checkInBtn.addEventListener('click', function() {
-                streakDays++;
-                updateProgress();
-                checkAchievements();
-            });
-
-            function updateProgress() {
-                const progress = Math.min(streakDays * 10, 100);
-                progressBar.style.width = `${progress}%`;
-            }
-
-            function checkAchievements() {
-                let newAchievement = '';
-                if (streakDays === 1) {
-                    newAchievement = "First Step: You've started your skincare diet journey!";
-                } else if (streakDays === 7) {
-                    newAchievement = "Week Warrior: You've completed a full week!";
-                } else if (streakDays === 30) {
-                    newAchievement = "Month Master: 30 days of consistent skincare diet!";
-                }
-
-                if (newAchievement) {
-                    achievementText.textContent = newAchievement;
-                    achievement.classList.remove('hidden');
-                    achievement.classList.add('pulse');
-                    setTimeout(() => achievement.classList.remove('pulse'), 3000);
-                }
-            }
-
-            // Simulated tips
-            setInterval(function() {
-                const tips = [
-                    "Remember to stay hydrated!",
-                    "Consistency is key in your skincare diet.",
-                    "Combine your diet with a good skincare routine for best results.",
-                    "Don't forget to protect your skin from the sun!"
-                ];
-                const randomTip = tips[Math.floor(Math.random() * tips.length)];
-                showFloatingTip(randomTip);
-            }, 300000); // Every 5 minutes
-
-            function showFloatingTip(message) {
-                const tip = document.createElement('div');
-                tip.textContent = message;
-                tip.className = 'fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg';
-                document.body.appendChild(tip);
-                setTimeout(() => tip.remove(), 5000);
-            }
         });
-    </script>
+
+        // Update diet plan section
+        const updateDietPlan = (goal) => {
+            const plan = skincareDiets[goal];
+            updateFoodSection(fruitsVeggiesDiv, plan.fruitsVeggies);
+            updateFoodSection(proteinsDiv, plan.proteins);
+            updateFoodSection(healthyFatsDiv, plan.healthyFats);
+        };
+
+        // Populate individual food sections
+        const updateFoodSection = (sectionDiv, foods) => {
+            sectionDiv.innerHTML = foods.map(food => `
+                <div class="diet-card p-4 rounded-lg">
+                    <img src="${food.image}" alt="${food.name}" class="w-full h-32 object-cover mb-2 rounded-lg">
+                    <h4 class="text-lg font-bold mb-1">${food.name}</h4>
+                    <p class="text-sm">${food.description}</p>
+                </div>
+            `).join('');
+        };
+
+        // Check-in logic for streaks and achievements
+        checkInBtn.addEventListener('click', () => {
+            streakDays++;
+            updateProgress();
+            checkAchievements();
+        });
+
+        // Update progress bar
+        const updateProgress = () => {
+            const progress = Math.min(streakDays * 10, 100);
+            progressBar.style.width = `${progress}%`;
+        };
+
+        // Show achievement based on streak
+        const checkAchievements = () => {
+            const achievements = {
+                1: "First Step: You've started your skincare diet journey!",
+                7: "Week Warrior: You've completed a full week!",
+                30: "Month Master: 30 days of consistent skincare diet!"
+            };
+
+            if (achievements[streakDays]) {
+                achievementText.textContent = achievements[streakDays];
+                achievement.classList.remove('hidden', 'pulse');
+                achievement.classList.add('pulse');
+                setTimeout(() => achievement.classList.remove('pulse'), 3000);
+            }
+        };
+
+        // Periodic skincare tips
+        setInterval(() => {
+            const tips = [
+                "Remember to stay hydrated!",
+                "Consistency is key in your skincare diet.",
+                "Combine your diet with a good skincare routine for best results.",
+                "Don't forget to protect your skin from the sun!"
+            ];
+            showFloatingTip(tips[Math.floor(Math.random() * tips.length)]);
+        }, 300000); // Every 5 minutes
+
+        // Show floating tip
+        const showFloatingTip = (message) => {
+            const tip = document.createElement('div');
+            tip.textContent = message;
+            tip.className = 'fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg';
+            document.body.appendChild(tip);
+            setTimeout(() => tip.remove(), 5000);
+        };
+    });
+</script>
 
     {% block navbar %}
     {% endblock navbar %}
