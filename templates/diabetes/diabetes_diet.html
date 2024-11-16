@@ -13,7 +13,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        
         .meal-card {
             background-color: #111;
             transition: all 0.3s ease;
@@ -30,22 +29,40 @@
         .btn:hover {
             background-color: olive;
         }
+        @media (max-width: 768px) {
+            .diabetes-type-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .meal-card {
+                flex-direction: column;
+            }
+            .meal-card-content {
+                width: 100%;
+                text-align: center;
+            }
+            .meal-card-image {
+                width: 100%;
+                margin-top: 1rem;
+            }
+        }
     </style>
 </head>
-<body class="flex flex-col">
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+<body class="flex flex-col min-h-screen" style="margin-top: 2rem;">
+   
+    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-10" style="margin-top: 2rem;">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
     </a>
 
-    <main class="flex-grow p-4" style="margin-top: 4rem;">
-
-        <div class="max-w-6xl mx-auto">
+    <main class="flex-grow p-4 mt-16">
+        <div class="max-w-4xl mx-auto px-4">
             <div class="text-center mb-8">
-                <h1 class="text-4xl font-bold">Diabetes Diet Planner</h1>
+                <h1 class="text-3xl md:text-4xl font-bold">Diabetes Diet Planner</h1>
             </div>
-            <div class="mb-8">
+
+            <div class="mb-8 text-center">
                 <h2 class="text-xl mb-4">Select your diabetes type:</h2>
-                <div class="flex space-x-4">
+                <div class="diabetes-type-buttons flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
                     <button class="diabetes-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="pre">Pre-diabetes</button>
                     <button class="diabetes-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="type1">Type 1</button>
                     <button class="diabetes-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="type2">Type 2</button>
@@ -53,23 +70,23 @@
             </div>
 
             <div id="mealPlan" class="hidden">
-                <h2 class="text-2xl mb-4">Your Personalized Meal Plan</h2>
-                <p class="mb-4">Click on a meal type to see more options!</p>
+                <h2 class="text-xl md:text-2xl mb-4 text-center">Your Personalized Meal Plan</h2>
+                <p class="mb-4 text-center">Click on a meal type to see more options!</p>
                 <div class="space-y-8">
-                    <div id="breakfast">
-                        <h3 class="text-xl mb-4">Breakfast</h3>
+                    <div id="breakfast" class="text-center">
+                        <h3 class="text-lg md:text-xl mb-4">Breakfast</h3>
                         <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4" data-meal-type="breakfast">Show Another Breakfast Option</button>
+                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="breakfast">Show Another Breakfast Option</button>
                     </div>
-                    <div id="lunch">
-                        <h3 class="text-xl mb-4">Lunch</h3>
+                    <div id="lunch" class="text-center">
+                        <h3 class="text-lg md:text-xl mb-4">Lunch</h3>
                         <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4" data-meal-type="lunch">Show Another Lunch Option</button>
+                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="lunch">Show Another Lunch Option</button>
                     </div>
-                    <div id="dinner">
-                        <h3 class="text-xl mb-4">Dinner</h3>
+                    <div id="dinner" class="text-center">
+                        <h3 class="text-lg md:text-xl mb-4">Dinner</h3>
                         <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4" data-meal-type="dinner">Show Another Dinner Option</button>
+                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="dinner">Show Another Dinner Option</button>
                     </div>
                 </div>
             </div>
