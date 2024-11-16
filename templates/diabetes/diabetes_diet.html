@@ -197,13 +197,13 @@
 
             function updateMealSection(sectionDiv, meal, mealType) {
                 sectionDiv.innerHTML = `
-                    <div class="meal-card flex items-center space-x-4 bg-black p-4 rounded-none shadow">
-                        <div class="w-2/3">
+                    <div class="meal-card flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 bg-black p-4 rounded-none shadow">
+                        <div class="meal-card-content w-full md:w-2/3 text-center md:text-left">
                             <h4 class="text-lg font-bold mb-2">${mealType} Option</h4>
                             <h3 class="text-xl mb-2">${meal.name}</h3>
-                            <p>${meal.description}</p>
+                            <p class="text-sm md:text-base">${meal.description}</p>
                         </div>
-                        <div class="w-1/3 h-48 bg-cover bg-center" style="background-image: url('${meal.image}');"></div>
+                        <div class="meal-card-image w-full md:w-1/3 h-48 bg-cover bg-center" style="background-image: url('${meal.image}');"></div>
                     </div>
                 `;
             }
