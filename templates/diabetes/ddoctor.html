@@ -31,13 +31,13 @@
     <a href="{% url 'wellnessdata' %}" class="back-button">
         <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
-    <main class="flex-grow flex flex-col items-center justify-center p-4">
+    <main class="flex-grow flex flex-col items-center justify-center p-4" style="margin-top: 3rem;">
         <h1 class="text-4xl mb-8 text-center">Meet Our Nutritionist Consultant</h1>
         
         <div class="w-full max-w-4xl bg-gray-900 rounded-lg shadow-lg overflow-hidden">
             <div class="md:flex">
                 <div class="md:flex-shrink-0">
-                    <img class="h-48 w-full object-cover md:w-48" src="/images/doctor.jpg" alt="Dr. Jane Smith" width="192" height="192">
+                    <img class="h-48 w-full object-cover md:w-48" src="{% static 'images/bloodpressure/meditation.jpeg' %}" alt="Dr. Jane Smith" width="192" height="192">
                 </div>
                 <div class="p-8">
                     <div class="uppercase tracking-wide text-sm text-olive font-semibold">Dr. Jane Smith</div>
@@ -112,8 +112,7 @@
             });
         });
     </script>
-</body>
-</html>
+
 
     {% block navbar %}
     {% endblock navbar %}
