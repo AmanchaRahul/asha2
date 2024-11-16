@@ -144,6 +144,23 @@
       let currentExercises = 0;
       let streak = 0;
 
+
+      // Load initial streak from server
+    function loadStreak() {
+        fetch('/get-exercise-streak/', {
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            streak = data.streak;
+            currentExercises = streak % 6; // 6 exercises per week
+            updateProgress();
+        });
+    }
+
       function updateExerciseList(type) {
         const exerciseList = document.getElementById('exerciseList');
         exerciseList.innerHTML = '';
@@ -163,17 +180,31 @@
             exerciseList.appendChild(card);
         });
         addCompleteExerciseListeners();
-    }
+        }
 
-      function addCompleteExerciseListeners() {
-          document.querySelectorAll('.complete-exercise').forEach(button => {
-              button.addEventListener('click', () => {
-                  currentExercises++;
-                  streak++;
-                  updateProgress();
-              });
-          });
-      }
+        function addCompleteExerciseListeners() {
+            document.querySelectorAll('.complete-exercise').forEach(button => {
+                button.addEventListener('click', () => {
+                    completeExercise();
+                });
+            });
+        }
+
+        function completeExercise() {
+            fetch('/update-exercise-streak/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                streak = data.streak;
+                currentExercises = streak % 6;
+                updateProgress();
+            });
+        }
 
       function updateProgress() {
           const progressBar = document.getElementById('progressBar');
@@ -184,6 +215,23 @@
           progressText.textContent = `${currentExercises} out of 6 exercises completed this week`;
           streakCount.textContent = `${streak} days`;
       }
+      
+
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
 
       document.querySelectorAll('.exercise-type-btn').forEach(button => {
           button.addEventListener('click', () => {
@@ -237,14 +285,19 @@
             }
         }
 
-
-    updateProgress();
-
-      // Initialize with Cardio exercises
-      updateExerciseList('Cardio');
-
-      // Initialize Lucide icons
-      lucide.createIcons();
+        document.getElementById('resetStreakButton').addEventListener('click', () => {
+            streak = 0;
+            currentExercises = 0;
+            updateProgress();
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStreak();
+            updateExerciseList('Cardio');
+            lucide.createIcons();
+        });
+    
   </script>
 </body>
 </html>
