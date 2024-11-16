@@ -98,6 +98,8 @@
                 <h3 class="text-xl mb-4 text-center">Track Your Progress</h3>
                 <div class="bg-gray-800 p-4 rounded-lg">
                     <p class="mb-2 text-center">Days following the skincare diet:</p>
+                    <!-- Count of Days in Smaller Font -->
+                    <div class="text-sm text-center mb-4" id="daysCount">0 days</div>
                     <div class="w-full bg-gray-700 rounded-full h-2.5 mb-4">
                         <div class="progress-bar rounded-full" style="width: 0%"></div>
                     </div>
@@ -108,6 +110,10 @@
                 <div id="achievement" class="mt-4 bg-gray-800 p-4 rounded-lg hidden">
                     <h4 class="text-lg font-bold mb-2 text-center">Achievement Unlocked!</h4>
                     <p id="achievementText" class="text-center"></p>
+                </div>
+                <!-- Reset Button (Small Size) -->
+                <div class="text-center mt-4">
+                    <button id="resetButton" class="btn bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 text-sm rounded">Reset</button>
                 </div>
             </div>
         </div>
@@ -175,8 +181,9 @@
             const achievementText = document.getElementById('achievementText');
 
             
-        let currentGoal = '';
-        let streakDays = 0;
+            let currentGoal = null;
+            let daysCount = 0;
+            let interval;
 
         // Handle goal button clicks
         skinGoalBtns.forEach(btn => {
@@ -256,6 +263,28 @@
             setTimeout(() => tip.remove(), 5000);
         };
     });
+    
+
+    // Check-in functionality (increment day count)
+    document.getElementById('checkIn').addEventListener('click', () => {
+        daysCount++;
+        document.getElementById('daysCount').textContent = `${daysCount} days`;
+        document.querySelector('.progress-bar').style.width = `${(daysCount % 30) * 3.33}%`; // Progress bar logic
+
+        if (daysCount >= 30) {
+            document.getElementById('achievement').classList.remove('hidden');
+            document.getElementById('achievementText').textContent = "You've completed 30 days of your skincare diet!";
+        }
+    });
+    
+    // Reset functionality
+    document.getElementById('resetButton').addEventListener('click', () => {
+        daysCount = 0;
+        document.getElementById('daysCount').textContent = `0 days`;
+        document.querySelector('.progress-bar').style.width = '0%';
+        document.getElementById('achievement').classList.add('hidden');
+    });
+
 </script>
 
     {% block navbar %}
