@@ -123,7 +123,8 @@ urlpatterns = [
     
     
     path('ddoctor/', views.ddoctor_view, name="ddoctor"),
-
+    path('bdoctor/', views.bdoctor_view, name="bdoctor"),
+    path('sdoctor/', views.sdoctor_view, name="sdoctor"),
     
 ]
     

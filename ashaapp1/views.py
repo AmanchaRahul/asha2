@@ -944,3 +944,10 @@ def reset_progress(request):
 
 def ddoctor_view(request):
     return render(request, 'diabetes/ddoctor.html')
+
+
+def bdoctor_view(request):
+    return render(request, 'bloodpressure/bdoctor.html')
+
+def sdoctor_view(request):
+    return render(request, 'skincare/sdoctor.html')
