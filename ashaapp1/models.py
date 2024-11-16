@@ -3,6 +3,31 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 import uuid
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+
+class BPExerciseStreak(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_activity_date = models.DateField()
+    current_streak = models.IntegerField(default=0)
+    weekly_exercises = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ['user']
+
+
+class ExerciseStreak(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    last_activity_date = models.DateField()
+    current_streak = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ['user']
+        
+        
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)

@@ -815,3 +815,104 @@ def reset_water_intake(request):
     water_intake.save()
 
     return redirect('water_intake_tracker') 
+
+
+
+
+from django.views.decorators.http import require_POST, require_GET
+from datetime import date, timedelta
+from .models import ExerciseStreak, BPExerciseStreak
+
+
+
+@require_POST
+def update_bp_exercise_streak(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'User not authenticated'}, status=401)
+
+    streak, created = BPExerciseStreak.objects.get_or_create(
+        user=request.user,
+        defaults={
+            'last_activity_date': date.today(),
+            'current_streak': 1,
+            'weekly_exercises': 1
+        }
+    )
+
+    if not created:
+        today = date.today()
+        days_diff = (today - streak.last_activity_date).days
+        
+        if days_diff == 1:  # Consecutive day
+            streak.current_streak += 1
+        elif days_diff > 1:  # Streak broken
+            streak.current_streak = 1
+        
+        # Reset weekly exercises if it's been more than a week
+        if (today - streak.last_activity_date).days >= 7:
+            streak.weekly_exercises = 0
+        
+        streak.weekly_exercises = min(streak.weekly_exercises + 1, 6)
+        streak.last_activity_date = today
+        streak.save()
+
+    return JsonResponse({
+        'streak': streak.current_streak,
+        'weekly_exercises': streak.weekly_exercises
+    })
+
+@require_GET
+def get_bp_exercise_streak(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'streak': 0, 'weekly_exercises': 0})
+
+    streak = BPExerciseStreak.objects.filter(user=request.user).first()
+    
+    if streak:
+        # Reset weekly exercises if it's been more than a week
+        today = date.today()
+        if (today - streak.last_activity_date).days >= 7:
+            streak.weekly_exercises = 0
+            streak.save()
+            
+    return JsonResponse({
+        'streak': streak.current_streak if streak else 0,
+        'weekly_exercises': streak.weekly_exercises if streak else 0
+    })
+
+
+@require_POST
+def update_exercise_streak(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'User not authenticated'}, status=401)
+
+    streak, created = ExerciseStreak.objects.get_or_create(
+        user=request.user,
+        defaults={'last_activity_date': date.today(), 'current_streak': 1}
+    )
+
+    if not created:
+        today = date.today()
+        days_diff = (today - streak.last_activity_date).days
+        
+        if days_diff == 1:  # Consecutive day
+            streak.current_streak += 1
+        elif days_diff > 1:  # Streak broken
+            streak.current_streak = 1
+        
+        streak.last_activity_date = today
+        streak.save()
+
+    return JsonResponse({
+        'streak': streak.current_streak,
+    })
+
+@require_GET
+def get_exercise_streak(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'streak': 0})
+
+    streak = ExerciseStreak.objects.filter(user=request.user).first()
+    return JsonResponse({
+        'streak': streak.current_streak if streak else 0
+    })

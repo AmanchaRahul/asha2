@@ -1,6 +1,23 @@
 from django.contrib import admin
 from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareCheck, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage
+from .models import ExerciseStreak, BPExerciseStreak
 
+
+@admin.register(BPExerciseStreak)
+class BPExerciseStreakAdmin(admin.ModelAdmin):
+    list_display = ('user', 'current_streak', 'weekly_exercises', 'last_activity_date')
+    list_filter = ('last_activity_date',)
+    search_fields = ('user__username',)
+    ordering = ('-current_streak',)
+    
+
+@admin.register(ExerciseStreak)
+class ExerciseStreakAdmin(admin.ModelAdmin):
+    list_display = ('user', 'current_streak', 'last_activity_date')
+    list_filter = ('last_activity_date',)
+    search_fields = ('user__username',)
+    ordering = ('-current_streak',)
+    
 
 
 class UserProfileAdmin(admin.ModelAdmin):
