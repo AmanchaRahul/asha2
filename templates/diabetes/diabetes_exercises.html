@@ -1,367 +1,481 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}
-<title>Diabetes Exercise Planner</title>
-{% endblock title %}
-
-{% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Exercise Tracker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
+
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+                /* Adjust the position of the Swiper navigation arrows */
+        .swiper-button-next, 
+        .swiper-button-prev {
+            top: 35%; /* Move the arrows higher above the video controls */
+            transform: translateY(-50%);
+            z-index: 10; /* Ensure the arrows are above other elements */
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .btn {
-            background-color: #556B2F;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #6B8E23;
-        }
-        .exercise-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .exercise-card {
-            background-color: #111;
-            border: 1px solid #333;
-            border-radius: none;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .exercise-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(107, 142, 35, 0.3);
-        }
-        .exercise-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-        }
-        .progress-container {
-            width: 100%;
-            background-color: #333;
-            border-radius: 15px;
-            margin: 20px 0;
-        }
-        .progress-bar {
-            width: 0;
-            height: 30px;
-            background-color: #556B2F;
-            border-radius: 15px;
-            transition: width 0.5s ease-in-out;
-        }
-        .streak-container {
-            text-align: center;
-            font-size: 24px;
-            margin-top: 20px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-        }
-        .modal-content {
-            background-color: #111;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: none;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover {
-            color: #fff;
-        }
-        .message-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #111;
-            padding: 20px;
-            border-radius: none;
-            border: 1px solid #556B2F;
-            z-index: 1000;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            text-align: center;
-            display: none;
-        }
-        .message-content {
-            margin: 10px;
-        }
-        .message-content button {
-            margin-top: 15px;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        .pulse {
-            animation: pulse 2s infinite;
+
+        /* Optional: Increase the size of arrows for better accessibility */
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 20px;
         }
     </style>
 </head>
-<body>
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
-    </a>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Navigation -->
+        <nav class="flex justify-between items-center mb-8">
+            <button class="text-2xl">←</button>
+            <h1 class="text-2xl font-bold">Diabetes Exercise Hub</h1>
+            <div></div>
+        </nav>
 
-    <div class="container" style="margin-top: 2rem;">
-        <h1 class="text-4xl font-bold text-center mb-8">Diabetes Exercise Planner</h1>
-        
-        <div class="exercise-grid">
-            <div class="exercise-card" onclick="showExerciseModal('walking')">
-                <div class="exercise-icon">🚶</div>
-                <h3>Walking</h3>
-            </div>
-            <div class="exercise-card" onclick="showExerciseModal('swimming')">
-                <div class="exercise-icon">🏊</div>
-                <h3>Swimming</h3>
-            </div>
-            <div class="exercise-card" onclick="showExerciseModal('cycling')">
-                <div class="exercise-icon">🚴</div>
-                <h3>Cycling</h3>
-            </div>
-            <div class="exercise-card" onclick="showExerciseModal('yoga')">
-                <div class="exercise-icon">🧘</div>
-                <h3>Yoga</h3>
-            </div>
-            <div class="exercise-card" onclick="showExerciseModal('strength')">
-                <div class="exercise-icon">💪</div>
-                <h3>Strength Training</h3>
-            </div>
-            <div class="exercise-card" onclick="showExerciseModal('dancing')">
-                <div class="exercise-icon">💃</div>
-                <h3>Dancing</h3>
-            </div>
-            <div class="exercise-card" onclick="showExerciseModal('jogging')">
-                <div class="exercise-icon">🏃</div>
-                <h3>Jogging</h3>
-            </div>
-            <div class="exercise-card" onclick="showExerciseModal('pilates')">
-                <div class="exercise-icon">🧘‍♀️</div>
-                <h3>Pilates</h3>
-            </div>
+        <!-- Tabs -->
+        <div class="flex justify-between mb-8 border-b border-gray-700">
+            <button id="exercisesTabBtn" class="px-4 py-2 text-lg font-semibold border-b-2 border-blue-500">EXERCISES</button>
+            <button id="trackerTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE TRACKER</button>
         </div>
 
-        <div class="progress-container">
-            <div id="progressBar" class="progress-bar"></div>
+        <!-- Exercises Section -->
+        <div id="exercises" class="space-y-8">
+            <!-- Low-Impact Cardio Section -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Walking</h2>
+                <p class="text-gray-400 mb-4">Walking is one of the simplest and most effective exercises for managing diabetes. It helps improve blood sugar control, cardiovascular health, and overall fitness</p>
+                
+                <!-- Swiper Carousel -->
+                <div class="swiper cardioSwiper">
+                    <div class="swiper-wrapper">
+                        <!-- Exercise Video Card 1 -->
+                       <div class="swiper-slide">
+                          <div class="bg-gray-800 rounded-lg overflow-hidden">
+                              <div class="w-full h-48">
+                                  <iframe 
+                                      class="w-full h-full" 
+                                      src="https://www.youtube.com/embed/tVpUCkMLgms?si=G5NndvkQAiRyPP6v" 
+                                      title="Power Walking for Beginners" 
+                                      frameborder="0" 
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                      allowfullscreen>
+                                  </iframe>
+                              </div>
+                              <div class="p-4">
+                                  <div class="flex items-center mb-2">
+                                      <span class="text-gray-400 mr-2">⏱ 10:00</span>
+                                      <span class="text-gray-400">| Low Intensity</span>
+                                  </div>
+                                  <h3 class="text-lg font-semibold mb-2">Power Walking for Beginners</h3>
+                                  <p class="text-gray-400">A brisk walk that increases your heart rate while keeping it manageable for beginners. Great for improving insulin sensitivity.</p>
+                              </div>
+                          </div>
+                      </div>
+
+                        <!-- Exercise Video Card 2 -->
+                        
+                          
+                       <div class="swiper-slide">
+                          <div class="bg-gray-800 rounded-lg overflow-hidden">
+                              <div class="w-full h-48">
+                                  <iframe 
+                                      class="w-full h-full" 
+                                      src="https://www.youtube.com/embed/AxrYGzDmSOk?si=eq-MwSpwt5NFkvrQ"
+ 
+                                      title="High intensity walking" 
+                                      frameborder="0" 
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                      allowfullscreen>
+                                  </iframe>
+                              </div>
+                              <div class="p-4">
+                                  <div class="flex items-center mb-2">
+                                      <span class="text-gray-400 mr-2">⏱ 15:00</span>
+                                      <span class="text-gray-400">| Low Intensity</span>
+                                  </div>
+                                  <h3 class="text-lg font-semibold mb-2">High Intensity Walking</h3>
+                                  <p class="text-gray-400">Alternate between 2 minutes of brisk walking and 1 minute of slow-paced recovery. Helps in better glucose management and calorie burn.</p>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      
+                      <!-- Exercise Video Card 3 -->
+                       <div class="swiper-slide">
+                          <div class="bg-gray-800 rounded-lg overflow-hidden">
+                              <div class="w-full h-48">
+                                  <iframe 
+                                      class="w-full h-full" 
+                                      src="https://www.youtube.com/embed/olaM9OhPQrc?si=DnJ5ypO33nen-VbE" 
+                                      title="Nature Walk" 
+                                      frameborder="0" 
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                      allowfullscreen>
+                                  </iframe>
+                              </div>
+                              <div class="p-4">
+                                  <div class="flex items-center mb-2">
+                                      <span class="text-gray-400 mr-2">⏱ 20:00</span>
+                                      <span class="text-gray-400">| Low Intensity</span>
+                                  </div>
+                                  <h3 class="text-lg font-semibold mb-2">Nature Walk</h3>
+                                  <p class="text-gray-400">Walk at a moderate pace in a park or trail, soaking in fresh air and reducing stress, which can also impact blood sugar levels positively.</p>
+                              </div>
+                          </div>
+                      </div>
+                        <!-- Additional video slides... -->
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </section>
+
+            <!-- Strength Training Section -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Strength Training</h2>
+                <p class="text-gray-400 mb-4">Strength training helps build muscle, burn fat, and improve insulin sensitivity.</p>
+                
+                <div class="swiper strengthSwiper">
+                    <div class="swiper-wrapper">
+                         <!-- Exercise Video Card 1 -->
+                       <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/TdBD7z0iziI?si=bgDRw212QGPjgFXu"  
+                                        title="Resistance Band Rows" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 10:00</span>
+                                        <span class="text-gray-400">| Low Intensity</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Resistance Band Exercises</h3>
+                                    <p class="text-gray-400"> A low-impact exercise using a resistance band to strengthen your back and arms while stabilizing blood sugar levels</p>
+                                </div>
+                            </div>
+                        </div>
+
+                      <!-- Exercise Video Card 2 -->
+                      
+                        
+                       <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/irfw1gQ0foQ?si=ZrC2mFyjnnbLN3wq" 
+
+                                        title="Bodyweight Squats" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 10:00</span>
+                                        <span class="text-gray-400">| Low Intensity</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Bodyweight Squats</h3>
+                                    <p class="text-gray-400">Strengthens the lower body and core, improving glucose uptake in muscles</p>
+                                </div>
+                            </div>
+                       </div>
+                    
+                    
+                        <!-- Exercise Video Card 3 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/Al9fOb4SFCU?si=C766S5WApkbQkSxk"  
+                                        title="Knee Pushps" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">3 sets</span>
+                                        <span class="text-gray-400">| Low Intensity</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Knee Push-Ups</h3>
+                                    <p class="text-gray-400">A modified push-up exercise that strengthens the upper body and core while promoting blood sugar control through physical activity.</p>
+                                </div>
+                            </div>
+                        </div>
+                      <!-- Additional video slides... -->
+                  </div>
+                  
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </section>
+
+
+            <!-- Yoga Training Section -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Yoga</h2>
+                <p class="text-gray-400 mb-4">Yoga is a gentle, stress-reducing exercise that improves flexibility, mindfulness, and blood sugar control.</p>
+                
+                <div class="swiper yogaSwiper">
+                    <div class="swiper-wrapper">
+                         <!-- Exercise Video Card 1 -->
+                       <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src= "https://www.youtube.com/embed/a0wyBGg4aWw?si=W_9ZE3Ub_JBmBd9g" 
+                                        title="cat-cow pose" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 5:00</span>
+                                        <span class="text-gray-400">| Low Intensity</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Cat-Cow Pose</h3>
+                                    <p class="text-gray-400">A flowing movement between two poses to stretch the spine and improve circulation.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                      <!-- Exercise Video Card 2 -->
+                      
+                        
+                       <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/CNRLcEPJdIU?si=4PHQ6Bm6VcEiWHJs" 
+                                        title="Seated Forward Bent" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 6:00</span>
+                                        <span class="text-gray-400">| Low Intensity</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Seated Forward Bend</h3>
+                                    <p class="text-gray-400">A calming stretch that helps reduce stress and regulate blood sugar levels.</p>
+                                </div>
+                            </div>
+                       </div>
+                    
+                    
+                        <!-- Exercise Video Card 3 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/1VYlOKUdylM?si=u0CuVWLrqV9DZWyP" 
+                                        title="Corpse Pose" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 8:00</span>
+                                        <span class="text-gray-400">| Low Intensity</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Corpse Pose (Savasana)</h3>
+                                    <p class="text-gray-400">A relaxation pose to calm the mind and body, reducing stress-induced blood sugar fluctuations.</p>
+                                </div>
+                            </div>
+                        </div>
+                      <!-- Additional video slides... -->
+                  </div>
+                  
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </section>
         </div>
 
-        <div class="streak-container">
-            <p>Your Exercise Streak: <span id="streakCount">0</span> days</p>
-        </div>
-
-        <!-- Replace the malformed button with this correct version -->
-        <button class="btn pulse" onclick="showTip()">Daily Tip</button>
-        <button class="btn" onclick="resetStreak()" style="background-color: #8B0000; margin-top: 20px;">Reset Streak</button>
-
-        <!-- Custom message container -->
-        <div id="messageContainer" class="message-container">
-            <div class="message-content">
-                <p id="messageText"></p>
-                <button class="btn" onclick="hideMessage()">OK</button>
+        <!-- Exercise Tracker Section -->
+        <div id="tracker" class="hidden space-y-8">
+            <!-- Blood Sugar & Exercise Impact -->
+            <div class="bg-gray-800 p-6 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold mb-4">Blood Sugar Trends</h3>
+                <canvas id="glucoseChart" height="200"></canvas>
             </div>
-        </div>
-    </div>
 
-    <div id="exerciseModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle"></h2>
-            <p id="modalDescription"></p>
-            <button class="btn" onclick="completeExercise()">Complete Exercise</button>
+            <!-- Weekly Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">Exercise Minutes</h3>
+                    <p class="text-3xl font-bold">120</p>
+                    <p class="text-green-500 text-sm">↑ 15%</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">Glucose Stability</h3>
+                    <p class="text-3xl font-bold">85%</p>
+                    <p class="text-green-500 text-sm">↑ 5%</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">Active Days</h3>
+                    <p class="text-3xl font-bold">5/7</p>
+                    <p class="text-blue-500 text-sm">On Track</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">Energy Level</h3>
+                    <p class="text-3xl font-bold">8/10</p>
+                    <p class="text-green-500 text-sm">↑ 20%</p>
+                </div>
+            </div>
+
+            <!-- Exercise Log -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Recent Exercises</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
+                        <div>
+                            <h4 class="font-semibold">Walking Workout</h4>
+                            <p class="text-sm text-gray-400">Blood sugar change: -15mg/dL</p>
+                        </div>
+                        <span class="text-sm text-gray-400">Today</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
+                        <div>
+                            <h4 class="font-semibold">Resistance Training</h4>
+                            <p class="text-sm text-gray-400">Blood sugar change: -20mg/dL</p>
+                        </div>
+                        <span class="text-sm text-gray-400">Yesterday</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Diabetes Management Achievements</h3>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            🎯
+                        </div>
+                        <p class="text-sm">Glucose Master</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                            💪
+                        </div>
+                        <p class="text-sm">Exercise Pro</p>
+                    </div>
+                    <!-- More achievements... -->
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        let streak = 0;
-        let progress = 0;
-        const exercises = {
-            walking: {
-                title: "Brisk Walking",
-                description: "30 minutes of brisk walking can significantly improve blood sugar control."
-            },
-            swimming: {
-                title: "Swimming",
-                description: "45 minutes of low-impact cardio that's easy on the joints and great for overall fitness."
-            },
-            cycling: {
-                title: "Cycling",
-                description: "40 minutes of cycling is excellent for improving insulin sensitivity and cardiovascular health."
-            },
-            yoga: {
-                title: "Yoga",
-                description: "30 minutes of yoga combines strength, flexibility, and stress reduction for holistic health benefits."
-            },
-            strength: {
-                title: "Strength Training",
-                description: "Engage in 30 minutes of strength training to build muscle mass, improving insulin sensitivity and blood sugar control."
-            },
-            dancing: {
-                title: "Dancing",
-                description: "Enjoy 30 minutes of dancing, a fun cardio exercise that improves balance, coordination, and mood."
-            },
-            jogging: {
-                title: "Jogging",
-                description: "20 minutes of jogging can boost cardiovascular health and help manage blood sugar levels."
-            },
-            pilates: {
-                title: "Pilates",
-                description: "35 minutes of Pilates can improve core strength, flexibility, and body awareness, beneficial for diabetes management."
-            }
-        };
-
-        function showExerciseModal(exerciseType) {
-            const modal = document.getElementById('exerciseModal');
-            const title = document.getElementById('modalTitle');
-            const description = document.getElementById('modalDescription');
-            
-            title.textContent = exercises[exerciseType].title;
-            description.textContent = exercises[exerciseType].description;
-            
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('exerciseModal').style.display = 'none';
-        }
-
-        
-        function completeExercise() {
-            fetch('/update-exercise-streak/', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/json',
+        // Initialize Swipers
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiperOptions = {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
                 },
-            })
-            .then(response => response.json())
-            .then(data => {
-                streak = data.streak;
-                progress = (streak % 8) * 12.5; // 8 exercises = 100% progress
-                updateStreak();
-                updateProgressBar();
-                closeModal();
-            });
-        }
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    }
+                }
+            };
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
+            new Swiper('.cardioSwiper', swiperOptions);
+            new Swiper('.strengthSwiper', swiperOptions);
+            new Swiper('.yogaSwiper', swiperOptions);
+        });
+
+        // Initialize Glucose Chart
+        const glucoseCtx = document.getElementById('glucoseChart').getContext('2d');
+        new Chart(glucoseCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Before Exercise',
+                    data: [140, 135, 145, 130, 125, 135, 130],
+                    borderColor: '#3B82F6',
+                    tension: 0 // Set tension to 0 for straight lines
+                },
+                {
+                    label: 'After Exercise',
+                    data: [120, 115, 125, 110, 105, 115, 110],
+                    borderColor: '#10B981',
+                    tension: 0 // Set tension to 0 for straight lines
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Blood Glucose Levels (mg/dL)'
                     }
                 }
             }
-            return cookieValue;
-        }
+        });
 
-        // Add function to load initial streak
-        function loadStreak() {
-            fetch('/get-exercise-streak/', {
-                method: 'GET',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                streak = data.streak;
-                progress = (streak % 8) * 12.5;
-                updateStreak();
-                updateProgressBar();
-            });
-        }
-        
-        // Call loadStreak when page loads
-        document.addEventListener('DOMContentLoaded', loadStreak);
+        // Tab Switching Logic
+        const exercisesTab = document.getElementById('exercisesTabBtn');
+        const trackerTab = document.getElementById('trackerTabBtn');
+        const exercisesSection = document.getElementById('exercises');
+        const trackerSection = document.getElementById('tracker');
 
-        function updateStreak() {
-            document.getElementById('streakCount').textContent = streak;
-        }
-        
-        function updateProgressBar() {
-            document.getElementById('progressBar').style.width = progress + '%';
-        }
+        exercisesTab.addEventListener('click', () => {
+            exercisesTab.classList.add('border-b-2', 'border-blue-500');
+            exercisesTab.classList.remove('text-gray-400');
+            trackerTab.classList.remove('border-b-2', 'border-blue-500');
+            trackerTab.classList.add('text-gray-400');
+            exercisesSection.classList.remove('hidden');
+            trackerSection.classList.add('hidden');
+        });
 
-        function showMessage(message) {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageText = document.getElementById('messageText');
-            messageText.textContent = message;
-            messageContainer.style.display = 'block';
-        }
-
-        function hideMessage() {
-            document.getElementById('messageContainer').style.display = 'none';
-        }
-
-        function showTip() {
-            const tips = {{ tips|safe }};  // Using the tips from context
-            const randomTip = tips[Math.floor(Math.random() * tips.length)];
-            showMessage(randomTip);
-        }
-
-        function resetStreak() {
-            streak = 0;
-            progress = 0;
-            updateStreak();
-            updateProgressBar();
-            showMessage("Your streak has been reset to zero.");
-        }
-        
-
-        // Add this to handle clicking outside the message
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('messageContainer')) {
-                hideMessage();
-            }
-            if (event.target == document.getElementById('exerciseModal')) {
-                closeModal();
-            }
-        }
+        trackerTab.addEventListener('click', () => {
+            trackerTab.classList.add('border-b-2', 'border-blue-500');
+            trackerTab.classList.remove('text-gray-400');
+            exercisesTab.classList.remove('border-b-2', 'border-blue-500');
+            exercisesTab.classList.add('text-gray-400');
+            trackerSection.classList.remove('hidden');
+            exercisesSection.classList.add('hidden');
+        });
     </script>
 </body>
 </html>
-{% block navbar %}
-{% endblock navbar %}
-
-{% block footer %}
-{% endblock footer %}
-
-{% endblock basepage %}
