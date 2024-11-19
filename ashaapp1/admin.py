@@ -1,7 +1,21 @@
 from django.contrib import admin
 from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareCheck, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage
 from .models import ExerciseStreak, BPExerciseStreak, DailyCheckIn
+from .models import ExerciseLog, WeeklyStats
 
+@admin.register(ExerciseLog)
+class ExerciseLogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'exercise_type', 'duration', 'blood_sugar_before', 'blood_sugar_after', 'date')
+    list_filter = ('user', 'exercise_type', 'date')
+    search_fields = ('user__username', 'exercise_type', 'notes')
+    date_hierarchy = 'date'
+
+@admin.register(WeeklyStats)
+class WeeklyStatsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'week_start', 'exercise_minutes', 'glucose_stability', 'active_days', 'energy_level')
+    list_filter = ('user', 'week_start')
+    search_fields = ('user__username',)
+    date_hierarchy = 'week_start'
 
 # Define a custom admin class for DailyCheckIn
 class DailyCheckInAdmin(admin.ModelAdmin):

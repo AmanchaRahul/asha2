@@ -226,21 +226,124 @@ def skincare_diet_view(request):
 
 
 
+
+from django.db.models import Avg, Sum
+from datetime import datetime, timedelta
+from .models import ExerciseLog, WeeklyStats
+from .forms import ExerciseLogForm
+from django.db.models import Avg, Q  
+
+
+
+
+    
 @login_required
 def diabetes_exercises_view(request):
-    context = {
-        'tips': [
-            "Stay hydrated during exercise to help regulate blood sugar.",
-            "Check your blood sugar before and after exercising.",
-            "Wear comfortable, supportive shoes to protect your feet.",
-            "Start slowly and gradually increase intensity over time.",
-            "Always carry a fast-acting carbohydrate snack with you.",
-            "Listen to your body and rest when needed."
-        ]
+    if request.method == 'POST':
+        form = ExerciseLogForm(request.POST)
+        if form.is_valid():
+            exercise_log = form.save(commit=False)
+            exercise_log.user = request.user
+            exercise_log.save()
+            return redirect('diabetesexercises')
+    else:
+        form = ExerciseLogForm()
+
+    # Get user's exercise logs for the past week
+    week_ago = datetime.now() - timedelta(days=7)
+    exercise_logs = ExerciseLog.objects.filter(
+        user=request.user,
+        date__gte=week_ago
+    ).order_by('-date')
+    
+    
+    latest_exercise_logs = exercise_logs[:5]
+
+    # Calculate weekly stats
+    weekly_stats = {
+        'exercise_minutes': exercise_logs.aggregate(total=Sum('duration'))['total'] or 0,
+        'glucose_stability': calculate_glucose_stability(exercise_logs),
+        'active_days': exercise_logs.values('date').distinct().count(), 
+        'energy_level': calculate_energy_level(exercise_logs)
     }
-    return render(request, "diabetes/diabetes_exercises.html", context)
 
 
+    # Get user's achievements
+    achievements = Achievement.objects.filter(user=request.user)
+
+    # Get glucose data for the chart
+    glucose_data = get_glucose_chart_data(exercise_logs)
+
+    context = {
+        'form': form,
+        'exercise_logs': latest_exercise_logs,
+        'weekly_stats': weekly_stats,
+        'achievements': achievements,
+        'glucose_data': glucose_data,
+    }
+    return render(request,"diabetes/diabetes_exercises.html",context)
+
+
+def calculate_glucose_stability(logs):
+    if not logs:
+        return 0
+    
+    total_readings = logs.count() * 2  # before and after readings
+    in_range_readings = logs.filter(
+        Q(blood_sugar_before__range=(70, 180)) |  # Use Q directly instead of models.Q
+        Q(blood_sugar_after__range=(70, 180))
+    ).count()
+    
+    return (in_range_readings / total_readings) * 100 if total_readings > 0 else 0
+
+def calculate_energy_level(logs):
+    if not logs:
+        return 0  # Return 0 if no exercise logs are available
+
+    # Calculate average exercise duration (in minutes)
+    avg_duration = logs.aggregate(avg=Avg('duration'))['avg'] or 0
+
+    # Calculate the number of active days in the last 7 days
+    active_days = logs.dates('date', 'day').count()
+    
+    # Consistency factor: reward more days of activity in the week
+    consistency_factor = active_days / 7  # The more active days, the higher this factor
+
+    # Calculate energy level (considering duration and consistency factor)
+    energy_level = (avg_duration / 30) * 10 * consistency_factor
+
+    # Cap energy level at 10
+    return min(energy_level, 10)
+
+
+
+
+def get_glucose_chart_data(logs):
+    if not logs:
+        return json.dumps({
+            'dates': [],
+            'before_values': [],
+            'after_values': []
+        })
+    
+    days_of_week = [] 
+    before_values = []
+    after_values = []
+    
+    for log in logs:
+        day_of_week = log.date.strftime('%A') 
+        days_of_week.append(day_of_week)
+        before_values.append(float(log.blood_sugar_before))
+        after_values.append(float(log.blood_sugar_after))
+    
+    # Add debug print
+    data = {
+        'dates': days_of_week,  
+        'before_values': before_values,
+        'after_values': after_values
+    }
+    print("Glucose Data:", data)  # Debug print
+    return json.dumps(data)
 
 
 @login_required

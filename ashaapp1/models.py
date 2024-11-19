@@ -147,3 +147,22 @@ class WaterIntake(models.Model):
     
 
 
+class ExerciseLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    exercise_type = models.CharField(max_length=100)
+    duration = models.IntegerField()  # in minutes
+    blood_sugar_before = models.IntegerField()
+    blood_sugar_after = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(blank=True, null=True)
+
+class WeeklyStats(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    week_start = models.DateField()
+    exercise_minutes = models.IntegerField(default=0)
+    glucose_stability = models.FloatField(default=0)  # percentage
+    active_days = models.IntegerField(default=0)
+    energy_level = models.FloatField(default=0)
+
+
+

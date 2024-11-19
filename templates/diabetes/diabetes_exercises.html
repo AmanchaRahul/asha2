@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% load static %}
+
+{% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +16,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
 
     <style>
-                /* Adjust the position of the Swiper navigation arrows */
+
+        .chart-canvas {
+            width: 100%;       /* Make it responsive */
+            height: 200px;     /* Fix the height (adjust as necessary) */
+            max-height: 400px; /* Optional: Set max height to prevent over-expansion */
+            object-fit: contain; /* Ensure the chart stays within bounds */
+        }
+    
+
+        /* Adjust the position of the Swiper navigation arrows */
         .swiper-button-next, 
         .swiper-button-prev {
             top: 35%; /* Move the arrows higher above the video controls */
@@ -26,10 +41,13 @@
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
-    <div class="container mx-auto px-4 py-8">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    </a>
+    <div class="container mx-auto px-4 py-8" style="margin-top: 3.5rem;">
         <!-- Navigation -->
-        <nav class="flex justify-between items-center mb-8">
-            <button class="text-2xl">←</button>
+        <nav class="flex justify-center items-center mb-8">
+            
             <h1 class="text-2xl font-bold">Diabetes Exercise Hub</h1>
             <div></div>
         </nav>
@@ -38,6 +56,9 @@
         <div class="flex justify-between mb-8 border-b border-gray-700">
             <button id="exercisesTabBtn" class="px-4 py-2 text-lg font-semibold border-b-2 border-blue-500">EXERCISES</button>
             <button id="trackerTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE TRACKER</button>
+            <button id="logTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE LOG</button>
+            
+            
         </div>
 
         <!-- Exercises Section -->
@@ -66,7 +87,7 @@
                               <div class="p-4">
                                   <div class="flex items-center mb-2">
                                       <span class="text-gray-400 mr-2">⏱ 10:00</span>
-                                      <span class="text-gray-400">| Low Intensity</span>
+                                      <span class="text-gray-400">| Moderate</span>
                                   </div>
                                   <h3 class="text-lg font-semibold mb-2">Power Walking for Beginners</h3>
                                   <p class="text-gray-400">A brisk walk that increases your heart rate while keeping it manageable for beginners. Great for improving insulin sensitivity.</p>
@@ -75,8 +96,7 @@
                       </div>
 
                         <!-- Exercise Video Card 2 -->
-                        
-                          
+                             
                        <div class="swiper-slide">
                           <div class="bg-gray-800 rounded-lg overflow-hidden">
                               <div class="w-full h-48">
@@ -93,7 +113,7 @@
                               <div class="p-4">
                                   <div class="flex items-center mb-2">
                                       <span class="text-gray-400 mr-2">⏱ 15:00</span>
-                                      <span class="text-gray-400">| Low Intensity</span>
+                                      <span class="text-gray-400">| Vigorous</span>
                                   </div>
                                   <h3 class="text-lg font-semibold mb-2">High Intensity Walking</h3>
                                   <p class="text-gray-400">Alternate between 2 minutes of brisk walking and 1 minute of slow-paced recovery. Helps in better glucose management and calorie burn.</p>
@@ -118,7 +138,7 @@
                               <div class="p-4">
                                   <div class="flex items-center mb-2">
                                       <span class="text-gray-400 mr-2">⏱ 20:00</span>
-                                      <span class="text-gray-400">| Low Intensity</span>
+                                      <span class="text-gray-400">| Moderate</span>
                                   </div>
                                   <h3 class="text-lg font-semibold mb-2">Nature Walk</h3>
                                   <p class="text-gray-400">Walk at a moderate pace in a park or trail, soaking in fresh air and reducing stress, which can also impact blood sugar levels positively.</p>
@@ -156,7 +176,7 @@
                                 <div class="p-4">
                                     <div class="flex items-center mb-2">
                                         <span class="text-gray-400 mr-2">⏱ 10:00</span>
-                                        <span class="text-gray-400">| Low Intensity</span>
+                                        <span class="text-gray-400">| Light</span>
                                     </div>
                                     <h3 class="text-lg font-semibold mb-2">Resistance Band Exercises</h3>
                                     <p class="text-gray-400"> A low-impact exercise using a resistance band to strengthen your back and arms while stabilizing blood sugar levels</p>
@@ -183,7 +203,7 @@
                                 <div class="p-4">
                                     <div class="flex items-center mb-2">
                                         <span class="text-gray-400 mr-2">⏱ 10:00</span>
-                                        <span class="text-gray-400">| Low Intensity</span>
+                                        <span class="text-gray-400">| Moderate</span>
                                     </div>
                                     <h3 class="text-lg font-semibold mb-2">Bodyweight Squats</h3>
                                     <p class="text-gray-400">Strengthens the lower body and core, improving glucose uptake in muscles</p>
@@ -208,7 +228,7 @@
                                 <div class="p-4">
                                     <div class="flex items-center mb-2">
                                         <span class="text-gray-400 mr-2">3 sets</span>
-                                        <span class="text-gray-400">| Low Intensity</span>
+                                        <span class="text-gray-400">| Moderate</span>
                                     </div>
                                     <h3 class="text-lg font-semibold mb-2">Knee Push-Ups</h3>
                                     <p class="text-gray-400">A modified push-up exercise that strengthens the upper body and core while promoting blood sugar control through physical activity.</p>
@@ -248,7 +268,7 @@
                                 <div class="p-4">
                                     <div class="flex items-center mb-2">
                                         <span class="text-gray-400 mr-2">⏱ 5:00</span>
-                                        <span class="text-gray-400">| Low Intensity</span>
+                                        <span class="text-gray-400">| Gentle</span>
                                     </div>
                                     <h3 class="text-lg font-semibold mb-2">Cat-Cow Pose</h3>
                                     <p class="text-gray-400">A flowing movement between two poses to stretch the spine and improve circulation.</p>
@@ -274,7 +294,7 @@
                                 <div class="p-4">
                                     <div class="flex items-center mb-2">
                                         <span class="text-gray-400 mr-2">⏱ 6:00</span>
-                                        <span class="text-gray-400">| Low Intensity</span>
+                                        <span class="text-gray-400">| Gentle</span>
                                     </div>
                                     <h3 class="text-lg font-semibold mb-2">Seated Forward Bend</h3>
                                     <p class="text-gray-400">A calming stretch that helps reduce stress and regulate blood sugar levels.</p>
@@ -299,7 +319,7 @@
                                 <div class="p-4">
                                     <div class="flex items-center mb-2">
                                         <span class="text-gray-400 mr-2">⏱ 8:00</span>
-                                        <span class="text-gray-400">| Low Intensity</span>
+                                        <span class="text-gray-400">| Relaxing</span>
                                     </div>
                                     <h3 class="text-lg font-semibold mb-2">Corpse Pose (Savasana)</h3>
                                     <p class="text-gray-400">A relaxation pose to calm the mind and body, reducing stress-induced blood sugar fluctuations.</p>
@@ -316,166 +336,337 @@
             </section>
         </div>
 
+                <!-- Exercise Log Form Section -->
+        <div id="logForm" class="hidden space-y-8">
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Log Your Exercise</h3>
+                <form method="POST" action="{% url 'diabetesexercises' %}" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-300">Exercise Type</label>
+                        <select name="exercise_type" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
+                            <option value="walking">Walking</option>
+                            <option value="strength">Strength Training</option>
+                            <option value="yoga">Yoga</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-300">Duration (minutes)</label>
+                        <input type="number" name="duration" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-300">Blood Sugar Before (mg/dL)</label>
+                        <input type="number" name="blood_sugar_before" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-300">Blood Sugar After (mg/dL)</label>
+                        <input type="number" name="blood_sugar_after" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-300">Notes</label>
+                        <textarea name="notes" rows="3" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                        Log Exercise
+                    </button>
+                </form>
+            </div>
+        </div>
+
+
         <!-- Exercise Tracker Section -->
         <div id="tracker" class="hidden space-y-8">
             <!-- Blood Sugar & Exercise Impact -->
             <div class="bg-gray-800 p-6 rounded-lg mb-8">
                 <h3 class="text-lg font-semibold mb-4">Blood Sugar Trends</h3>
-                <canvas id="glucoseChart" height="200"></canvas>
+                <!-- Remove fixed width and height -->
+                <canvas id="glucoseChart" class="chart-canvas"></canvas> <!-- Using a class for styling -->
+                <!-- Add this line to pass data from Django to JavaScript -->
+                <script id="glucose-data" type="application/json">
+                    {{ glucose_data|safe }}
+                </script>
             </div>
 
+
             <!-- Weekly Stats -->
+            
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
                     <h3 class="text-sm font-semibold mb-2">Exercise Minutes</h3>
-                    <p class="text-3xl font-bold">120</p>
-                    <p class="text-green-500 text-sm">↑ 15%</p>
+                    <p class="text-3xl font-bold">{{ weekly_stats.exercise_minutes }}</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
                     <h3 class="text-sm font-semibold mb-2">Glucose Stability</h3>
-                    <p class="text-3xl font-bold">85%</p>
-                    <p class="text-green-500 text-sm">↑ 5%</p>
+                    <p class="text-3xl font-bold">{{ weekly_stats.glucose_stability|floatformat:0 }}%</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
                     <h3 class="text-sm font-semibold mb-2">Active Days</h3>
-                    <p class="text-3xl font-bold">5/7</p>
-                    <p class="text-blue-500 text-sm">On Track</p>
+                    <p class="text-3xl font-bold">{{ weekly_stats.active_days }}</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
                     <h3 class="text-sm font-semibold mb-2">Energy Level</h3>
-                    <p class="text-3xl font-bold">8/10</p>
-                    <p class="text-green-500 text-sm">↑ 20%</p>
+                    <p class="text-3xl font-bold">{{ weekly_stats.energy_level|floatformat:0 }}</p>
+                    <p class="text-sm text-gray-400">Energy Level (0-10 scale): Reflects your recent exercise efforts</p>
                 </div>
+                
+                
             </div>
 
             <!-- Exercise Log -->
             <div class="bg-gray-800 p-6 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Recent Exercises</h3>
                 <div class="space-y-4">
+                    {% for log in exercise_logs %}
                     <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
                         <div>
-                            <h4 class="font-semibold">Walking Workout</h4>
-                            <p class="text-sm text-gray-400">Blood sugar change: -15mg/dL</p>
+                            <h4 class="font-semibold">{{ log.exercise_type }}</h4>
+                            <p class="text-sm text-gray-400">Blood sugar change: {{ log.blood_sugar_after|subtract:log.blood_sugar_before }}mg/dL</p>
+                            <p class="text-sm text-gray-400">
+                                {{ log.notes }}
+                            </p>
                         </div>
-                        <span class="text-sm text-gray-400">Today</span>
+                        
+                        <span class="text-sm text-gray-400">{{ log.date|date:"l" }}</span>
+
+
+
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
-                        <div>
-                            <h4 class="font-semibold">Resistance Training</h4>
-                            <p class="text-sm text-gray-400">Blood sugar change: -20mg/dL</p>
+                    {% endfor %}
+                </div>
+            </div>
+                        <!-- Diabetes Exercise Insights -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Diabetes Exercise Insights</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                    <!-- Insight 1: Glucose Control -->
+                    <div class="text-center p-4 bg-blue-500 rounded-lg shadow-lg">
+                        <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <img src="{% static 'images/diabetes/glucose.jpg' %}" alt="Glucose Control" />
+
                         </div>
-                        <span class="text-sm text-gray-400">Yesterday</span>
+                        <h4 class="text-lg text-white font-semibold">Glucose Control</h4>
+                        <p class="text-sm text-white">Exercise helps stabilize your blood sugar levels. Aim for regular activity to keep your levels in check.</p>
                     </div>
+
+                    <!-- Insight 2: Active Days -->
+                    <div class="text-center p-4 bg-green-500 rounded-lg shadow-lg">
+                        <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <img src="{% static 'images/diabetes/active.jpg' %}" alt="Active" />
+                        </div>
+                        <h4 class="text-lg text-white font-semibold">Active Days</h4>
+                        <p class="text-sm text-white">The more active days you have each week, the better your fitness and diabetes control will be.</p>
+                    </div>
+
+                    <!-- Insight 3: Energy Boost -->
+                    <div class="text-center p-4 bg-yellow-500 rounded-lg shadow-lg">
+                        <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <img src="{% static 'images/diabetes/boost.jpg' %}" alt="boost" />
+                        </div>
+                        <h4 class="text-lg text-white font-semibold">Energy Boost</h4>
+                        <p class="text-sm text-white">Regular exercise boosts your energy levels, helping you stay active throughout the day and manage your diabetes better.</p>
+                    </div>
+
                 </div>
             </div>
 
-            <!-- Achievements -->
-            <div class="bg-gray-800 p-6 rounded-lg">
-                <h3 class="text-lg font-semibold mb-4">Diabetes Management Achievements</h3>
-                <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-blue-500 rounded-full mx-auto mb-2 flex items-center justify-center">
-                            🎯
-                        </div>
-                        <p class="text-sm">Glucose Master</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-green-500 rounded-full mx-auto mb-2 flex items-center justify-center">
-                            💪
-                        </div>
-                        <p class="text-sm">Exercise Pro</p>
-                    </div>
-                    <!-- More achievements... -->
-                </div>
-            </div>
+
+            
         </div>
     </div>
 
-    <script>
-        // Initialize Swipers
-        document.addEventListener('DOMContentLoaded', function() {
-            const swiperOptions = {
-                slidesPerView: 1,
-                spaceBetween: 20,
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true
-                },
-                breakpoints: {
-                    640: {
-                        slidesPerView: 2,
+<!-- Chart Script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Initialize Swipers
+                const swiperOptions = {
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
                     },
-                    1024: {
-                        slidesPerView: 3,
-                    }
-                }
-            };
-
-            new Swiper('.cardioSwiper', swiperOptions);
-            new Swiper('.strengthSwiper', swiperOptions);
-            new Swiper('.yogaSwiper', swiperOptions);
-        });
-
-        // Initialize Glucose Chart
-        const glucoseCtx = document.getElementById('glucoseChart').getContext('2d');
-        new Chart(glucoseCtx, {
-            type: 'line',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    label: 'Before Exercise',
-                    data: [140, 135, 145, 130, 125, 135, 130],
-                    borderColor: '#3B82F6',
-                    tension: 0 // Set tension to 0 for straight lines
-                },
-                {
-                    label: 'After Exercise',
-                    data: [120, 115, 125, 110, 105, 115, 110],
-                    borderColor: '#10B981',
-                    tension: 0 // Set tension to 0 for straight lines
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true
                     },
-                    title: {
-                        display: true,
-                        text: 'Blood Glucose Levels (mg/dL)'
+                    breakpoints: {
+                        640: { slidesPerView: 2 },
+                        1024: { slidesPerView: 3 }
                     }
-                }
-            }
-        });
+                };
+            
+                // Initialize all swipers
+                new Swiper('.cardioSwiper', swiperOptions);
+                new Swiper('.strengthSwiper', swiperOptions);
+                new Swiper('.yogaSwiper', swiperOptions);
+            
+                // Tab Switching
+                const tabs = [
+                    document.getElementById('exercisesTabBtn'),
+                    document.getElementById('trackerTabBtn'),
+                    document.getElementById('logTabBtn')
+                ];
+                const sections = [
+                    document.getElementById('exercises'),
+                    document.getElementById('tracker'),
+                    document.getElementById('logForm')
+                ];
+            
+                tabs.forEach((tab, index) => {
+                    tab?.addEventListener('click', () => {
+                        tabs.forEach((t, i) => {
+                            t.classList.toggle('border-b-2', i === index);
+                            t.classList.toggle('border-blue-500', i === index);
+                            t.classList.toggle('text-gray-400', i !== index);
+                            sections[i].classList.toggle('hidden', i !== index);
+                        });
+                    });
+                });
+            
+                
+                    console.log('DOM Content Loaded');
+                
+                    // Get the glucose data
+                    const glucoseDataElement = document.getElementById('glucose-data');
+                    if (!glucoseDataElement) {
+                        console.error('Glucose data element not found');
+                        return;
+                    }
+                
+                    try {
+                        // Parse the data and log it
+                        const glucoseData = JSON.parse(glucoseDataElement.textContent);
+                        console.log('Glucose Data:', glucoseData);
+                
+                        const glucoseCtx = document.getElementById('glucoseChart');
+                        if (!glucoseCtx) {
+                            console.error('Canvas element not found');
+                            return;
+                        }
+                
+                        // Log canvas dimensions
+                        console.log('Canvas dimensions:', {
+                            width: glucoseCtx.width,
+                            height: glucoseCtx.height,
+                            offsetWidth: glucoseCtx.offsetWidth,
+                            offsetHeight: glucoseCtx.offsetHeight
+                        });
+                
+                        const chart = new Chart(glucoseCtx, {
+                            type: 'line',
+                            data: {
+                                labels: glucoseData.dates,
+                                datasets: [
+                                    {
+                                        label: 'Before Exercise',
+                                        data: glucoseData.before_values,
+                                        borderColor: '#3B82F6',
+                                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                        tension: 0.4,
+                                        fill: true
+                                    },
+                                    {
+                                        label: 'After Exercise',
+                                        data: glucoseData.after_values,
+                                        borderColor: '#10B981',
+                                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                        tension: 0.4,
+                                        fill: true
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                        labels: {
+                                            color: '#fff',
+                                            font: {
+                                                size: 12
+                                            }
+                                        }
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Blood Glucose Levels (mg/dL)',
+                                        color: '#fff',
+                                        font: {
+                                            size: 16
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: false,
+                                        grid: {
+                                            color: 'rgba(255, 255, 255, 0.1)'
+                                        },
+                                        ticks: {
+                                            color: '#fff',
+                                            font: {
+                                                size: 12
+                                            }
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Blood Glucose (mg/dL)',
+                                            color: '#fff',
+                                            font: {
+                                                size: 12
+                                            }
+                                        }
+                                    },
+                                    x: {
+                                        grid: {
+                                            color: 'rgba(255, 255, 255, 0.1)'
+                                        },
+                                        ticks: {
+                                            color: '#fff',
+                                            font: {
+                                                size: 12
+                                            }
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Days',
+                                            color: '#fff',
+                                            font: {
+                                                size: 12
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                
+                        // Log successful chart creation
+                        console.log('Chart created successfully');
+                    } catch (error) {
+                        console.error('Error creating chart:', error);
+                    }
+                });
 
-        // Tab Switching Logic
-        const exercisesTab = document.getElementById('exercisesTabBtn');
-        const trackerTab = document.getElementById('trackerTabBtn');
-        const exercisesSection = document.getElementById('exercises');
-        const trackerSection = document.getElementById('tracker');
 
-        exercisesTab.addEventListener('click', () => {
-            exercisesTab.classList.add('border-b-2', 'border-blue-500');
-            exercisesTab.classList.remove('text-gray-400');
-            trackerTab.classList.remove('border-b-2', 'border-blue-500');
-            trackerTab.classList.add('text-gray-400');
-            exercisesSection.classList.remove('hidden');
-            trackerSection.classList.add('hidden');
-        });
 
-        trackerTab.addEventListener('click', () => {
-            trackerTab.classList.add('border-b-2', 'border-blue-500');
-            trackerTab.classList.remove('text-gray-400');
-            exercisesTab.classList.remove('border-b-2', 'border-blue-500');
-            exercisesTab.classList.add('text-gray-400');
-            trackerSection.classList.remove('hidden');
-            exercisesSection.classList.add('hidden');
-        });
-    </script>
+
+        </script>
+      
+  
 </body>
 </html>
+
+{% block navbar %}
+{% endblock navbar %}
+
+{% block footer %}
+{% endblock footer %}
+
+{% endblock basepage %}

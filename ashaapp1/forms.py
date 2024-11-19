@@ -50,3 +50,13 @@ class SkinCareCheckForm(forms.ModelForm):
         }
 
 
+
+from .models import ExerciseLog
+
+class ExerciseLogForm(forms.ModelForm):
+    class Meta:
+        model = ExerciseLog
+        fields = ['exercise_type', 'duration', 'blood_sugar_before', 'blood_sugar_after', 'notes']
+
+
+
