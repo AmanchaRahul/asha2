@@ -229,7 +229,7 @@ def skincare_diet_view(request):
 
 from django.db.models import Avg, Sum
 from datetime import datetime, timedelta
-from .models import ExerciseLog, WeeklyStats
+from .models import ExerciseLog, WeeklyStats, Achievement
 from .forms import ExerciseLogForm
 from django.db.models import Avg, Q  
 
