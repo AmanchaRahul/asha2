@@ -1,0 +1,22 @@
+
+.chart-canvas {
+    width: 100%;       /* Make it responsive */
+    height: 200px;     /* Fix the height (adjust as necessary) */
+    max-height: 400px; /* Optional: Set max height to prevent over-expansion */
+    object-fit: contain; /* Ensure the chart stays within bounds */
+}
+
+
+/* Adjust the position of the Swiper navigation arrows */
+.swiper-button-next, 
+.swiper-button-prev {
+    top: 35%; /* Move the arrows higher above the video controls */
+    transform: translateY(-50%);
+    z-index: 10; /* Ensure the arrows are above other elements */
+}
+
+/* Optional: Increase the size of arrows for better accessibility */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-size: 20px;
+}
