@@ -4,6 +4,7 @@
 {% load static %}
 
 {% block basepage %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +16,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
     <style>
+
+        body {
+            font-family: 'Courier Prime', monospace;
+        }
+
+
         .chart-canvas {
             width: 100%;       /* Make it responsive */
             height: 200px;     /* Fix the height (adjust as necessary) */
@@ -652,16 +659,15 @@
                     }
                 });
         </script>
-      
-
-
-{% block navbar %}
-{% endblock navbar %}
-
-{% block footer %}
-{% endblock footer %}
-
-</body>
-</html>
-
-{% endblock basepage %}
+    </body>
+    </html>
+    
+    {% block navbar %}
+    {% endblock navbar %}
+    
+    
+    {% block footer %}
+    {% endblock footer %}
+    
+    
+    {% endblock basepage %}
