@@ -165,4 +165,8 @@ class WeeklyStats(models.Model):
     energy_level = models.FloatField(default=0)
 
 
-
+class Achievement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    icon = models.CharField(max_length=50)
+    date_earned = models.DateTimeField(auto_now_add=True)
