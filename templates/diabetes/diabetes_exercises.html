@@ -342,11 +342,15 @@
         </div>
 
                 <!-- Exercise Log Form Section -->
+                 
+        <!-- Exercise Log Form Section -->
         <div id="logForm" class="hidden space-y-8">
             <div class="bg-gray-800 p-6 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Log Your Exercise</h3>
                 <form method="POST" action="{% url 'diabetesexercises' %}" class="space-y-4">
                     {% csrf_token %}
+                    
+                    <!-- Exercise Type -->
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-gray-300">Exercise Type</label>
                         <select name="exercise_type" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
@@ -356,32 +360,79 @@
                         </select>
                     </div>
                     
+                    <!-- Duration -->
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-gray-300">Duration (minutes)</label>
-                        <input type="number" name="duration" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
+                        <input 
+                            type="number" 
+                            name="duration" 
+                            class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white"
+                            placeholder="E.g., 30"
+                        >
                     </div>
                     
+                    <!-- Blood Sugar Before -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-300">Blood Sugar Before (mg/dL)</label>
-                        <input type="number" name="blood_sugar_before" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
+                        <label class="block text-sm font-medium text-gray-300">
+                            Blood Sugar Before (mg/dL) 
+                            <span class="text-gray-400 text-xs">(Normal: 80–130)</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            name="blood_sugar_before" 
+                            class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white"
+                            placeholder="E.g., 100"
+                        >
                     </div>
                     
+                    <!-- Blood Sugar After -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-300">Blood Sugar After (mg/dL)</label>
-                        <input type="number" name="blood_sugar_after" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white">
+                        <label class="block text-sm font-medium text-gray-300">
+                            Blood Sugar After (mg/dL)
+                            <span class="text-gray-400 text-xs">(Expected: 80–140)</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            name="blood_sugar_after" 
+                            class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white"
+                            placeholder="E.g., 120"
+                        >
                     </div>
                     
+                    <!-- Notes -->
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-gray-300">Notes</label>
-                        <textarea name="notes" rows="3" class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white"></textarea>
+                        <textarea 
+                            name="notes" 
+                            rows="3" 
+                            class="w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white" 
+                            placeholder="E.g., Felt energetic, mild fatigue, etc."
+                        ></textarea>
                     </div>
                     
-                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                    <!-- Blood Sugar Info -->
+                    <div class="bg-gray-700 p-4 rounded-md text-sm text-gray-300">
+                        <p>
+                            <strong>Guidance:</strong> 
+                            Blood sugar levels typically range from <strong>80–130 mg/dL</strong> before exercise and <strong>80–140 mg/dL</strong> after exercise. Adjust your activity accordingly.
+                        </p>
+                        <p class="mt-2">
+                            If levels are below <strong>100 mg/dL</strong>, consider a small snack before starting.
+                        </p>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md"
+                    >
                         Log Exercise
                     </button>
                 </form>
             </div>
         </div>
+
+
 
 
         <!-- Exercise Tracker Section -->
