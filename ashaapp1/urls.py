@@ -112,16 +112,7 @@ urlpatterns = [
     
     path('voice/', views.voice_view, name='voice'),
     
-    path('update-exercise-streak/', views.update_exercise_streak, name='update_exercise_streak'),
-    path('get-exercise-streak/', views.get_exercise_streak, name='get_exercise_streak'),
-    path('update-bp-exercise-streak/', views.update_bp_exercise_streak, name='update_bp_exercise_streak'),
-    path('get-bp-exercise-streak/', views.get_bp_exercise_streak, name='get_bp_exercise_streak'),
 
-    
-    path('track-progress/', views.track_progress, name='track_progress'),
-    path('reset-progress/', views.reset_progress, name='reset_progress'),
-    
-    
     path('ddoctor/', views.ddoctor_view, name="ddoctor"),
     path('bdoctor/', views.bdoctor_view, name="bdoctor"),
     path('sdoctor/', views.sdoctor_view, name="sdoctor"),

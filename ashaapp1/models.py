@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 import uuid
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 
@@ -147,3 +148,58 @@ class Achievement(models.Model):
     name = models.CharField(max_length=100)
     icon = models.CharField(max_length=50)
     date_earned = models.DateTimeField(auto_now_add=True)
+
+
+
+
+
+
+class BloodPressureExerciseLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    exercise_type = models.CharField(max_length=50, choices=[
+        ('Low-Impact Cardio', 'Low-Impact Cardio'),
+        ('Breathing Exercises', 'Breathing Exercises'),
+        ('Flexibility & Stretching', 'Flexibility & Stretching')
+    ])
+    duration = models.IntegerField(help_text='Exercise duration in minutes')
+    
+    # Subjective Blood Pressure Assessment
+    feeling_after_exercise = models.CharField(max_length=50, choices=[
+        ('great', 'Great (likely BP improvement)'),
+        ('normal', 'Normal (no significant change)'),
+        ('slightly_tired', 'Slightly Tired (potential BP elevation)'),
+        ('dizzy', 'Dizzy or Fatigued (potential BP elevation)')
+    ])
+    activity_intensity = models.CharField(max_length=20, choices=[
+        ('low', 'Low'),
+        ('moderate', 'Moderate'),
+        ('high', 'High')
+    ])
+    stress_level = models.CharField(max_length=20, choices=[
+        ('low', 'Low'),
+        ('moderate', 'Moderate'),
+        ('high', 'High')
+    ])
+    
+    # Symptoms
+    YES_NO_CHOICES = [
+        ('Yes', 'Yes'),
+        ('No', 'No'),
+    ]
+
+    headache = models.CharField(max_length=3, choices=YES_NO_CHOICES)
+    light_headedness = models.CharField(max_length=3, choices=YES_NO_CHOICES)
+    palpitations = models.CharField(max_length=3, choices=YES_NO_CHOICES)
+    
+    # Energy Boost
+    energy_boost = models.IntegerField(help_text='Perceived energy boost (1-10)', 
+                                       validators=[MinValueValidator(1), MaxValueValidator(10)])
+    
+    notes = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.exercise_type} - {self.date.date()}"
+
+    class Meta:
+        ordering = ['-date']
