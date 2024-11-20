@@ -229,9 +229,10 @@ def skincare_diet_view(request):
 
 from django.db.models import Avg, Sum
 from datetime import datetime, timedelta
-from .models import ExerciseLog, WeeklyStats, Achievement
-from .forms import ExerciseLogForm
+from .models import ExerciseLog, WeeklyStats, Achievement,  BloodPressureExerciseLog
+from .forms import ExerciseLogForm, BloodPressureExerciseLogForm
 from django.db.models import Avg, Q  
+
 
 
 
@@ -925,123 +926,104 @@ def reset_water_intake(request):
     return redirect('water_intake_tracker') 
 
 
-
-
-from django.views.decorators.http import require_POST, require_GET
-from datetime import date, timedelta
-from .models import ExerciseStreak, BPExerciseStreak
-
-
-
-@require_POST
-def update_bp_exercise_streak(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'error': 'User not authenticated'}, status=401)
-
-    streak, created = BPExerciseStreak.objects.get_or_create(
-        user=request.user,
-        defaults={
-            'last_activity_date': date.today(),
-            'current_streak': 1,
-            'weekly_exercises': 1
-        }
-    )
-
-    if not created:
-        today = date.today()
-        days_diff = (today - streak.last_activity_date).days
-        
-        if days_diff == 1:  # Consecutive day
-            streak.current_streak += 1
-        elif days_diff > 1:  # Streak broken
-            streak.current_streak = 1
-        
-        # Reset weekly exercises if it's been more than a week
-        if (today - streak.last_activity_date).days >= 7:
-            streak.weekly_exercises = 0
-        
-        streak.weekly_exercises = min(streak.weekly_exercises + 1, 6)
-        streak.last_activity_date = today
-        streak.save()
-
-    return JsonResponse({
-        'streak': streak.current_streak,
-        'weekly_exercises': streak.weekly_exercises
-    })
-
-@require_GET
-def get_bp_exercise_streak(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'streak': 0, 'weekly_exercises': 0})
-
-    streak = BPExerciseStreak.objects.filter(user=request.user).first()
-    
-    if streak:
-        # Reset weekly exercises if it's been more than a week
-        today = date.today()
-        if (today - streak.last_activity_date).days >= 7:
-            streak.weekly_exercises = 0
-            streak.save()
-            
-    return JsonResponse({
-        'streak': streak.current_streak if streak else 0,
-        'weekly_exercises': streak.weekly_exercises if streak else 0
-    })
-
-
-@require_POST
-def update_exercise_streak(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'error': 'User not authenticated'}, status=401)
-
-    streak, created = ExerciseStreak.objects.get_or_create(
-        user=request.user,
-        defaults={'last_activity_date': date.today(), 'current_streak': 1}
-    )
-
-    if not created:
-        today = date.today()
-        days_diff = (today - streak.last_activity_date).days
-        
-        if days_diff == 1:  # Consecutive day
-            streak.current_streak += 1
-        elif days_diff > 1:  # Streak broken
-            streak.current_streak = 1
-        
-        streak.last_activity_date = today
-        streak.save()
-
-    return JsonResponse({
-        'streak': streak.current_streak,
-    })
-
-@require_GET
-def get_exercise_streak(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'streak': 0})
-
-    streak = ExerciseStreak.objects.filter(user=request.user).first()
-    return JsonResponse({
-        'streak': streak.current_streak if streak else 0
-    })
-
-
 @login_required
-def track_progress(request):
-    user_checkin, created = DailyCheckIn.objects.get_or_create(user=request.user)
-
+def bloodpressure_exercises_view(request):
     if request.method == 'POST':
-        user_checkin.check_in_count += 1
-        user_checkin.save()
-        return JsonResponse({'check_in_count': user_checkin.check_in_count})
+        form = BloodPressureExerciseLogForm(request.POST)
+        if form.is_valid():
+            log = form.save(commit=False)
+            log.user = request.user
+            log.save()
+            return redirect('bloodpressureexercises')
+    else:
+        form = BloodPressureExerciseLogForm()
 
-    return render(request, 'track_progress.html', {'check_in_count': user_checkin.check_in_count})
+    # Get all logs for the user
+    all_logs = BloodPressureExerciseLog.objects.filter(user=request.user).order_by('date')
 
-@login_required
-def reset_progress(request):
-    user_checkin = DailyCheckIn.objects.get(user=request.user)
-    user_checkin.reset_count()
-    return redirect('track_progress')
+    # Calculate daily statistics for all logs
+    daily_stats = calculate_daily_stats(all_logs)
+
+    # Prepare data for the graph (based on all logs)
+    bp_data = prepare_bp_graph_data_daily(all_logs)
+
+    active_days = all_logs.values('date').distinct().count()
+
+
+    context = {
+        'form': form,
+        'exercise_logs': all_logs.order_by('-date')[:5],  # Show the latest 5 logs
+        'daily_stats': daily_stats,
+        'bp_data': json.dumps(bp_data),
+        'active_days': active_days,
+    }
+
+    return render(request, 'bloodpressure/bloodpressure_exercises.html', context)
+
+
+def calculate_daily_stats(logs):
+    """Calculate daily statistics for exercise logs."""
+    daily_stats = {}
+    # Get unique dates and aggregate data for each day
+    unique_dates = logs.values_list('date__date', flat=True).distinct()
+
+    for date in unique_dates:
+        day_logs = logs.filter(date__date=date)
+
+        daily_stats[date.strftime('%A')] = {
+            'exercise_minutes': day_logs.aggregate(total_minutes=Sum('duration'))['total_minutes'] or 0,
+            'energy_level': day_logs.aggregate(avg_energy=Avg('energy_boost'))['avg_energy'] or 0,
+            'bp_stability': calculate_bp_stability(day_logs),
+        }
+
+    return daily_stats
+
+
+def calculate_bp_stability(logs):
+    """Calculate blood pressure stability percentage based on exercise logs."""
+    if not logs:
+        return 0
+
+    positive_indicators = logs.filter(
+        feeling_after_exercise__in=['great', 'normal']
+    ).count()
+
+    total_logs = logs.count()
+    return (positive_indicators / total_logs * 100) if total_logs > 0 else 0
+
+
+def prepare_bp_graph_data_daily(logs):
+    """Prepare data for the blood pressure trends graph with daily data."""
+    days = []
+    feeling_great = []
+    feeling_normal = []
+
+    # Get all unique dates
+    unique_dates = logs.values_list('date__date', flat=True).distinct()
+
+    for date in unique_dates:
+        day_logs = logs.filter(date__date=date)
+
+        # Append day name
+        days.append(date.strftime('%A'))
+
+        # Calculate percentages for 'great' and 'normal' feelings
+        great_count = day_logs.filter(feeling_after_exercise='great').count()
+        great_percentage = (great_count / day_logs.count() * 100) if day_logs.count() > 0 else 0
+        feeling_great.append(great_percentage)
+
+        normal_count = day_logs.filter(feeling_after_exercise='normal').count()
+        normal_percentage = (normal_count / day_logs.count() * 100) if day_logs.count() > 0 else 0
+        feeling_normal.append(normal_percentage)
+
+    return {
+        'days': days,
+        'feeling_great': feeling_great,
+        'feeling_normal': feeling_normal,
+    }
+
+
+
 
 
 

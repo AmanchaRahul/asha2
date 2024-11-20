@@ -60,3 +60,56 @@ class ExerciseLogForm(forms.ModelForm):
 
 
 
+from .models import BloodPressureExerciseLog
+
+class BloodPressureExerciseLogForm(forms.ModelForm):
+    class Meta:
+        model = BloodPressureExerciseLog
+        fields = [
+            'exercise_type',
+            'duration',
+            'feeling_after_exercise',
+            'activity_intensity',
+            'stress_level',
+            'headache',
+            'light_headedness',
+            'palpitations',
+            'energy_boost',
+            'notes'
+        ]
+        widgets = {
+            'exercise_type': forms.Select(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'duration': forms.NumberInput(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'feeling_after_exercise': forms.Select(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'activity_intensity': forms.Select(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'stress_level': forms.Select(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'headache': forms.Select(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'light_headedness': forms.Select(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'palpitations': forms.Select(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white'
+            }),
+            'energy_boost': forms.NumberInput(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white',
+                'min': '1', 'max': '10'
+            }),
+            'notes': forms.Textarea(attrs={
+                'class': 'w-full bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white',
+                'rows': 3
+            }),
+        }
+
+

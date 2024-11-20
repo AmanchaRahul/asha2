@@ -1,8 +1,20 @@
 from django.contrib import admin
 from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareCheck, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage
-from .models import ExerciseStreak, BPExerciseStreak, DailyCheckIn
+from .models import DailyCheckIn
 from .models import ExerciseLog, WeeklyStats,Achievement
 
+from .models import BloodPressureExerciseLog
+
+
+
+@admin.register(BloodPressureExerciseLog)
+class BloodPressureExerciseLogAdmin(admin.ModelAdmin):
+    list_display = ['user', 'exercise_type', 'duration', 'feeling_after_exercise', 'date']
+    list_filter = ['exercise_type', 'feeling_after_exercise', 'date']
+    search_fields = ['user__username', 'notes']
+    date_hierarchy = 'date'
+    
+    
 @admin.register(ExerciseLog)
 class ExerciseLogAdmin(admin.ModelAdmin):
     list_display = ('user', 'exercise_type', 'duration', 'blood_sugar_before', 'blood_sugar_after', 'date')
@@ -45,22 +57,6 @@ class DailyCheckInAdmin(admin.ModelAdmin):
 admin.site.register(DailyCheckIn, DailyCheckInAdmin)
 
 
-
-@admin.register(BPExerciseStreak)
-class BPExerciseStreakAdmin(admin.ModelAdmin):
-    list_display = ('user', 'current_streak', 'weekly_exercises', 'last_activity_date')
-    list_filter = ('last_activity_date',)
-    search_fields = ('user__username',)
-    ordering = ('-current_streak',)
-    
-
-@admin.register(ExerciseStreak)
-class ExerciseStreakAdmin(admin.ModelAdmin):
-    list_display = ('user', 'current_streak', 'last_activity_date')
-    list_filter = ('last_activity_date',)
-    search_fields = ('user__username',)
-    ordering = ('-current_streak',)
-    
 
 
 class UserProfileAdmin(admin.ModelAdmin):

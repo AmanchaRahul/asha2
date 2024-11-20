@@ -1,10 +1,6 @@
-
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% load static %}
-
-{% block title %}
-<title>Blood Pressure Exercise Planner</title>
-{% endblock title %}
 
 {% block basepage %}
 <!DOCTYPE html>
@@ -12,314 +8,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Blood Pressure Exercise Tracker</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
+
     <style>
-        .exercise-card {
-            background-color: #1f2937;
-            transition: all 0.3s ease;
-            border: 1px solid #374151;
-        }
-        .exercise-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
-        }
-        .btn {
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #556b2f;
-        }
-        .progress-bar {
-            transition: width 0.5s ease-in-out;
+
+        body {
+            font-family: 'Courier Prime', monospace;
         }
 
-
-        .message-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #1f2937;
-            padding: 20px;
-            border-radius: none;
-            border: 1px solid #556B2F;
-            z-index: 1000;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            text-align: center;
-            display: none;
+        
+        .chart-canvas {
+            width: 100%;
+            height: 200px;
+            max-height: 400px;
+            object-fit: contain;
         }
-        .message-content {
-            margin: 10px;
+        .swiper-button-next, 
+        .swiper-button-prev {
+            top: 35%;
+            transform: translateY(-50%);
+            z-index: 10;
         }
-        .message-content button {
-            margin-top: 15px;
-        }
-
-        @media (max-width: 640px) {
-            .exercise-type-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.875rem;
-            }
-            .exercise-card {
-                margin-bottom: 1rem;
-            }
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 20px;
         }
     </style>
 </head>
-<body class="min-h-screen p-4" style="margin-top: 2rem;">
-    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-10" style="margin-top: 2rem;">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
+<body class="bg-gray-900 text-gray-100">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
+    <div class="container mx-auto px-4 py-8" style="margin-top: 3.5rem;">
+        <nav class="flex justify-center items-center mb-8">
+            <h1 class="text-2xl font-bold">Blood Pressure Exercise Hub</h1>
+            <div></div>
+        </nav>
 
-    <h1 class="text-2xl md:text-4xl font-bold text-center mb-8 mt-16 px-4">Blood Pressure Exercise Planner</h1>
-    
-    <div class="mb-8 px-4">
-        <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
-            <button class="exercise-type-btn btn bg-gray-800 text-white font-bold py-2 px-4 rounded-none flex items-center justify-center" data-type="Cardio">
-                <i data-lucide="heart" class="inline mr-2 w-4 h-4"></i>Cardio
-            </button>
-            <button class="exercise-type-btn btn bg-gray-800 text-white font-bold py-2 px-4 rounded-none flex items-center justify-center" data-type="Strength">
-                <i data-lucide="dumbbell" class="inline mr-2 w-4 h-4"></i>Strength
-            </button>
-            <button class="exercise-type-btn btn bg-gray-800 text-white font-bold py-2 px-4 rounded-none flex items-center justify-center" data-type="Flexibility">
-                <i data-lucide="stretch" class="inline mr-2 w-4 h-4"></i>Flexibility
-            </button>
+        <div class="flex justify-between mb-8 border-b border-gray-700">
+            <button id="exercisesTabBtn" class="px-4 py-2 text-lg font-semibold border-b-2 border-blue-500">EXERCISES</button>
+            <button id="trackerTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE TRACKER</button>
+            <button id="logTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE LOG</button>
         </div>
-    </div>
 
-    <div id="exerciseList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4"></div>
-
-    <div class="mt-8 px-4">
-        <h2 class="text-xl md:text-2xl font-bold mb-4">Your Progress</h2>
-        <div class="bg-gray-800 p-4">
-            <h3 class="text-lg mb-2">Weekly Goal</h3>
-            <div class="w-full bg-gray-700 rounded-full h-2.5 mb-4">
-                <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full progress-bar" style="width: 0%"></div>
-            </div>
-            <p id="progressText" class="text-sm">0 out of 6 exercises completed this week</p>
-            <div class="flex items-center justify-between mt-4">
-                <div>
-                    <h3 class="text-lg mb-2">Exercise Streak</h3>
-                    <p id="streakCount" class="text-2xl md:text-3xl font-bold">0 days</p>
+        <div id="exercises" class="space-y-8">
+             <!-- low cardio Exercises Section -->
+             <section>
+                <h2 class="text-2xl font-bold mb-4">Low-Impact Cardio</h2>
+                <p class="text-gray-400 mb-4">Boost your energy and improve cardiovascular health with these low-impact exercises.</p>
+                
+                <div class="swiper lowImpactSwiper">
+                    <div class="swiper-wrapper">
+                         <!-- Exercise Video Card 1 -->
+                       <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/8uVOAhhpEbI?si=NfKhbCnwHfUjb8gG" 
+                                        title="Low-Impact Cardio Workout" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 15:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Low-Impact Cardio Workout</h3>
+                                    <p class="text-gray-400">A full-body workout that's easy on the joints while keeping your heart rate up.</p>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Exercise Video Card 2 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/v3SGmJPDNVw?si=vLfZ4fSgpgHggBOz"
+                                        title="Low-Impact Dance Workout" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 20:00</span>
+                                        <span class="text-gray-400">| Fun</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Low-Impact Dance Workout</h3>
+                                    <p class="text-gray-400">A fun, energetic dance routine that's gentle on your body.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise Video Card 3 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/jRWKYOhcWWU?si=fSF9m-o0CSspuebB" 
+                                        title="Low-Impact Walking Workout" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 30:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Low-Impact Walking Workout</h3>
+                                    <p class="text-gray-400">A simple walking-based cardio exercise suitable for all fitness levels.</p>
+                                </div>
+                            </div>
+                        </div>      
+                    </div>
+                    
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
-                <i data-lucide="award" class="text-yellow-500 w-8 h-8 md:w-12 md:h-12"></i>
+            </section>
+            
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Breathing Exercises</h2>
+                <p class="text-gray-400 mb-4">Controlled breathing can help reduce stress, which is vital for maintaining healthy blood pressure levels.</p>
+                
+                <div class="swiper breathingSwiper">
+                    <div class="swiper-wrapper">
+                        <!-- Exercise Video Card 1 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/9fEo9my03Ks?si=_-u4iPDxHTlfB8EK"
+                                        title="Deep Breathing for Relaxation" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 5:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Deep Breathing</h3>
+                                    <p class="text-gray-400">Slow, controlled breathing to calm the nervous system and reduce blood pressure.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Exercise Video Card 2 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/oN8xV3Kb5-Q?si=p353KL1Ur0fzpDlW"  
+                                        title="Box Breathing Technique" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 5:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Box Breathing</h3>
+                                    <p class="text-gray-400">A structured breathing method to reduce stress and regulate blood pressure.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Exercise Video Card 3 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/q5m6tMjcF8k?si=HaQK93p6ulWcuf_6"  
+                                        title="Alternate Nostril Breathing" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 5:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Alternate Nostril Breathing</h3>
+                                    <p class="text-gray-400">A calming technique to balance the nervous system and improve circulation.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </section>
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Flexibility & Stretching</h2>
+                <p class="text-gray-400 mb-4">Enhance your mobility and reduce tension with these gentle stretching exercises.</p>
+                
+                <div class="swiper flexibilitySwiper">
+                    <div class="swiper-wrapper">
+                         <!-- Exercise Video Card 1 -->
+                       <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/f-G70VJMZvU?si=Fp4VQVnHtZWjuIi1" 
+                                        title="Full Body Stretch Routine" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 10:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Full Body Stretch Routine</h3>
+                                    <p class="text-gray-400">A comprehensive stretching sequence to relax and lengthen your muscles.</p>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Exercise Video Card 2 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/OUlBO3g0OIY?si=oehPDIsJnEla6eyx" 
+                                        title="Upper Body Stretches" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 5:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Upper Body Stretches</h3>
+                                    <p class="text-gray-400">A series of stretches targeting the shoulders, chest, and arms to reduce stiffness.</p>
+                                </div>
+                            </div>
+                        </div>
+                                <!-- Exercise Video Card 3 -->
+                        <div class="swiper-slide">
+                            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                                <div class="w-full h-48">
+                                    <iframe 
+                                        class="w-full h-full" 
+                                        src="https://www.youtube.com/embed/CKnlEt5n3Sk?si=xhLF5u4wTK2p6cVh"
+                                        title="Lower Body Stretches" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-center mb-2">
+                                        <span class="text-gray-400 mr-2">⏱ 10:00</span>
+                                        <span class="text-gray-400">| Gentle</span>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2">Lower Body Stretches</h3>
+                                    <p class="text-gray-400">A series of stretches for the legs and hips to release tension and enhance flexibility.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </section>
+                        
+
+        </div>
+        <!-- Exercise Log Form Section -->
+        <div id="logForm" class="hidden space-y-8">
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Log Your Exercise</h3>
+                <form method="POST" action="{% url 'bloodpressureexercises' %}" class="space-y-4">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                        Log Exercise
+                    </button>
+                </form>
             </div>
-            <button id="resetStreakButton" class="btn bg-red-600 text-white font-bold py-2 px-4 rounded-none mt-4 w-full">
-                Reset Streak
-            </button>
+        </div>
+        
+        <div id="tracker" class="hidden space-y-8">
+            <!-- Blood Pressure & Exercise Impact -->
+            <div class="bg-gray-800 p-6 rounded-lg mb-8">
+                <h3 class="text-lg font-semibold mb-4">Blood Pressure Trends</h3>
+                <canvas id="bpChart" class="chart-canvas"></canvas>
+                <script id="bp-data" type="application/json">
+                    {{ bp_data|safe }}
+                </script>
+            </div>
+        
+            <!-- Daily Stats -->
+        
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                {% for day, stats in daily_stats.items %}
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">Exercise Minutes</h3>
+                    <p class="text-3xl font-bold">{{ stats.exercise_minutes }}</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">BP Stability</h3>
+                    <p class="text-3xl font-bold">{{ stats.bp_stability|floatformat:0 }}%</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">Active Days</h3>
+                    <p class="text-3xl font-bold">{{ active_days }}</p>
+                </div>
+                
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-sm font-semibold mb-2">Energy Level</h3>
+                    <p class="text-3xl font-bold">{{ stats.energy_level|floatformat:0 }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Exercise Log -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Recent Exercises</h3>
+                <div class="space-y-4">
+                    {% for log in exercise_logs %}
+                    <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
+                        <div>
+                            <h4 class="font-semibold">{{ log.get_exercise_type_display }}</h4>
+                            <p class="text-sm text-gray-400">Feeling: {{ log.get_feeling_after_exercise_display }}</p>
+                            <p class="text-sm text-gray-400">Duration: {{ log.duration }} minutes</p>
+                            <p class="text-sm text-gray-400">{{ log.notes }}</p>
+                        </div>
+                        <span class="text-sm text-gray-400">{{ log.date|date:"l, F j" }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+            <!-- Blood Pressure Exercise Insights -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-4">Blood Pressure Exercise Insights</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-blue-500 rounded-lg shadow-lg">
+                        <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <img src="{% static 'images/bloodpressure/bp.jpg' %}" alt="BP Control" />
+                        </div>
+                        <h4 class="text-lg text-white font-semibold">BP Control</h4>
+                        <p class="text-sm text-white">Exercise helps stabilize your blood pressure levels. Aim for regular activity to keep your levels in check.</p>
+                    </div>
+                    <div class="text-center p-4 bg-green-500 rounded-lg shadow-lg">
+                        <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <img src="{% static 'images/bloodpressure/bactive.jpg' %}" alt="Active" />
+                        </div>
+                        <h4 class="text-lg text-white font-semibold">Active Days</h4>
+                        <p class="text-sm text-white">The more active days you have each week, the better your fitness and blood pressure control will be.</p>
+                    </div>
+                    <div class="text-center p-4 bg-yellow-500 rounded-lg shadow-lg">
+                        <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <img src="{% static 'images/bloodpressure/bboost.jpg' %}" alt="boost" />
+                        </div>
+                        <h4 class="text-lg text-white font-semibold">Energy Boost</h4>
+                        <p class="text-sm text-white">Regular exercise boosts your energy levels, helping you stay active throughout the day and manage your blood pressure better.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="messageContainer" class="message-container">
-        <div class="message-content">
-            <p id="messageText"></p>
-            <button class="btn bg-olive-600 text-white font-bold py-2 px-4 rounded" onclick="hideMessage()">OK</button>
-        </div>
-    </div>
-
-    <div id="tipButton" class="fixed bottom-4 right-4 bg-olive text-white p-3 md:p-4 rounded-full cursor-pointer shadow-lg">
-        <i data-lucide="lightbulb" class="w-5 h-5 md:w-6 md:h-6"></i>
-    </div>
-
-  <script>
-      const exerciseTypes = {
-          Cardio: [
-              { name: 'Brisk Walking', duration: '30 mins', intensity: 'Moderate', benefits: 'Lowers blood pressure and improves cardiovascular health', image: "{% static 'images/bloodpressure/briskwalk.gif' %}" },
-              { name: 'Swimming', duration: '45 mins', intensity: 'Moderate to High', benefits: 'Low-impact exercise that reduces blood pressure and improves heart health', image: "{% static 'images/bloodpressure/swimming.gif' %}" },
-              { name: 'Cycling', duration: '30 mins', intensity: 'Moderate to High', benefits: 'Improves circulation and helps lower blood pressure', image: "{% static 'images/bloodpressure/cycling.gif' %}" },
-          ],
-          Strength: [
-              { name: 'Resistance Band Exercises', duration: '3 sets of 12 reps', intensity: 'Moderate', benefits: 'Builds strength and helps regulate blood pressure', image: "{% static 'images/bloodpressure/resistance.gif' %}" },
-              { name: 'Bodyweight Squats', duration: '3 sets of 15 reps', intensity: 'Moderate', benefits: 'Improves lower body strength and circulation', image: "{% static 'images/bloodpressure/squats.gif' %}" },
-              { name: 'Wall Push-ups', duration: '3 sets of 10 reps', intensity: 'Low to Moderate', benefits: 'Strengthens upper body without straining the heart', image: "{% static 'images/bloodpressure/wallpushup.gif' %}" },
-          ],
-          Flexibility: [
-              { name: 'Yoga for Hypertension', duration: '20 mins', intensity: 'Low to Moderate', benefits: 'Reduces stress and helps lower blood pressure', image: "{% static 'images/bloodpressure/hyperstretch.gif' %}" },
-              { name: 'Deep Breathing Exercises', duration: '15 mins', intensity: 'Low', benefits: 'Calms the nervous system and may help reduce blood pressure', image: "{% static 'images/bloodpressure/breathing.gif' %}" },
-              { name: 'Gentle Stretching', duration: '15 mins', intensity: 'Low', benefits: 'Improves flexibility and promotes relaxation', image: "{% static 'images/bloodpressure/stretching.gif' %}" },
-          ],
-      };
-
-      let currentExercises = 0;
-      let streak = 0;
-
-
-      // Load initial streak from server
-    function loadStreak() {
-        fetch('/get-exercise-streak/', {
-            method: 'GET',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            streak = data.streak;
-            currentExercises = streak % 6; // 6 exercises per week
-            updateProgress();
-        });
-    }
-
-      function updateExerciseList(type) {
-        const exerciseList = document.getElementById('exerciseList');
-        exerciseList.innerHTML = '';
-        exerciseTypes[type].forEach((exercise, index) => {
-            const card = document.createElement('div');
-            card.className = 'exercise-card overflow-hidden shadow-lg p-4 md:p-6';
-            card.innerHTML = `
-                <img src="${exercise.image}" alt="${exercise.name}" class="w-full h-32 md:h-40 object-cover mb-4 rounded-none">
-                <h3 class="text-lg md:text-xl font-bold mb-2">${exercise.name}</h3>
-                <p class="text-gray-400 mb-4 text-sm md:text-base">${exercise.duration}</p>
-                <p class="text-sm md:text-base"><strong>Intensity:</strong> ${exercise.intensity}</p>
-                <p class="text-sm md:text-base"><strong>Benefits:</strong> ${exercise.benefits}</p>
-                <button class="complete-exercise btn bg-olive text-white font-bold py-2 px-4 rounded-none mt-4 w-full text-sm md:text-base">
-                    Complete Exercise
-                </button>
-            `;
-            exerciseList.appendChild(card);
-        });
-        addCompleteExerciseListeners();
-        }
-
-        function addCompleteExerciseListeners() {
-            document.querySelectorAll('.complete-exercise').forEach(button => {
-                button.addEventListener('click', () => {
-                    completeExercise();
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Existing Swiper initialization
+            const swiperOptions = {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true
+                },
+                breakpoints: {
+                    640: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 }
+                }
+            };
+    
+            new Swiper('.lowImpactSwiper', swiperOptions);
+            new Swiper('.breathingSwiper', swiperOptions);
+            new Swiper('.flexibilitySwiper', swiperOptions);
+    
+            // Tab switching logic
+            const tabs = [
+                document.getElementById('exercisesTabBtn'),
+                document.getElementById('trackerTabBtn'),
+                document.getElementById('logTabBtn')
+            ];
+            const sections = [
+                document.getElementById('exercises'),
+                document.getElementById('tracker'),
+                document.getElementById('logForm')
+            ];
+    
+            tabs.forEach((tab, index) => {
+                tab?.addEventListener('click', () => {
+                    tabs.forEach((t, i) => {
+                        t.classList.toggle('border-b-2', i === index);
+                        t.classList.toggle('border-blue-500', i === index);
+                        t.classList.toggle('text-gray-400', i !== index);
+                        sections[i].classList.toggle('hidden', i !== index);
+                    });
                 });
             });
-        }
-
-        function completeExercise() {
-            fetch('/update-exercise-streak/', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                streak = data.streak;
-                currentExercises = streak % 6;
-                updateProgress();
-            });
-        }
-
-      function updateProgress() {
-          const progressBar = document.getElementById('progressBar');
-          const progressText = document.getElementById('progressText');
-          const streakCount = document.getElementById('streakCount');
-          const progress = (currentExercises / 6) * 100;
-          progressBar.style.width = `${progress}%`;
-          progressText.textContent = `${currentExercises} out of 6 exercises completed this week`;
-          streakCount.textContent = `${streak} days`;
-      }
-      
-
-      function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-
-      document.querySelectorAll('.exercise-type-btn').forEach(button => {
-          button.addEventListener('click', () => {
-              updateExerciseList(button.getAttribute('data-type'));
-          });
-      });
-
-
-        function showMessage(message) {
-            const messageContainer = document.getElementById('messageContainer');
-            const messageText = document.getElementById('messageText');
-            messageText.textContent = message;
-            messageContainer.style.display = 'block';
-        }
-
-        function hideMessage() {
-            document.getElementById('messageContainer').style.display = 'none';
-        }
-
-      // Update tip button click handler
-      document.getElementById('tipButton').addEventListener('click', () => {
-        const tips = [
-          'Tip: Start with gentle exercises like walking or stretching to ease your body into movement.',
-          'Tip: Aim for at least 30 minutes of moderate exercise most days of the week for optimal blood pressure control.',
-          'Tip: Deep breathing exercises can help reduce stress and stabilize blood pressure levels.',
-          'Tip: Avoid holding your breath during exercises, as it can cause sudden spikes in blood pressure.',
-          'Tip: Stay hydrated during workouts, as dehydration can elevate blood pressure.',
-          'Tip: Choose low-impact activities, such as cycling or swimming, which are easier on the heart.',
-          'Tip: Listen to your body—if you feel dizzy or lightheaded, stop exercising and rest.',
-          'Tip: Include relaxation techniques, like yoga or tai chi, in your routine to support cardiovascular health.',
-          'Tip: Stretch before and after each workout to improve flexibility and reduce muscle tension.',
-        ];
-      
-        const randomTip = tips[Math.floor(Math.random() * tips.length)];
-        showMessage(randomTip);
-      });
-      
-
-        // Update reset streak button click handler
-        document.getElementById('resetStreakButton').addEventListener('click', () => {
-            currentExercises = 0;
-            streak = 0;
-            updateProgress();
-            showMessage('Your streak has been reset to zero.');
-        });
-
-        // Add click outside to close message
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('messageContainer')) {
-                hideMessage();
-            }
-        }
-
-        document.getElementById('resetStreakButton').addEventListener('click', () => {
-            streak = 0;
-            currentExercises = 0;
-            updateProgress();
-        });
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadStreak();
-            updateExerciseList('Cardio');
-            lucide.createIcons();
-        });
     
-  </script>
+            
+                const bpData = JSON.parse(document.getElementById('bp-data').textContent);
+                const bpCtx = document.getElementById('bpChart');
+        
+                new Chart(bpCtx, {
+                    type: 'line',
+                    data: {
+                        labels: bpData.days,
+                        datasets: [
+                            {
+                                label: 'Feeling Great',
+                                data: bpData.feeling_great,
+                                borderColor: '#3B82F6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                                fill: true,
+                            },
+                            {
+                                label: 'Feeling Normal',
+                                data: bpData.feeling_normal,
+                                borderColor: '#F59E0B',
+                                backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                                fill: true,
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                });
+            });
+            
+    </script>
+    
 </body>
 </html>
-
 {% block navbar %}
 {% endblock navbar %}
-
-
 {% block footer %}
 {% endblock footer %}
-
-
 {% endblock basepage %}
-
-
-
-
-
-
-
-
-
-
-
-
