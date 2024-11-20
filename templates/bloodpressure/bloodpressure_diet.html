@@ -49,6 +49,7 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
+        
         .nutritional-info {
             background-color: rgba(66, 153, 225, 0.1);
             border: 1px solid #4299e1;
@@ -56,6 +57,29 @@
             padding: 10px;
             margin-top: 10px;
         }
+        
+        .nutritional-info ul {
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+            gap: 10px; /* Add spacing between items */
+            padding: 0;
+            list-style: none;
+        }
+        
+        .nutritional-info li {
+            flex: 1 1 calc(50% - 10px); /* Adjust item width to fit two per row */
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem; /* Adjust font size for better readability */
+        }
+        
+        @media (max-width: 600px) {
+            .nutritional-info li {
+                flex: 1 1 100%; /* Make each item take the full width on small screens */
+                justify-content: flex-start; /* Align text to the left */
+            }
+        }
+        
         @media (max-width: 640px) {
             .bp-type-buttons {
                 flex-direction: column;
