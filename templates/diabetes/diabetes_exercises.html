@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
 {% load custom_filters %}
-
 {% load static %}
 
 {% block basepage %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,54 +14,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
     <style>
-
         body {
             font-family: 'Courier Prime', monospace;
         }
-
-
         .chart-canvas {
-            width: 100%;       /* Make it responsive */
-            height: 200px;     /* Fix the height (adjust as necessary) */
-            max-height: 400px; /* Optional: Set max height to prevent over-expansion */
-            object-fit: contain; /* Ensure the chart stays within bounds */
+            width: 100%;
+            height: 300px;
+            max-height: 400px;
+            object-fit: contain;
         }
-        
-        
-        /* Adjust the position of the Swiper navigation arrows */
         .swiper-button-next, 
         .swiper-button-prev {
-            top: 35%; /* Move the arrows higher above the video controls */
+            top: 35%;
             transform: translateY(-50%);
-            z-index: 10; /* Ensure the arrows are above other elements */
+            z-index: 10;
         }
-        
-        /* Optional: Increase the size of arrows for better accessibility */
         .swiper-button-next::after,
         .swiper-button-prev::after {
             font-size: 20px;
         }
+        @media (max-width: 640px) {
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-50">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
     </a>
-    <div class="container mx-auto px-4 py-8" style="margin-top: 3.5rem;">
-        <!-- Navigation -->
+    <div class="container mx-auto px-4 py-8 mt-16">
         <nav class="flex justify-center items-center mb-8">
-            
-            <h1 class="text-2xl md:text-3xl font-bold">Diabetes Exercise Hub</h1>
-            <div></div>
+            <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">Diabetes Exercise Hub</h1>
         </nav>
 
-        <!-- Tabs -->
-        <div class="flex justify-between mb-8 border-b border-gray-700">
-            <button id="exercisesTabBtn" class="px-4 py-2 text-lg font-semibold border-b-2 border-blue-500">EXERCISES</button>
-            <button id="trackerTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE TRACKER</button>
-            <button id="logTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE LOG</button>
-            
-            
+        <div class="flex flex-wrap justify-between mb-8 border-b border-gray-700">
+            <button id="exercisesTabBtn" class="px-2 py-2 text-sm md:text-base lg:text-lg font-semibold border-b-2 border-blue-500 flex-grow">EXERCISES</button>
+            <button id="trackerTabBtn" class="px-2 py-2 text-sm md:text-base lg:text-lg font-semibold text-gray-400 flex-grow">EXERCISE TRACKER</button>
+            <button id="logTabBtn" class="px-2 py-2 text-sm md:text-base lg:text-lg font-semibold text-gray-400 flex-grow">EXERCISE LOG</button>
         </div>
 
         <!-- Exercises Section -->
@@ -345,7 +335,7 @@
                  
         <!-- Exercise Log Form Section -->
         <div id="logForm" class="hidden space-y-8">
-            <div class="bg-gray-800 p-6 rounded-lg">
+            <div class="bg-gray-800 p-4 md:p-6 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Log Your Exercise</h3>
                 <form method="POST" action="{% url 'diabetesexercises' %}" class="space-y-4">
                     {% csrf_token %}
@@ -453,32 +443,30 @@
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">Exercise Minutes</h3>
-                    <p class="text-3xl font-bold">{{ weekly_stats.exercise_minutes }}</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Exercise Minutes</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ weekly_stats.exercise_minutes }}</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">Glucose Stability</h3>
-                    <p class="text-3xl font-bold">{{ weekly_stats.glucose_stability|floatformat:0 }}%</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Glucose Stability</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ weekly_stats.glucose_stability|floatformat:0 }}%</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">Active Days</h3>
-                    <p class="text-3xl font-bold">{{ weekly_stats.active_days }}</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Active Days</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ weekly_stats.active_days }}</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">Energy Level</h3>
-                    <p class="text-3xl font-bold">{{ weekly_stats.energy_level|floatformat:0 }}</p>
-                    <p class="text-sm text-gray-400">Energy Level (0-10 scale): Reflects your recent exercise efforts</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Energy Level</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ weekly_stats.energy_level|floatformat:0 }}</p>
+                    <p class="text-xs md:text-sm text-gray-400">Energy Level (0-10 scale)</p>
                 </div>
-                
-                
             </div>
 
             <!-- Exercise Log -->
-            <div class="bg-gray-800 p-6 rounded-lg">
+            <div class="bg-gray-800 p-4 md:p-6 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Recent Exercises</h3>
                 <div class="space-y-4">
                     {% for log in exercise_logs %}
-                    <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between p-3 bg-gray-700 rounded">
                         <div>
                             <h4 class="font-semibold">{{ log.exercise_type }}</h4>
                             <p class="text-sm text-gray-400">Blood sugar change: {{ log.blood_sugar_after|subtract:log.blood_sugar_before }}mg/dL</p>
@@ -487,18 +475,15 @@
                             </p>
                         </div>
                         
-                        <span class="text-sm text-gray-400">{{ log.date|date:"l" }}</span>
-
-
-
+                        <span class="text-sm text-gray-400 mt-2 md:mt-0">{{ log.date|date:"l" }}</span>
                     </div>
                     {% endfor %}
                 </div>
             </div>
                         <!-- Diabetes Exercise Insights -->
-            <div class="bg-gray-800 p-6 rounded-lg">
-                <h3 class="text-lg font-semibold mb-4">Diabetes Exercise Insights</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-gray-800 p-4 md:p-6 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-4">Diabetes Exercise Insights</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                     <!-- Insight 1: Glucose Control -->
                     <div class="text-center p-4 bg-blue-500 rounded-lg shadow-lg">
@@ -530,8 +515,6 @@
 
                 </div>
             </div>
-
-
             
         </div>
     </div>
@@ -586,36 +569,15 @@
                     });
                 });
             
-                
-                    console.log('DOM Content Loaded');
-                
-                    // Get the glucose data
-                    const glucoseDataElement = document.getElementById('glucose-data');
-                    if (!glucoseDataElement) {
-                        console.error('Glucose data element not found');
-                        return;
-                    }
-                
-                    try {
-                        // Parse the data and log it
-                        const glucoseData = JSON.parse(glucoseDataElement.textContent);
-                        console.log('Glucose Data:', glucoseData);
-                
-                        const glucoseCtx = document.getElementById('glucoseChart');
-                        if (!glucoseCtx) {
-                            console.error('Canvas element not found');
-                            return;
-                        }
-                
-                        // Log canvas dimensions
-                        console.log('Canvas dimensions:', {
-                            width: glucoseCtx.width,
-                            height: glucoseCtx.height,
-                            offsetWidth: glucoseCtx.offsetWidth,
-                            offsetHeight: glucoseCtx.offsetHeight
-                        });
-                
-                        const chart = new Chart(glucoseCtx, {
+                 // Chart initialization
+            const glucoseDataElement = document.getElementById('glucose-data');
+            if (glucoseDataElement) {
+                try {
+                    const glucoseData = JSON.parse(glucoseDataElement.textContent);
+                    const glucoseCtx = document.getElementById('glucoseChart');
+                    
+                    if (glucoseCtx) {
+                        new Chart(glucoseCtx, {
                             type: 'line',
                             data: {
                                 labels: glucoseData.dates,
@@ -644,72 +606,43 @@
                                 plugins: {
                                     legend: {
                                         position: 'top',
-                                        labels: {
-                                            color: '#fff',
-                                            font: {
-                                                size: 12
-                                            }
-                                        }
+                                        labels: { color: '#fff' }
                                     },
                                     title: {
                                         display: true,
                                         text: 'Blood Glucose Levels (mg/dL)',
-                                        color: '#fff',
-                                        font: {
-                                            size: 16
-                                        }
+                                        color: '#fff'
                                     }
                                 },
                                 scales: {
                                     y: {
                                         beginAtZero: false,
-                                        grid: {
-                                            color: 'rgba(255, 255, 255, 0.1)'
-                                        },
-                                        ticks: {
-                                            color: '#fff',
-                                            font: {
-                                                size: 12
-                                            }
-                                        },
+                                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                        ticks: { color: '#fff' },
                                         title: {
                                             display: true,
                                             text: 'Blood Glucose (mg/dL)',
-                                            color: '#fff',
-                                            font: {
-                                                size: 12
-                                            }
+                                            color: '#fff'
                                         }
                                     },
                                     x: {
-                                        grid: {
-                                            color: 'rgba(255, 255, 255, 0.1)'
-                                        },
-                                        ticks: {
-                                            color: '#fff',
-                                            font: {
-                                                size: 12
-                                            }
-                                        },
+                                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                                        ticks: { color: '#fff' },
                                         title: {
                                             display: true,
                                             text: 'Days',
-                                            color: '#fff',
-                                            font: {
-                                                size: 12
-                                            }
+                                            color: '#fff'
                                         }
                                     }
                                 }
                             }
                         });
-                
-                        // Log successful chart creation
-                        console.log('Chart created successfully');
-                    } catch (error) {
-                        console.error('Error creating chart:', error);
                     }
-                });
+                } catch (error) {
+                    console.error('Error creating chart:', error);
+                }
+            }
+        });
         </script>
     </body>
     </html>
