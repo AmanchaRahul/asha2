@@ -12,24 +12,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: black;
+            color: #e2e8f0;
+        }
         .meal-card {
-            background-color: #111;
+            background-color: #2d3748;
             transition: all 0.3s ease;
-            border: 1px solid white;
+            border: 1px solid #4a5568;
         }
         .meal-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(66, 153, 225, 0.2);
         }
         .btn {
-            border: 1px solid white;
             transition: all 0.3s ease;
         }
         .btn:hover {
-            background-color: olive;
+            background-color: #4299e1;
         }
-        @media (max-width: 768px) {
+        .diabetes-type-btn.active {
+            background-color: #4299e1;
+            color: #ffffff;
+        }
+        .chart-canvas {
+            width: 100%;
+            height: 300px;
+            max-height: 400px;
+            object-fit: contain;
+        }
+        .meal-type-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #4299e1;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .nutritional-info {
+            background-color: rgba(66, 153, 225, 0.1);
+            border: 1px solid #4299e1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        @media (max-width: 640px) {
             .diabetes-type-buttons {
                 flex-direction: column;
                 gap: 1rem;
@@ -37,113 +70,92 @@
             .meal-card {
                 flex-direction: column;
             }
-            .meal-card-content {
-                width: 100%;
-                text-align: center;
-            }
-            .meal-card-image {
-                width: 100%;
-                margin-top: 1rem;
-            }
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen" style="margin-top: 2rem;">
-   
-    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-10" style="margin-top: 2rem;">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
+<body class="bg-gray-900 text-gray-100">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
+    <div class="container mx-auto px-4 py-8 mt-16">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Diabetes Diet Planner</h1>
+            <p class="text-xl text-blue-300">Your personal guide to a healthier diet</p>
+        </header>
 
-    <main class="flex-grow p-4 mt-16">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold">Diabetes Diet Planner</h1>
-            </div>
+        <nav class="flex flex-wrap justify-center mb-8 gap-4">
+            <button id="preBtn" class="diabetes-type-btn px-6 py-3 text-lg font-semibold bg-gray-700 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">Pre-diabetes</button>
+            <button id="type1Btn" class="diabetes-type-btn px-6 py-3 text-lg font-semibold bg-gray-700 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">Type 1</button>
+            <button id="type2Btn" class="diabetes-type-btn px-6 py-3 text-lg font-semibold bg-gray-700 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105">Type 2</button>
+        </nav>
 
-            <div class="mb-8 text-center">
-                <h2 class="text-xl mb-4">Select your diabetes type:</h2>
-                <div class="diabetes-type-buttons flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-                    <button class="diabetes-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="pre">Pre-diabetes</button>
-                    <button class="diabetes-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="type1">Type 1</button>
-                    <button class="diabetes-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="type2">Type 2</button>
-                </div>
-            </div>
-
-            <div id="mealPlan" class="hidden">
-                <h2 class="text-xl md:text-2xl mb-4 text-center">Your Personalized Meal Plan</h2>
-                <p class="mb-4 text-center">Click on a meal type to see more options!</p>
-                <div class="space-y-8">
-                    <div id="breakfast" class="text-center">
-                        <h3 class="text-lg md:text-xl mb-4">Breakfast</h3>
-                        <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="breakfast">Show Another Breakfast Option</button>
-                    </div>
-                    <div id="lunch" class="text-center">
-                        <h3 class="text-lg md:text-xl mb-4">Lunch</h3>
-                        <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="lunch">Show Another Lunch Option</button>
-                    </div>
-                    <div id="dinner" class="text-center">
-                        <h3 class="text-lg md:text-xl mb-4">Dinner</h3>
-                        <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="dinner">Show Another Dinner Option</button>
-                    </div>
-                </div>
-            </div>
+        <div id="mealPlan" class="space-y-12 hidden">
+            <section id="breakfast">
+                <h2 class="text-3xl font-bold mb-6 text-center">Breakfast</h2>
+                <div class="meal-content"></div>
+            </section>
+            <section id="lunch">
+                <h2 class="text-3xl font-bold mb-6 text-center">Lunch</h2>
+                <div class="meal-content"></div>
+            </section>
+            <section id="dinner">
+                <h2 class="text-3xl font-bold mb-6 text-center">Dinner</h2>
+                <div class="meal-content"></div>
+            </section>
         </div>
-    </main>
+    </div>
 
     <script>
         const mealPlans = {
             pre: {
                 breakfast: [
-                    { name: "Overnight oats with berries and nuts", description: "A fiber-rich breakfast that combines rolled oats, almond milk, Greek yogurt, chia seeds, mixed berries, and chopped nuts for a satisfying and nutritious start to the day", image: "{% static 'images/diabetes/dbreakfast.gif' %}" },
-                    { name: "Avocado toast with egg", description: "A simple yet delicious breakfast featuring whole grain toast topped with mashed avocado, a hard-boiled egg, olive oil, and seasoned with salt and pepper, providing a balance of healthy fats, protein, and complex carbohydrates", image: "{% static 'images/diabetes/dbreakfast2.gif' %}" },
-                    { name: "Greek yogurt parfait with granola and fruit", description: "A layered breakfast parfait made with plain Greek yogurt, mixed berries, low-sugar granola, and sliced almonds, offering a tasty and nutrient-dense way to begin the day", image: "{% static 'images/diabetes/dbreakfast3.gif' %}" }
+                    { name: "Overnight oats with berries and nuts", description: "A fiber-rich breakfast that combines rolled oats, almond milk, Greek yogurt, chia seeds, mixed berries, and chopped nuts for a satisfying and nutritious start to the day", image: "{% static 'images/diabetes/dbreakfast.gif' %}", nutrition: { calories: 350, carbs: 45, protein: 15, fat: 12 } },
+                    { name: "Avocado toast with egg", description: "A simple yet delicious breakfast featuring whole grain toast topped with mashed avocado, a hard-boiled egg, olive oil, and seasoned with salt and pepper, providing a balance of healthy fats, protein, and complex carbohydrates", image: "{% static 'images/diabetes/dbreakfast2.gif' %}", nutrition: { calories: 300, carbs: 25, protein: 12, fat: 20 } },
+                    { name: "Greek yogurt parfait with granola and fruit", description: "A layered breakfast parfait made with plain Greek yogurt, mixed berries, low-sugar granola, and sliced almonds, offering a tasty and nutrient-dense way to begin the day", image: "{% static 'images/diabetes/dbreakfast3.gif' %}", nutrition: { calories: 280, carbs: 35, protein: 18, fat: 8 } }
                 ],
                 lunch: [
-                    { name: "Whole Wheat Chapati with Dal and Vegetable Curry", description: "Serve 2-3 chapatis made from whole wheat flour alongside a bowl of dal (lentil soup) and a small bowl of mixed vegetable curry. This meal is rich in fiber, protein, and complex carbohydrates, helping to stabilize blood sugar levels", image: "{% static 'images/diabetes/dlunch1.gif' %}" },
-                    { name: "Brown Rice Pulao with Mixed Vegetables", description: "A small bowl of brown rice pulao cooked with a variety of non-starchy vegetables like carrots, beans, and peas. Pair it with a side salad of cucumber and tomatoes for added fiber and nutrients", image: "{% static 'images/diabetes/dlunch2.gif' %}" },
-                    { name: "Quinoa Salad with Chickpeas", description: "A refreshing salad made with cooked quinoa, chickpeas, diced cucumbers, tomatoes, onions, and a squeeze of lemon juice. This dish is high in protein and fiber, promoting satiety and better blood sugar control", image: "{% static 'images/diabetes/dlunch3.gif' %}" }
+                    { name: "Whole Wheat Chapati with Dal and Vegetable Curry", description: "Serve 2-3 chapatis made from whole wheat flour alongside a bowl of dal (lentil soup) and a small bowl of mixed vegetable curry. This meal is rich in fiber, protein, and complex carbohydrates, helping to stabilize blood sugar levels", image: "{% static 'images/diabetes/dlunch1.gif' %}", nutrition: { calories: 400, carbs: 60, protein: 20, fat: 10 } },
+                    { name: "Brown Rice Pulao with Mixed Vegetables", description: "A small bowl of brown rice pulao cooked with a variety of non-starchy vegetables like carrots, beans, and peas. Pair it with a side salad of cucumber and tomatoes for added fiber and nutrients", image: "{% static 'images/diabetes/dlunch2.gif' %}", nutrition: { calories: 350, carbs: 55, protein: 10, fat: 8 } },
+                    { name: "Quinoa Salad with Chickpeas", description: "A refreshing salad made with cooked quinoa, chickpeas, diced cucumbers, tomatoes, onions, and a squeeze of lemon juice. This dish is high in protein and fiber, promoting satiety and better blood sugar control", image: "{% static 'images/diabetes/dlunch3.gif' %}", nutrition: { calories: 320, carbs: 50, protein: 15, fat: 7 } }
                 ],
                 dinner: [
-                    { name: "Palak Paneer with Whole Wheat Roti", description: "A nutritious dish made with spinach (palak) and cottage cheese (paneer), cooked with spices. Serve it with 1-2 whole wheat rotis for a balanced meal rich in fiber and protein", image: "{% static 'images/diabetes/ddinner1.jpg' %}" },
-                    { name: "Brown Rice Khichdi", description: "A comforting one-pot dish made with brown rice, moong dal (yellow lentils), and mixed vegetables, seasoned with turmeric and cumin. This meal is high in fiber and low in glycemic index, making it ideal for blood sugar management", image: "{% static 'images/diabetes/ddinner2.jpeg' %}" },
-                    { name: "Vegetable Stir-Fry with Quinoa", description: "A colorful stir-fry of non-starchy vegetables like bell peppers, broccoli, and carrots, tossed in minimal oil and served over a bed of quinoa. This dish is packed with nutrients and provides a good source of protein and fiber", image: "{% static 'images/diabetes/ddinner3.jpg' %}" }
+                    { name: "Palak Paneer with Whole Wheat Roti", description: "A nutritious dish made with spinach (palak) and cottage cheese (paneer), cooked with spices. Serve it with 1-2 whole wheat rotis for a balanced meal rich in fiber and protein", image: "{% static 'images/diabetes/ddinner1.jpg' %}", nutrition: { calories: 380, carbs: 40, protein: 22, fat: 15 } },
+                    { name: "Brown Rice Khichdi", description: "A comforting one-pot dish made with brown rice, moong dal (yellow lentils), and mixed vegetables, seasoned with turmeric and cumin. This meal is high in fiber and low in glycemic index, making it ideal for blood sugar management", image: "{% static 'images/diabetes/ddinner2.jpeg' %}", nutrition: { calories: 330, carbs: 55, protein: 12, fat: 6 } },
+                    { name: "Vegetable Stir-Fry with Quinoa", description: "A colorful stir-fry of non-starchy vegetables like bell peppers, broccoli, and carrots, tossed in minimal oil and served over a bed of quinoa. This dish is packed with nutrients and provides a good source of protein and fiber", image: "{% static 'images/diabetes/ddinner3.jpg' %}", nutrition: { calories: 300, carbs: 45, protein: 14, fat: 8 } }
                 ]
             },
             type1: {
                 breakfast: [
-                    { name: "Vegetable Upma", description: "A savory dish made from semolina cooked with mixed vegetables like carrots, peas, and beans, seasoned with mustard seeds and curry leaves. This high-fiber meal helps maintain steady blood sugar levels", image: "{% static 'images/diabetes/d1breakfast1.gif' %}" },
-                    { name: "Moong Dal Chilla", description: "Thin pancakes made from ground moong dal (split yellow lentils) mixed with spices and chopped vegetables. Rich in protein and fiber, these chillas are a nutritious start to the day", image: "{% static 'images/diabetes/d1breakfast2.jpg' %}" },
-                    { name: "Oats Porridge with Nuts", description: "Cooked oats topped with a mix of nuts (like almonds and walnuts) and seeds (like chia or flaxseeds), along with a sprinkle of cinnamon. This meal is high in fiber and healthy fats, promoting satiety", image: "{% static 'images/diabetes/d1breakfast3.jpeg' %}" }
+                    { name: "Vegetable Upma", description: "A savory dish made from semolina cooked with mixed vegetables like carrots, peas, and beans, seasoned with mustard seeds and curry leaves. This high-fiber meal helps maintain steady blood sugar levels", image: "{% static 'images/diabetes/d1breakfast1.gif' %}", nutrition: { calories: 250, carbs: 40, protein: 8, fat: 7 } },
+                    { name: "Moong Dal Chilla", description: "Thin pancakes made from ground moong dal (split yellow lentils) mixed with spices and chopped vegetables. Rich in protein and fiber, these chillas are a nutritious start to the day", image: "{% static 'images/diabetes/d1breakfast2.jpg' %}", nutrition: { calories: 200, carbs: 30, protein: 12, fat: 5 } },
+                    { name: "Oats Porridge with Nuts", description: "Cooked oats topped with a mix of nuts (like almonds and walnuts) and seeds (like chia or flaxseeds), along with a sprinkle of cinnamon. This meal is high in fiber and healthy fats, promoting satiety", image: "{% static 'images/diabetes/d1breakfast3.jpeg' %}", nutrition: { calories: 300, carbs: 35, protein: 10, fat: 15 } }
                 ],
                 lunch: [
-                    { name: "Chickpea and Spinach Curry", description: "A hearty curry made with chickpeas and spinach, cooked with tomatoes and spices. Serve it with a small portion of brown rice or whole wheat roti for a balanced meal rich in fiber and protein", image: "{% static 'images/diabetes/d1lunch1.jpeg' %}" },
-                    { name: "Lentil Salad with Mixed Vegetables", description: "A refreshing salad made with cooked lentils, diced cucumbers, bell peppers, and carrots, dressed with olive oil and lemon juice. This dish is high in protein and fiber, making it a healthy choice", image: "{% static 'images/diabetes/d1lunch2.jpg' %}" },
-                    { name: "Vegetable Dalia (Cracked Wheat Porridge)", description: "A savory porridge made from cracked wheat cooked with mixed vegetables and spices. This dish is high in fiber and provides sustained energy without causing spikes in blood sugar levels", image: "{% static 'images/diabetes/d1lunch3.jpg' %}" }
+                    { name: "Chickpea and Spinach Curry", description: "A hearty curry made with chickpeas and spinach, cooked with tomatoes and spices. Serve it with a small portion of brown rice or whole wheat roti for a balanced meal rich in fiber and protein", image: "{% static 'images/diabetes/d1lunch1.jpeg' %}", nutrition: { calories: 350, carbs: 50, protein: 15, fat: 10 } },
+                    { name: "Lentil Salad with Mixed Vegetables", description: "A refreshing salad made with cooked lentils, diced cucumbers, bell peppers, and carrots, dressed with olive oil and lemon juice. This dish is high in protein and fiber, making it a healthy choice", image: "{% static 'images/diabetes/d1lunch2.jpg' %}", nutrition: { calories: 300, carbs: 45, protein: 18, fat: 8 } },
+                    { name: "Vegetable Dalia (Cracked Wheat Porridge)", description: "A savory porridge made from cracked wheat cooked with mixed vegetables and spices. This dish is high in fiber and provides sustained energy without causing spikes in blood sugar levels", image: "{% static 'images/diabetes/d1lunch3.jpg' %}", nutrition: { calories: 280, carbs: 50, protein: 10, fat: 5 } }
                 ],
                 dinner: [
-                    { name: "Ragi Idli with Sambar", description: "Steamed idlis made from finger millet (ragi) served with a side of sambar (lentil soup). This combination is low in glycemic index and high in fiber", image: "{% static 'images/diabetes/d1dinner1.jpeg' %}" },
-                    { name: "Stuffed Bell Peppers", description: "Bell peppers filled with a mixture of quinoa, black beans, tomatoes, and spices, baked until tender. This dish is colorful, nutritious, and provides a good source of plant-based protein", image: "{% static 'images/diabetes/d1dinner2.gif' %}" },
-                    { name: "Tofu Stir-Fry with Vegetables", description: "Cubes of tofu stir-fried with a variety of non-starchy vegetables like broccoli, bell peppers, and carrots, seasoned with soy sauce or spices. This meal is rich in protein and low in carbohydrates", image: "{% static 'images/diabetes/d1dinner3.gif' %}" }
+                    { name: "Ragi Idli with Sambar", description: "Steamed idlis made from finger millet (ragi) served with a side of sambar (lentil soup). This combination is low in glycemic index and high in fiber", image: "{% static 'images/diabetes/d1dinner1.jpeg' %}", nutrition: { calories: 300, carbs: 55, protein: 12, fat: 5 } },
+                    { name: "Stuffed Bell Peppers", description: "Bell peppers filled with a mixture of quinoa, black beans, tomatoes, and spices, baked until tender. This dish is colorful, nutritious, and provides a good source of plant-based protein", image: "{% static 'images/diabetes/d1dinner2.gif' %}", nutrition: { calories: 320, carbs: 40, protein: 15, fat: 12 } },
+                    { name: "Tofu Stir-Fry with Vegetables", description: "Cubes of tofu stir-fried with a variety of non-starchy vegetables like broccoli, bell peppers, and carrots, seasoned with soy sauce or spices. This meal is rich in protein and low in carbohydrates", image: "{% static 'images/diabetes/d1dinner3.gif' %}", nutrition: { calories: 280, carbs: 25, protein: 20, fat: 15 } }
                 ]
             },
             type2: {
                 breakfast: [
-                    { name: "Vegetable Poha", description: "Flattened rice cooked with mustard seeds, turmeric, peas, and diced potatoes, garnished with fresh coriander and lemon juice. This dish is light yet filling and provides fiber and essential nutrients", image: "{% static 'images/diabetes/d3breakfast1.jpeg' %}" },
-                    { name: "Cabbage and Carrot Paratha", description: "Whole wheat flatbreads stuffed with a mixture of grated cabbage and carrots, seasoned with spices. Served with yogurt, this meal is high in fiber and helps maintain stable blood sugar levels", image: "{% static 'images/diabetes/d3breakfast2.jpg' %}" },
-                    { name: "Greek Yogurt with Berries and Nuts", description: "A bowl of plain Greek yogurt topped with a handful of mixed berries (like strawberries and blueberries) and a sprinkle of nuts (such as almonds or walnuts). This breakfast is rich in protein and healthy fats", image: "{% static 'images/diabetes/d3breakfast3.gif' %}" }
+                    { name: "Vegetable Poha", description: "Flattened rice cooked with mustard seeds, turmeric, peas, and diced potatoes, garnished with fresh coriander and lemon juice. This dish is light yet filling and provides fiber and essential nutrients", image: "{% static 'images/diabetes/d3breakfast1.jpeg' %}", nutrition: { calories: 250, carbs: 45, protein: 6, fat: 5 } },
+                    { name: "Cabbage and Carrot Paratha", description: "Whole wheat flatbreads stuffed with a mixture of grated cabbage and carrots, seasoned with spices. Served with yogurt, this meal is high in fiber and helps maintain stable blood sugar levels", image: "{% static 'images/diabetes/d3breakfast2.jpg' %}", nutrition: { calories: 280, carbs: 40, protein: 8, fat: 10 } },
+                    { name: "Greek Yogurt with Berries and Nuts", description: "A bowl of plain Greek yogurt topped with a handful of mixed berries (like strawberries and blueberries) and a sprinkle of nuts (such as almonds or walnuts). This breakfast is rich in protein and healthy fats", image: "{% static 'images/diabetes/d3breakfast3.gif' %}", nutrition: { calories: 300, carbs: 25, protein: 20, fat: 15 } }
                 ],
                 lunch: [
-                    { name: "Vegetable Daal", description: "A hearty mix of lentils cooked with assorted vegetables like spinach, carrots, and tomatoes, seasoned with spices. Serve it with a small portion of brown rice for a balanced meal rich in protein and fiber", image: "{% static 'images/diabetes/d3lunch1.gif' %}" },
-                    { name: "Stuffed Bitter Gourd (Karela)", description: "Bitter gourd filled with a mixture of spiced paneer or besan (chickpea flour) and sautéed onions. This dish is low in carbohydrates and helps control blood sugar levels", image: "{% static 'images/diabetes/d3lunch2.jpeg' %}" },
-                    { name: "Mixed Vegetable Soup", description: "A warm soup made from a variety of non-starchy vegetables like broccoli, cauliflower, and carrots, seasoned with herbs and spices. Pair it with a slice of whole grain bread for added fiber", image: "{% static 'images/diabetes/d3lunch3.gif' %}" }
+                    { name: "Vegetable Daal", description: "A hearty mix of lentils cooked with assorted vegetables like spinach, carrots, and tomatoes, seasoned with spices. Serve it with a small portion of brown rice for a balanced meal rich in protein and fiber", image: "{% static 'images/diabetes/d3lunch1.gif' %}", nutrition: { calories: 350, carbs: 55, protein: 18, fat: 8 } },
+                    { name: "Stuffed Bitter Gourd (Karela)", description: "Bitter gourd filled with a mixture of spiced paneer or besan (chickpea flour) and sautéed onions. This dish is low in carbohydrates and helps control blood sugar levels", image: "{% static 'images/diabetes/d3lunch2.jpeg' %}", nutrition: { calories: 220, carbs: 20, protein: 12, fat: 14 } },
+                    { name: "Mixed Vegetable Soup", description: "A warm soup made from a variety of non-starchy vegetables like broccoli, cauliflower, and carrots, seasoned with herbs and spices. Pair it with a slice of whole grain bread for added fiber", image: "{% static 'images/diabetes/d3lunch3.gif' %}", nutrition: { calories: 180, carbs: 30, protein: 8, fat: 5 } }
                 ],
                 dinner: [
-                    { name: "Tandoori Chicken or Paneer", description: "Marinated chicken or paneer cooked in a tandoor or oven, served with a side of cucumber salad. This dish is high in protein and low in carbohydrates", image: "{% static 'images/diabetes/d3dinner1.jpg' %}" },
-                    { name: "Baingan Bharta", description: "Roasted eggplant mashed and cooked with tomatoes, onions, and spices. Serve it with whole wheat roti for a nutritious meal that's low in glycemic index", image: "{% static 'images/diabetes/d3dinner2.jpg' %}" },
-                    { name: "Quinoa Vegetable Pulao", description: "A flavorful pulao made with quinoa, mixed vegetables, and spices. This dish is rich in protein and fiber while being low in carbohydrates compared to traditional rice pulao", image: "{% static 'images/diabetes/d3dinner3.gif' %}" }
+                    { name: "Tandoori Chicken or Paneer", description: "Marinated chicken or paneer cooked in a tandoor or oven, served with a side of cucumber salad. This dish is high in protein and low in carbohydrates", image: "{% static 'images/diabetes/d3dinner1.jpg' %}", nutrition: { calories: 300, carbs: 10, protein: 35, fat: 15 } },
+                    { name: "Baingan Bharta", description: "Roasted eggplant mashed and cooked with tomatoes, onions, and spices. Serve it with whole wheat roti for a nutritious meal that's low in glycemic index", image: "{% static 'images/diabetes/d3dinner2.jpg' %}", nutrition: { calories: 250, carbs: 35, protein: 8, fat: 12 } },
+                    { name: "Quinoa Vegetable Pulao", description: "A flavorful pulao made with quinoa, mixed vegetables, and spices. This dish is rich in protein and fiber while being low in carbohydrates compared to traditional rice pulao", image: "{% static 'images/diabetes/d3dinner3.gif' %}", nutrition: { calories: 280, carbs: 45, protein: 10, fat: 8 } }
                 ]
             }
         };
@@ -151,10 +163,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const diabetesTypeBtns = document.querySelectorAll('.diabetes-type-btn');
             const mealPlanDiv = document.getElementById('mealPlan');
-            const breakfastDiv = document.getElementById('breakfast').querySelector('div');
-            const lunchDiv = document.getElementById('lunch').querySelector('div');
-            const dinnerDiv = document.getElementById('dinner').querySelector('div');
-            const refreshButtons = document.querySelectorAll('.refresh-meals');
+            const mealSections = document.querySelectorAll('#mealPlan section');
 
             let currentType = '';
             let currentMeals = {
@@ -165,7 +174,9 @@
 
             diabetesTypeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const type = this.getAttribute('data-type');
+                    diabetesTypeBtns.forEach(b => b.classList.remove('bg-blue-600'));
+                    this.classList.add('bg-blue-600');
+                    const type = this.id.replace('Btn', '');
                     currentType = type;
                     resetCurrentMeals();
                     updateMealPlan(type);
@@ -173,15 +184,8 @@
                 });
             });
 
-            refreshButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const mealType = this.getAttribute('data-meal-type');
-                    refreshMeal(mealType);
-                });
-            });
-
             function resetCurrentMeals() {
-                currentMeals  = {
+                currentMeals = {
                     breakfast: 0,
                     lunch: 0,
                     dinner: 0
@@ -190,41 +194,63 @@
 
             function updateMealPlan(type) {
                 const plan = mealPlans[type];
-                updateMealSection(breakfastDiv, plan.breakfast[currentMeals.breakfast], 'Breakfast');
-                updateMealSection(lunchDiv, plan.lunch[currentMeals.lunch], 'Lunch');
-                updateMealSection(dinnerDiv, plan.dinner[currentMeals.dinner], 'Dinner');
+                mealSections.forEach(section => {
+                    const mealType = section.id;
+                    const contentDiv = section.querySelector('.meal-content');
+                    updateMealSection(contentDiv, plan[mealType][currentMeals[mealType]], mealType);
+                });
             }
 
             function updateMealSection(sectionDiv, meal, mealType) {
                 sectionDiv.innerHTML = `
-                    <div class="meal-card flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 bg-black p-4 rounded-none shadow">
-                        <div class="meal-card-content w-full md:w-2/3 text-center md:text-left">
-                            <h4 class="text-lg font-bold mb-2">${mealType} Option</h4>
-                            <h3 class="text-xl mb-2">${meal.name}</h3>
-                            <p class="text-sm md:text-base">${meal.description}</p>
+                    <div class="meal-card bg-gray-800 p-6 rounded-lg shadow-lg relative">
+                        <span class="meal-type-indicator">${mealType.charAt(0).toUpperCase() + mealType.slice(1)}</span>
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="w-full md:w-1/2 mb-4 md:mb-0 md:mr-4">
+                                <img src="${meal.image}" alt="${meal.name}" class="w-full h-64 object-cover rounded-lg">
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <h3 class="text-2xl font-bold mb-2">${meal.name}</h3>
+                                <p class="text-gray-300 mb-4">${meal.description}</p>
+                                <div class="nutritional-info">
+                                    <h4 class="font-semibold mb-2">Nutritional Information</h4>
+                                    <ul class="flex justify-between">
+                                        <li><i class="fas fa-fire mr-1"></i> ${meal.nutrition.calories} cal</li>
+                                        <li><i class="fas fa-bread-slice mr-1"></i> ${meal.nutrition.carbs}g carbs</li>
+                                        <li><i class="fas fa-drumstick-bite mr-1"></i> ${meal.nutrition.protein}g protein</li>
+                                        <li><i class="fas fa-cheese mr-1"></i> ${meal.nutrition.fat}g fat</li>
+                                    </ul>
+                                </div>
+                                <button class="refresh-meal btn w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mt-4" data-meal-type="${mealType}">
+                                    <i class="fas fa-sync-alt mr-2"></i>Show Another Option
+                                </button>
+                            </div>
                         </div>
-                        <div class="meal-card-image w-full md:w-1/3 h-48 bg-cover bg-center" style="background-image: url('${meal.image}');"></div>
                     </div>
                 `;
+
+                const refreshBtn = sectionDiv.querySelector('.refresh-meal');
+                refreshBtn.addEventListener('click', function() {
+                    const mealType = this.getAttribute('data-meal-type');
+                    refreshMeal(mealType);
+                });
             }
 
             function refreshMeal(mealType) {
                 const plan = mealPlans[currentType];
                 currentMeals[mealType] = (currentMeals[mealType] + 1) % plan[mealType].length;
-                const sectionDiv = document.getElementById(mealType).querySelector('div');
-                updateMealSection(sectionDiv, plan[mealType][currentMeals[mealType]], mealType.charAt(0).toUpperCase() + mealType.slice(1));
+                const sectionDiv = document.getElementById(mealType).querySelector('.meal-content');
+                updateMealSection(sectionDiv, plan[mealType][currentMeals[mealType]], mealType);
             }
         });
     </script>
 </body>
 </html>
 
-
 {% block navbar %}
 {% endblock navbar %}
 
 {% block footer %}
 {% endblock footer %}
-
 
 {% endblock basepage %}

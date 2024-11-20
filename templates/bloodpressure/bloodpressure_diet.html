@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -13,24 +12,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: black;
+            color: #e2e8f0;
+        }
         .meal-card {
-            background-color: #111;
+            background-color: #2d3748;
             transition: all 0.3s ease;
-            border: 1px solid white;
+            border: 1px solid #4a5568;
         }
         .meal-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(66, 153, 225, 0.2);
         }
         .btn {
-            border: 1px solid white;
             transition: all 0.3s ease;
         }
         .btn:hover {
-            background-color: olive;
+            background-color: #4299e1;
         }
-        @media (max-width: 768px) {
+        .bp-type-btn.active {
+            background-color: #4299e1;
+            color: #ffffff;
+        }
+        .meal-type-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #4299e1;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .nutritional-info {
+            background-color: rgba(66, 153, 225, 0.1);
+            border: 1px solid #4299e1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        @media (max-width: 640px) {
             .bp-type-buttons {
                 flex-direction: column;
                 gap: 1rem;
@@ -38,115 +64,92 @@
             .meal-card {
                 flex-direction: column;
             }
-            .meal-card-content {
-                width: 100%;
-                text-align: center;
-            }
-            .meal-card-image {
-                width: 100%;
-                margin-top: 1rem;
-            }
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen" style="margin-top: 2rem;">
-   
-    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-10" style="margin-top: 2rem;">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
+<body class="bg-gray-900 text-gray-100">
+    <a href="{% url 'wellnessdata' %}" class="back-button">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
+    <div class="container mx-auto px-4 py-8 mt-16">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Blood Pressure Diet Planner</h1>
+            <p class="text-xl text-blue-300">Your personal guide to a heart-healthy diet</p>
+        </header>
 
-    <main class="flex-grow p-4 mt-16">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold">Blood Pressure Diet Planner</h1>
-            </div>
+        <nav class="flex flex-wrap justify-center mb-8 gap-4">
+            <button id="preBtn" class="bp-type-btn px-6 py-3 text-lg font-semibold bg-gray-700 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105" data-type="pre">Pre-Hypertension</button>
+            <button id="stage1Btn" class="bp-type-btn px-6 py-3 text-lg font-semibold bg-gray-700 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105" data-type="stage1">Stage 1 Hypertension</button>
+            <button id="stage2Btn" class="bp-type-btn px-6 py-3 text-lg font-semibold bg-gray-700 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105" data-type="stage2">Stage 2 Hypertension</button>
+        </nav>
 
-            <!-- Mobile responsive button section -->
-            <div class="mb-8 text-center">
-                <h2 class="text-xl mb-4">Select your blood pressure condition:</h2>
-                <div class="bp-type-buttons flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-                    <button class="bp-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="pre">Pre-Hypertension</button>
-                    <button class="bp-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="stage1">Stage 1 Hypertension</button>
-                    <button class="bp-type-btn btn bg-black text-white font-bold py-2 px-4 rounded-none" data-type="stage2">Stage 2 Hypertension</button>
-                </div>
-            </div>
-
-            <!-- Mobile responsive meal plan section -->
-            <div id="mealPlan" class="hidden">
-                <h2 class="text-xl md:text-2xl mb-4 text-center">Your Personalized Meal Plan</h2>
-                <p class="mb-4 text-center">Click on a meal type to see more options!</p>
-                <div class="space-y-8">
-                    <div id="breakfast" class="text-center">
-                        <h3 class="text-lg md:text-xl mb-4">Breakfast</h3>
-                        <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="breakfast">Show Another Breakfast Option</button>
-                    </div>
-                    <div id="lunch" class="text-center">
-                        <h3 class="text-lg md:text-xl mb-4">Lunch</h3>
-                        <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="lunch">Show Another Lunch Option</button>
-                    </div>
-                    <div id="dinner" class="text-center">
-                        <h3 class="text-lg md:text-xl mb-4">Dinner</h3>
-                        <div class="space-y-4"></div>
-                        <button class="refresh-meals btn bg-black text-white font-bold py-2 px-4 rounded-none mt-4 w-full md:w-auto" data-meal-type="dinner">Show Another Dinner Option</button>
-                    </div>
-                </div>
-            </div>
+        <div id="mealPlan" class="hidden space-y-12">
+            <section id="breakfast">
+                <h2 class="text-3xl font-bold mb-6 text-center">Breakfast</h2>
+                <div class="meal-content"></div>
+            </section>
+            <section id="lunch">
+                <h2 class="text-3xl font-bold mb-6 text-center">Lunch</h2>
+                <div class="meal-content"></div>
+            </section>
+            <section id="dinner">
+                <h2 class="text-3xl font-bold mb-6 text-center">Dinner</h2>
+                <div class="meal-content"></div>
+            </section>
         </div>
-    </main>
+    </div>
 
     <script>
         const mealPlans = {
             pre: {
                 breakfast: [
-                    { name: "Multigrain Vegetable Uttapam", description: "Savory pancakes made with a mix of whole grains and vegetables. Rich in fiber and complex carbohydrates for sustained energy. Serve with a small portion of coconut chutney and sambar (lightly salted)", image: "{% static 'images/bloodpressure/bbreakfast1.jpeg' %}" },
-                    { name: "Besan Chilla with Mint Chutney", description: "Savory pancakes made from chickpea flour (besan). High in protein and fiber, helps maintain satiety. Pair with homemade mint chutney and a small bowl of yogurt", image: "{% static 'images/bloodpressure/bbreakfast2.jpg' %}" },
-                    { name: "Wheat Bran and Apple Porridge", description: "Whole wheat porridge cooked with wheat bran and diced apples. High in soluble fiber, which can help lower blood pressure. Top with a handful of unsalted mixed nuts for healthy fats", image: "{% static 'images/bloodpressure/bbreakfast3.jpg' %}" }
+                    { name: "Multigrain Vegetable Uttapam", description: "Savory pancakes made with a mix of whole grains and vegetables. Rich in fiber and complex carbohydrates for sustained energy. Serve with a small portion of coconut chutney and sambar (lightly salted)", image: "{% static 'images/bloodpressure/bbreakfast1.jpeg' %}",nutrition: { calories: 320, carbs: 50, protein: 10, fat: 8 } },
+                    { name: "Besan Chilla with Mint Chutney", description: "Savory pancakes made from chickpea flour (besan). High in protein and fiber, helps maintain satiety. Pair with homemade mint chutney and a small bowl of yogurt", image: "{% static 'images/bloodpressure/bbreakfast2.jpg' %}", nutrition: { calories: 280, carbs: 35, protein: 12, fat: 9 } },
+                    { name: "Wheat Bran and Apple Porridge", description: "Whole wheat porridge cooked with wheat bran and diced apples. High in soluble fiber, which can help lower blood pressure. Top with a handful of unsalted mixed nuts for healthy fats", image: "{% static 'images/bloodpressure/bbreakfast3.jpg' %}", nutrition: { calories: 300, carbs: 55, protein: 8, fat: 6 } }
                 ],
                 lunch: [
-                    { name: "Mixed Dal Khichdi with Vegetable Raita", description: "One-pot meal of rice and mixed lentils with mild spices. Balanced meal providing complete proteins and complex carbs. Serve with vegetable raita for probiotics and added nutrients", image: "{% static 'images/bloodpressure/blunch1.jpeg' %}" },
-                    { name: "Grilled Paneer and Vegetable Wrap", description: "Whole wheat roti filled with grilled paneer and mixed vegetables. Good source of calcium and various vitamins and minerals. Accompany with a small serving of cucumber and tomato salad", image: "{% static 'images/bloodpressure/blunch2.jpeg' %}" },
-                    { name: "Chickpea and Spinach Curry with Brown Rice", description: "Nutrient-dense curry rich in folate and magnesium. Use low-sodium vegetable broth for added flavor without excess salt. Serve with a small portion of brown rice and a wedge of lemon", image: "{% static 'images/bloodpressure/blunch3.jpg' %}" }
+                    { name: "Mixed Dal Khichdi with Vegetable Raita", description: "One-pot meal of rice and mixed lentils with mild spices. Balanced meal providing complete proteins and complex carbs. Serve with vegetable raita for probiotics and added nutrients", image: "{% static 'images/bloodpressure/blunch1.jpeg' %}" , nutrition: { calories: 400, carbs: 55, protein: 18, fat: 10 } },
+                    { name: "Grilled Paneer and Vegetable Wrap", description: "Whole wheat roti filled with grilled paneer and mixed vegetables. Good source of calcium and various vitamins and minerals. Accompany with a small serving of cucumber and tomato salad", image: "{% static 'images/bloodpressure/blunch2.jpeg' %}", nutrition: { calories: 350, carbs: 40, protein: 15, fat: 12 } },
+                    { name: "Chickpea and Spinach Curry with Brown Rice", description: "Nutrient-dense curry rich in folate and magnesium. Use low-sodium vegetable broth for added flavor without excess salt. Serve with a small portion of brown rice and a wedge of lemon", image: "{% static 'images/bloodpressure/blunch3.jpg' %}", nutrition: { calories: 420, carbs: 50, protein: 20, fat: 8 } }
                 ],
                 dinner: [
-                    { name: "Baked Fish with Vegetable Upma", description: "Fish seasoned with herbs and lemon, then baked. Rich in omega-3 fatty acids, beneficial for heart health. Serve with vegetable upma made from semolina and mixed vegetables", image: "{% static 'images/bloodpressure/bdinner1.jpeg' %}" },
-                    { name: "Lentil and Vegetable Soup with Multigrain Roti", description: "Hearty soup packed with lentils and assorted vegetables. High in fiber and plant-based proteins. Pair with one small multigrain roti and a side of roasted pumpkin seeds", image: "{% static 'images/bloodpressure/bdinner2.jpg' %}" },
-                    { name: "Tandoori Chicken with Quinoa Biryani", description: "Chicken marinated in yogurt and spices, then grilled. Lean protein source with flavorful spices instead of excess salt. Serve with quinoa biryani cooked with vegetables and mild spices", image: "{% static 'images/bloodpressure/bdinner3.jpeg' %}" }
+                    { name: "Baked Fish with Vegetable Upma", description: "Fish seasoned with herbs and lemon, then baked. Rich in omega-3 fatty acids, beneficial for heart health. Serve with vegetable upma made from semolina and mixed vegetables", image: "{% static 'images/bloodpressure/bdinner1.jpeg' %}", nutrition: { calories: 350, carbs: 40, protein: 22, fat: 8 } },
+                    { name: "Lentil and Vegetable Soup with Multigrain Roti", description: "Hearty soup packed with lentils and assorted vegetables. High in fiber and plant-based proteins. Pair with one small multigrain roti and a side of roasted pumpkin seeds", image: "{% static 'images/bloodpressure/bdinner2.jpg' %}" , nutrition: { calories: 300, carbs: 35, protein: 15, fat: 7 } },
+                    { name: "Tandoori Chicken with Quinoa Biryani", description: "Chicken marinated in yogurt and spices, then grilled. Lean protein source with flavorful spices instead of excess salt. Serve with quinoa biryani cooked with vegetables and mild spices", image: "{% static 'images/bloodpressure/bdinner3.jpeg' %}" , nutrition: { calories: 400, carbs: 45, protein: 25, fat: 9 } }
                 ]
             },
             stage1: {
                 breakfast: [
-                    { name: "Oats Idli", description: "Steamed cakes made from oats and lentils. Low in sodium, high in fiber for heart health. Serve with sambar (lentil soup) made with less salt", image: "{% static 'images/bloodpressure/b1breakfast1.jpeg' %}" },
-                    { name: "Ragi Dosa", description: "Thin pancakes made from finger millet (ragi) flour. Rich in calcium and potassium, beneficial for blood pressure. Pair with tomato chutney prepared with minimal salt", image: "{% static 'images/bloodpressure/b1breakfast2.jpg' %}" },
-                    { name: "Vegetable Poha", description: "Flattened rice cooked with vegetables and minimal spices. Low-fat, easy to digest, and rich in B vitamins. Add roasted peanuts for healthy fats and protein", image: "{% static 'images/bloodpressure/b1breakfast3.jpeg' %}" }
+                    { name: "Oats Idli", description: "Steamed cakes made from oats and lentils. Low in sodium, high in fiber for heart health. Serve with sambar (lentil soup) made with less salt", image: "{% static 'images/bloodpressure/b1breakfast1.jpeg' %}", nutrition: { calories: 180, carbs: 30, protein: 6, fat: 3  } },
+                    { name: "Ragi Dosa", description: "Thin pancakes made from finger millet (ragi) flour. Rich in calcium and potassium, beneficial for blood pressure. Pair with tomato chutney prepared with minimal salt", image: "{% static 'images/bloodpressure/b1breakfast2.jpg' %}", nutrition: { calories: 200, carbs: 35, protein: 5, fat: 4 } },
+                    { name: "Vegetable Poha", description: "Flattened rice cooked with vegetables and minimal spices. Low-fat, easy to digest, and rich in B vitamins. Add roasted peanuts for healthy fats and protein", image: "{% static 'images/bloodpressure/b1breakfast3.jpeg' %}", nutrition: { calories: 220, carbs: 38, protein: 7, fat: 5  } }
                 ],
                 lunch: [
-                    { name: "Sprouted Moong Salad", description: "Protein-rich sprouted green gram with chopped vegetables. High in potassium and magnesium, important for blood pressure control. Dress with lemon juice and a pinch of cumin powder instead of salt", image: "{% static 'images/bloodpressure/b1lunch1.jpg' %}" },
-                    { name: "Rajma Masala with Brown Rice", description: "Kidney beans curry made with low-sodium tomato base. Rich in fiber and plant-based protein. Serve with a small portion of brown rice and cucumber raita", image: "{% static 'images/bloodpressure/b1lunch2.jpeg' %}" },
-                    { name: "Lauki (Bottle Gourd) Kofta Curry", description: "Steamed bottle gourd dumplings in a yogurt-based gravy. Low in calories, high in water content, good for hydration. Accompany with one small whole wheat roti and salad", image: "{% static 'images/bloodpressure/b1lunch3.jpg' %}" }
+                    { name: "Sprouted Moong Salad", description: "Protein-rich sprouted green gram with chopped vegetables. High in potassium and magnesium, important for blood pressure control. Dress with lemon juice and a pinch of cumin powder instead of salt", image: "{% static 'images/bloodpressure/b1lunch1.jpg' %}", nutrition: { calories: 150, carbs: 20, protein: 10, fat: 2 } },
+                    { name: "Rajma Masala with Brown Rice", description: "Kidney beans curry made with low-sodium tomato base. Rich in fiber and plant-based protein. Serve with a small portion of brown rice and cucumber raita", image: "{% static 'images/bloodpressure/b1lunch2.jpeg' %}", nutrition: { calories: 400, carbs: 55, protein: 15, fat: 8 } },
+                    { name: "Lauki (Bottle Gourd) Kofta Curry", description: "Steamed bottle gourd dumplings in a yogurt-based gravy. Low in calories, high in water content, good for hydration. Accompany with one small whole wheat roti and salad", image: "{% static 'images/bloodpressure/b1lunch3.jpg' %}", nutrition: { calories: 320, carbs: 45, protein: 10, fat: 6 } }
                 ],
                 dinner: [
-                    { name: "Baked Methi Matar Paneer", description: "Cottage cheese with fenugreek leaves and green peas, baked instead of fried. Rich in calcium and vitamin K, beneficial for heart health. Serve with a small portion of quinoa pulao made with low-sodium vegetable stock", image: "{% static 'images/bloodpressure/b1dinner1.jpg' %}" },
-                    { name: "Grilled Fish with Mint-Coriander Chutney", description: "Fish marinated in yogurt and spices, then grilled. High in omega-3 fatty acids, good for heart health. Pair with steamed vegetables and a small serving of millet", image: "{% static 'images/bloodpressure/b1dinner2.jpeg' %}" },
-                    { name: "Mixed Vegetable Daliya", description: "Broken wheat cooked with assorted vegetables. High in fiber and B vitamins, helps in managing blood pressure. Add a side of roasted chickpeas for extra protein and fiber", image: "{% static 'images/bloodpressure/b1dinner3.jpg' %}" }
+                    { name: "Baked Methi Matar Paneer", description: "Cottage cheese with fenugreek leaves and green peas, baked instead of fried. Rich in calcium and vitamin K, beneficial for heart health. Serve with a small portion of quinoa pulao made with low-sodium vegetable stock", image: "{% static 'images/bloodpressure/b1dinner1.jpg' %}", nutrition: { calories: 350, carbs: 40, protein: 18, fat: 10 } },
+                    { name: "Grilled Fish with Mint-Coriander Chutney", description: "Fish marinated in yogurt and spices, then grilled. High in omega-3 fatty acids, good for heart health. Pair with steamed vegetables and a small serving of millet", image: "{% static 'images/bloodpressure/b1dinner2.jpeg' %}", nutrition: { calories: 300, carbs: 25, protein: 22, fat: 7 } },
+                    { name: "Mixed Vegetable Daliya", description: "Broken wheat cooked with assorted vegetables. High in fiber and B vitamins, helps in managing blood pressure. Add a side of roasted chickpeas for extra protein and fiber", image: "{% static 'images/bloodpressure/b1dinner3.jpg' %}", nutrition: { calories: 280, carbs: 35, protein: 8, fat: 4 } }
                 ]
             },
             stage2: {
                 breakfast: [
-                    { name: "Daliya Khichdi", description: "Broken wheat cooked with moong dal and vegetables. Very low in sodium, high in fiber and plant-based protein. Add a tablespoon of ground flaxseeds for omega-3 fatty acids", image: "{% static 'images/bloodpressure/b3breakfast1.jpg' %}" },
-                    { name: "Spinach and Oats Dosa", description: "Thin pancakes made with oats and spinach. Rich in potassium, magnesium, and nitrates that help lower blood pressure. Serve with homemade tomato chutney (no added salt)", image: "{% static 'images/bloodpressure/b3breakfast2.jpg' %}" },
-                    { name: "Beetroot Ragi Idli", description: "Steamed cakes made from finger millet and beetroot. Beetroot is high in nitrates, which can help reduce blood pressure. Pair with a small portion of coconut chutney (unsalted)", image: "{% static 'images/bloodpressure/b3breakfast3.jpeg' %}" }
+                    { name: "Daliya Khichdi", description: "Broken wheat cooked with moong dal and vegetables. Very low in sodium, high in fiber and plant-based protein. Add a tablespoon of ground flaxseeds for omega-3 fatty acids", image: "{% static 'images/bloodpressure/b3breakfast1.jpg' %}", nutrition: { calories: 250, carbs: 38, protein: 10, fat: 4 } },
+                    { name: "Spinach and Oats Dosa", description: "Thin pancakes made with oats and spinach. Rich in potassium, magnesium, and nitrates that help lower blood pressure. Serve with homemade tomato chutney (no added salt)", image: "{% static 'images/bloodpressure/b3breakfast2.jpg' %}", nutrition: { calories: 200, carbs: 30, protein: 6, fat: 3 } },
+                    { name: "Beetroot Ragi Idli", description: "Steamed cakes made from finger millet and beetroot. Beetroot is high in nitrates, which can help reduce blood pressure. Pair with a small portion of coconut chutney (unsalted)", image: "{% static 'images/bloodpressure/b3breakfast3.jpeg' %}", nutrition: { calories: 210, carbs: 32, protein: 5, fat: 4 } }
                 ],
                 lunch: [
-                    { name: "Lobia (Black-eyed Peas) Curry with Cauliflower Rice", description: "Black-eyed peas curry made with low-sodium tomato base and spices. High in potassium and fiber, helps in blood pressure regulation. Serve over cauliflower 'rice' for a low-carb, low-sodium alternative", image: "{% static 'images/bloodpressure/b3lunch1.jpeg' %}" },
-                    { name: "Masoor Dal and Vegetable Khichdi", description: "One-pot meal with red lentils, brown rice, and mixed vegetables. Balanced meal rich in protein, fiber, and essential nutrients. Cook with no added salt, flavor with cumin, turmeric, and fresh herbs", image: "{% static 'images/bloodpressure/b3lunch2.jpeg' %}" },
-                    { name: "Grilled Chicken Tikka with Quinoa Pulao", description: "Chicken marinated in yogurt and spices, then grilled. High in protein, low in saturated fat. Serve with quinoa pulao cooked in low-sodium vegetable broth and mixed vegetables", image: "{% static 'images/bloodpressure/b3lunch3.jpeg' %}" }
+                    { name: "Lobia (Black-eyed Peas) Curry with Cauliflower Rice", description: "Black-eyed peas curry made with low-sodium tomato base and spices. High in potassium and fiber, helps in blood pressure regulation. Serve over cauliflower 'rice' for a low-carb, low-sodium alternative", image: "{% static 'images/bloodpressure/b3lunch1.jpeg' %}", nutrition: { calories: 300, carbs: 35, protein: 15, fat: 6 } },
+                    { name: "Masoor Dal and Vegetable Khichdi", description: "One-pot meal with red lentils, brown rice, and mixed vegetables. Balanced meal rich in protein, fiber, and essential nutrients. Cook with no added salt, flavor with cumin, turmeric, and fresh herbs", image: "{% static 'images/bloodpressure/b3lunch2.jpeg' %}", nutrition: { calories: 400, carbs: 50, protein: 18, fat: 8 } },
+                    { name: "Grilled Chicken Tikka with Quinoa Pulao", description: "Chicken marinated in yogurt and spices, then grilled. High in protein, low in saturated fat. Serve with quinoa pulao cooked in low-sodium vegetable broth and mixed vegetables", image: "{% static 'images/bloodpressure/b3lunch3.jpeg' %}", nutrition: { calories: 450, carbs: 40, protein: 25, fat: 9 } }
                 ],
                 dinner: [
-                    { name: "Baked Fish in Banana Leaf", description: "Fish seasoned with garlic, ginger, and lemon, wrapped and baked in banana leaf. Rich in omega-3 fatty acids, beneficial for heart health. Serve with steamed vegetables and a small portion of millet", image: "{% static 'images/bloodpressure/b3dinner1.jpg' %}" },
-                    { name: "Tofu and Mixed Vegetable Curry", description: "Firm tofu and assorted vegetables in a tomato-based curry. High in plant-based protein and various vitamins and minerals. Pair with one small jowar (sorghum) roti and a side of cucumber raita", image: "{% static 'images/bloodpressure/b3dinner2.jpeg' %}" },
-                    { name: "Mushroom and Peas Brown Rice Pulao", description: "Brown rice cooked with mushrooms, green peas, and mild spices. Mushrooms are a good source of potassium and antioxidants. Serve with a side of roasted pumpkin seeds for extra magnesium", image: "{% static 'images/bloodpressure/b3dinner3.jpeg' %}" }
+                    { name: "Baked Fish in Banana Leaf", description: "Fish seasoned with garlic, ginger, and lemon, wrapped and baked in banana leaf. Rich in omega-3 fatty acids, beneficial for heart health. Serve with steamed vegetables and a small portion of millet", image: "{% static 'images/bloodpressure/b3dinner1.jpg' %}", nutrition: { calories: 300, carbs: 28, protein: 22, fat: 7 } },
+                    { name: "Tofu and Mixed Vegetable Curry", description: "Firm tofu and assorted vegetables in a tomato-based curry. High in plant-based protein and various vitamins and minerals. Pair with one small jowar (sorghum) roti and a side of cucumber raita", image: "{% static 'images/bloodpressure/b3dinner2.jpeg' %}", nutrition: { calories: 280, carbs: 25, protein: 14, fat: 6 } },
+                    { name: "Mushroom and Peas Brown Rice Pulao", description: "Brown rice cooked with mushrooms, green peas, and mild spices. Mushrooms are a good source of potassium and antioxidants. Serve with a side of roasted pumpkin seeds for extra magnesium", image: "{% static 'images/bloodpressure/b3dinner3.jpeg' %}", nutrition: { calories: 330, carbs: 45, protein: 10, fat: 5 } }
                 ]
             }
         };
@@ -154,10 +157,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const bpTypeBtns = document.querySelectorAll('.bp-type-btn');
             const mealPlanDiv = document.getElementById('mealPlan');
-            const breakfastDiv = document.getElementById('breakfast').querySelector('div');
-            const lunchDiv = document.getElementById('lunch').querySelector('div');
-            const dinnerDiv = document.getElementById('dinner').querySelector('div');
-            const refreshButtons = document.querySelectorAll('.refresh-meals');
+            const mealSections = document.querySelectorAll('#mealPlan section');
 
             let currentType = '';
             let currentMeals = {
@@ -168,18 +168,13 @@
 
             bpTypeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const type =   this.getAttribute('data-type');
+                    bpTypeBtns.forEach(b => b.classList.remove('bg-blue-600'));
+                    this.classList.add('bg-blue-600');
+                    const type = this.getAttribute('data-type');
                     currentType = type;
                     resetCurrentMeals();
                     updateMealPlan(type);
                     mealPlanDiv.classList.remove('hidden');
-                });
-            });
-
-            refreshButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const mealType = this.getAttribute('data-meal-type');
-                    refreshMeal(mealType);
                 });
             });
 
@@ -193,31 +188,55 @@
 
             function updateMealPlan(type) {
                 const plan = mealPlans[type];
-                updateMealSection(breakfastDiv, plan.breakfast[currentMeals.breakfast], 'Breakfast');
-                updateMealSection(lunchDiv, plan.lunch[currentMeals.lunch], 'Lunch');
-                updateMealSection(dinnerDiv, plan.dinner[currentMeals.dinner], 'Dinner');
+                mealSections.forEach(section => {
+                    const mealType = section.id;
+                    const contentDiv = section.querySelector('.meal-content');
+                    updateMealSection(contentDiv, plan[mealType][currentMeals[mealType]], mealType);
+                });
             }
-
             function updateMealSection(sectionDiv, meal, mealType) {
                 sectionDiv.innerHTML = `
-                    <div class="meal-card flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 bg-black p-4 rounded-none shadow">
-                        <div class="meal-card-content w-full md:w-2/3 text-center md:text-left">
-                            <h4 class="text-lg font-bold mb-2">${mealType} Option</h4>
-                            <h3 class="text-xl mb-2">${meal.name}</h3>
-                            <p class="text-sm md:text-base">${meal.description}</p>
+                    <div class="meal-card bg-gray-800 p-6 rounded-lg shadow-lg relative">
+                        <span class="meal-type-indicator">${mealType.charAt(0).toUpperCase() + mealType.slice(1)}</span>
+                        <div class="flex flex-col md:flex-row items-center">
+                            <div class="w-full md:w-1/2 mb-4 md:mb-0 md:mr-4">
+                                <img src="${meal.image}" alt="${meal.name}" class="w-full h-64 object-cover rounded-lg">
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <h3 class="text-2xl font-bold mb-2">${meal.name}</h3>
+                                <p class="text-gray-300 mb-4">${meal.description}</p>
+                                <div class="nutritional-info">
+                                    <h4 class="font-semibold mb-2">Nutritional Information</h4>
+                                    <ul class="flex justify-between">
+                                        <li><i class="fas fa-fire mr-1"></i> ${meal.nutrition.calories} cal</li>
+                                        <li><i class="fas fa-bread-slice mr-1"></i> ${meal.nutrition.carbs}g carbs</li>
+                                        <li><i class="fas fa-drumstick-bite mr-1"></i> ${meal.nutrition.protein}g protein</li>
+                                        <li><i class="fas fa-cheese mr-1"></i> ${meal.nutrition.fat}g fat</li>
+                                    </ul>
+                                </div>
+                                <button class="refresh-meal btn w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mt-4" data-meal-type="${mealType}">
+                                    <i class="fas fa-sync-alt mr-2"></i>Show Another Option
+                                </button>
+                            </div>
                         </div>
-                        <div class="meal-card-image w-full md:w-1/3 h-48 bg-cover bg-center" style="background-image: url('${meal.image}');"></div>
                     </div>
                 `;
+
+                const refreshBtn = sectionDiv.querySelector('.refresh-meal');
+                refreshBtn.addEventListener('click', function() {
+                    const mealType = this.getAttribute('data-meal-type');
+                    refreshMeal(mealType);
+                });
             }
 
             function refreshMeal(mealType) {
                 const plan = mealPlans[currentType];
                 currentMeals[mealType] = (currentMeals[mealType] + 1) % plan[mealType].length;
-                const sectionDiv = document.getElementById(mealType).querySelector('div');
-                updateMealSection(sectionDiv, plan[mealType][currentMeals[mealType]], mealType.charAt(0).toUpperCase() + mealType.slice(1));
+                const sectionDiv = document.getElementById(mealType).querySelector('.meal-content');
+                updateMealSection(sectionDiv, plan[mealType][currentMeals[mealType]], mealType);
             }
         });
+           
     </script>
 </body>
 </html>
@@ -228,15 +247,4 @@
 {% block footer %}
 {% endblock footer %}
 
-
 {% endblock basepage %}
-
-
-
-
-
-
-
-
-
-
