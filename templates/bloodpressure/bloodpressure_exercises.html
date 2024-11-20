@@ -15,15 +15,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/8.4.5/swiper-bundle.min.js"></script>
 
     <style>
-
         body {
             font-family: 'Courier Prime', monospace;
         }
-
-
         .chart-canvas {
             width: 100%;
-            height: 200px;
+            height: 300px;
             max-height: 400px;
             object-fit: contain;
         }
@@ -37,22 +34,27 @@
         .swiper-button-prev::after {
             font-size: 20px;
         }
+        @media (max-width: 640px) {
+            .swiper-button-next,
+            .swiper-button-prev {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
-    <a href="{% url 'wellnessdata' %}" class="back-button">
-        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
+    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-12 left-4 z-50">
+        <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back" class="w-8 h-8">
     </a>
-    <div class="container mx-auto px-4 py-8" style="margin-top: 3.5rem;">
+    <div class="container mx-auto px-4 py-8 mt-16">
         <nav class="flex justify-center items-center mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold">Blood Pressure Exercise Hub</h1>
-            <div></div>
+            <h1 class="text-xl md:text-2xl lg:text-3xl font-bold">Blood Pressure Exercise Hub</h1>
         </nav>
 
-        <div class="flex justify-between mb-8 border-b border-gray-700">
-            <button id="exercisesTabBtn" class="px-4 py-2 text-lg font-semibold border-b-2 border-blue-500">EXERCISES</button>
-            <button id="trackerTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE TRACKER</button>
-            <button id="logTabBtn" class="px-4 py-2 text-lg font-semibold text-gray-400">EXERCISE LOG</button>
+        <div class="flex flex-wrap justify-between mb-8 border-b border-gray-700">
+            <button id="exercisesTabBtn" class="px-2 py-2 text-sm md:text-base lg:text-lg font-semibold border-b-2 border-blue-500 flex-grow">EXERCISES</button>
+            <button id="trackerTabBtn" class="px-2 py-2 text-sm md:text-base lg:text-lg font-semibold text-gray-400 flex-grow">EXERCISE TRACKER</button>
+            <button id="logTabBtn" class="px-2 py-2 text-sm md:text-base lg:text-lg font-semibold text-gray-400 flex-grow">EXERCISE LOG</button>
         </div>
 
         <div id="exercises" class="space-y-8">
@@ -314,7 +316,7 @@
         </div>
         <!-- Exercise Log Form Section -->
         <div id="logForm" class="hidden space-y-8">
-            <div class="bg-gray-800 p-6 rounded-lg">
+            <div class="bg-gray-800 p-4 md:p-6 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Log Your Exercise</h3>
                 <form method="POST" action="{% url 'bloodpressureexercises' %}" class="space-y-4">
                     {% csrf_token %}
@@ -328,7 +330,7 @@
         
         <div id="tracker" class="hidden space-y-8">
             <!-- Blood Pressure & Exercise Impact -->
-            <div class="bg-gray-800 p-6 rounded-lg mb-8">
+            <div class="bg-gray-800 p-4 md:p-6 rounded-lg mb-8">
                 <h3 class="text-lg font-semibold mb-4">Blood Pressure Trends</h3>
                 <canvas id="bpChart" class="chart-canvas"></canvas>
                 <script id="bp-data" type="application/json">
@@ -341,38 +343,37 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 {% for day, stats in daily_stats.items %}
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">Exercise Minutes</h3>
-                    <p class="text-3xl font-bold">{{ stats.exercise_minutes }}</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Exercise Minutes</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ stats.exercise_minutes }}</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">BP Stability</h3>
-                    <p class="text-3xl font-bold">{{ stats.bp_stability|floatformat:0 }}%</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">BP Stability</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ stats.bp_stability|floatformat:0 }}%</p>
                 </div>
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">Active Days</h3>
-                    <p class="text-3xl font-bold">{{ active_days }}</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Active Days</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ active_days }}</p>
                 </div>
-                
                 <div class="bg-gray-800 p-4 rounded-lg text-center">
-                    <h3 class="text-sm font-semibold mb-2">Energy Level</h3>
-                    <p class="text-3xl font-bold">{{ stats.energy_level|floatformat:0 }}</p>
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Energy Level</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ stats.energy_level|floatformat:0 }}</p>
                 </div>
                 {% endfor %}
             </div>
 
             <!-- Exercise Log -->
-            <div class="bg-gray-800 p-6 rounded-lg">
+            <div class="bg-gray-800 p-4 md:p-6 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Recent Exercises</h3>
                 <div class="space-y-4">
                     {% for log in exercise_logs %}
-                    <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between p-3 bg-gray-700 rounded">
                         <div>
                             <h4 class="font-semibold">{{ log.get_exercise_type_display }}</h4>
                             <p class="text-sm text-gray-400">Feeling: {{ log.get_feeling_after_exercise_display }}</p>
                             <p class="text-sm text-gray-400">Duration: {{ log.duration }} minutes</p>
                             <p class="text-sm text-gray-400">{{ log.notes }}</p>
                         </div>
-                        <span class="text-sm text-gray-400">{{ log.date|date:"l, F j" }}</span>
+                        <span class="text-sm text-gray-400 mt-2 md:mt-0">{{ log.date|date:"l, F j" }}</span>
                     </div>
                     {% endfor %}
                 </div>
@@ -380,26 +381,26 @@
 
 
             <!-- Blood Pressure Exercise Insights -->
-            <div class="bg-gray-800 p-6 rounded-lg">
+            <div class="bg-gray-800 p-4 md:p-6 rounded-lg">
                 <h3 class="text-lg font-semibold mb-4">Blood Pressure Exercise Insights</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="text-center p-4 bg-blue-500 rounded-lg shadow-lg">
                         <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
-                            <img src="{% static 'images/bloodpressure/bp.jpg' %}" alt="BP Control" />
+                            <img src="{% static 'images/bloodpressure/bp.jpg' %}" alt="BP Control" class="w-12 h-12 object-cover rounded-full" />
                         </div>
                         <h4 class="text-lg text-white font-semibold">BP Control</h4>
                         <p class="text-sm text-white">Exercise helps stabilize your blood pressure levels. Aim for regular activity to keep your levels in check.</p>
                     </div>
                     <div class="text-center p-4 bg-green-500 rounded-lg shadow-lg">
                         <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
-                            <img src="{% static 'images/bloodpressure/bactive.jpg' %}" alt="Active" />
+                            <img src="{% static 'images/bloodpressure/bactive.jpg' %}" alt="Active" class="w-12 h-12 object-cover rounded-full" />
                         </div>
                         <h4 class="text-lg text-white font-semibold">Active Days</h4>
                         <p class="text-sm text-white">The more active days you have each week, the better your fitness and blood pressure control will be.</p>
                     </div>
                     <div class="text-center p-4 bg-yellow-500 rounded-lg shadow-lg">
                         <div class="w-16 h-16 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
-                            <img src="{% static 'images/bloodpressure/bboost.jpg' %}" alt="boost" />
+                            <img src="{% static 'images/bloodpressure/bboost.jpg' %}" alt="boost" class="w-12 h-12 object-cover rounded-full" />
                         </div>
                         <h4 class="text-lg text-white font-semibold">Energy Boost</h4>
                         <p class="text-sm text-white">Regular exercise boosts your energy levels, helping you stay active throughout the day and manage your blood pressure better.</p>
@@ -456,46 +457,54 @@
                 });
             });
     
-            
-                const bpData = JSON.parse(document.getElementById('bp-data').textContent);
-                const bpCtx = document.getElementById('bpChart');
-        
-                new Chart(bpCtx, {
-                    type: 'line',
-                    data: {
-                        labels: bpData.days,
-                        datasets: [
-                            {
-                                label: 'Feeling Great',
-                                data: bpData.feeling_great,
-                                borderColor: '#3B82F6',
-                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                                fill: true,
-                            },
-                            {
-                                label: 'Feeling Normal',
-                                data: bpData.feeling_normal,
-                                borderColor: '#F59E0B',
-                                backgroundColor: 'rgba(245, 158, 11, 0.2)',
-                                fill: true,
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
+            // Chart initialization
+            const bpData = JSON.parse(document.getElementById('bp-data').textContent);
+            const bpCtx = document.getElementById('bpChart');
+
+            new Chart(bpCtx, {
+                type: 'line',
+                data: {
+                    labels: bpData.days,
+                    datasets: [
+                        {
+                            label: 'Feeling Great',
+                            data: bpData.feeling_great,
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            fill: true,
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                            },
+                        {
+                            label: 'Feeling Normal',
+                            data: bpData.feeling_normal,
+                            borderColor: '#F59E0B',
+                            backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                            fill: true,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#fff' }
                         },
                     },
-                });
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#fff' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#fff' }
+                        }
+                    },
+                },
             });
+        });
             
     </script>
     
