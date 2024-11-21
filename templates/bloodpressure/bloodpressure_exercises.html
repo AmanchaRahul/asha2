@@ -405,10 +405,8 @@
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Existing Swiper initialization
             const swiperOptions = {
                 slidesPerView: 1,
                 spaceBetween: 20,
@@ -431,7 +429,6 @@
             new Swiper('.breathingSwiper', swiperOptions);
             new Swiper('.flexibilitySwiper', swiperOptions);
     
-            // Tab switching logic
             const tabs = [
                 document.getElementById('exercisesTabBtn'),
                 document.getElementById('trackerTabBtn'),
@@ -444,7 +441,7 @@
             ];
     
             tabs.forEach((tab, index) => {
-                tab?.addEventListener('click', () => {
+                tab.addEventListener('click', () => {
                     tabs.forEach((t, i) => {
                         t.classList.toggle('border-b-2', i === index);
                         t.classList.toggle('border-blue-500', i === index);
@@ -453,57 +450,53 @@
                     });
                 });
             });
-    
             
-                const bpData = JSON.parse(document.getElementById('bp-data').textContent);
-                const bpCtx = document.getElementById('bpChart');
+            const bpData = JSON.parse(document.getElementById('bp-data').textContent);
+            const bpCtx = document.getElementById('bpChart');
             
-                new Chart(bpCtx, {
-                    type: 'line',
-                    data: {
-                        labels: bpData.days,
-                        datasets: [
-                            {
-                                label: 'Feeling Great',
-                                data: bpData.feeling_great,
-                                borderColor: '#3B82F6',
-                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                                tension: 0.4, // Add curve to the line
-                                fill: true
-                            },
-                            {
-                                label: 'Feeling Normal',
-                                data: bpData.feeling_normal,
-                                borderColor: '#F59E0B',
-                                backgroundColor: 'rgba(245, 158, 11, 0.2)',
-                                tension: 0.4 // Add curve to the line
-                                fill: true,
-                                
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                labels: { color: '#fff' }
-                            },
-                            
+            new Chart(bpCtx, {
+                type: 'line',
+                data: {
+                    labels: bpData.days,
+                    datasets: [
+                        {
+                            label: 'Feeling Great',
+                            data: bpData.feeling_great,
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            tension: 0.4,
+                            fill: true
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100, // Ensure the y-axis goes from 0 to 100%
-                            },
+                        {
+                            label: 'Feeling Normal',
+                            data: bpData.feeling_normal,
+                            borderColor: '#F59E0B',
+                            backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#fff' }
                         },
                     },
-                });
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                        },
+                    },
+                },
             });
-            
+        });
     </script>
-    
+
 </body>
 </html>
 {% block navbar %}
