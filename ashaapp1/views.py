@@ -970,13 +970,13 @@ def calculate_daily_stats(logs):
     for date in unique_dates:
         day_logs = logs.filter(date__date=date)
 
-        daily_stats[date.strftime('%A')] = {
-            'exercise_minutes': day_logs.aggregate(total_minutes=Sum('duration'))['total_minutes'] or 0,
-            'energy_level': day_logs.aggregate(avg_energy=Avg('energy_boost'))['avg_energy'] or 0,
-            'bp_stability': calculate_bp_stability(day_logs),
-        }
+        daily_stats[date.strftime('%Y-%m-%d')] = {
+    'exercise_minutes': day_logs.aggregate(total_minutes=Sum('duration'))['total_minutes'] or 0,
+    'energy_level': day_logs.aggregate(avg_energy=Avg('energy_boost'))['avg_energy'] or 0,
+    'bp_stability': calculate_bp_stability(day_logs),
+    }
 
-    return daily_stats
+    return daily_stats  
 
 
 def calculate_bp_stability(logs):
