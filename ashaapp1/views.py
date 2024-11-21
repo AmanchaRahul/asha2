@@ -939,21 +939,38 @@ def bloodpressure_exercises_view(request):
         form = BloodPressureExerciseLogForm()
 
     # Get all logs for the user
-    all_logs = BloodPressureExerciseLog.objects.filter(user=request.user).order_by('date')
+    all_logs = BloodPressureExerciseLog.objects.filter(user=request.user).order_by('-date')
 
-    # Calculate daily statistics for all logs
-    daily_stats = calculate_daily_stats(all_logs)
+    # Prepare context variables with default values
+    exercise_minutes = 0
+    bp_stability = 0
+    energy_level = 0
 
-    # Prepare data for the graph (based on all logs)
+    # Calculate daily statistics if logs exist
+    if all_logs.exists():
+        # Get the most recent log's date
+        latest_date = all_logs.first().date.date()
+        
+        # Filter logs for the most recent date
+        latest_day_logs = all_logs.filter(date__date=latest_date)
+        
+        # Calculate statistics for the latest day
+        exercise_minutes = latest_day_logs.aggregate(total_minutes=Sum('duration'))['total_minutes'] or 0
+        bp_stability = calculate_bp_stability(latest_day_logs)
+        energy_level = latest_day_logs.aggregate(avg_energy=Avg('energy_boost'))['avg_energy'] or 0
+
+    # Prepare data for the graph
     bp_data = prepare_bp_graph_data_daily(all_logs)
-
+    
+    # Count active days
     active_days = all_logs.values('date').distinct().count()
-
 
     context = {
         'form': form,
-        'exercise_logs': all_logs.order_by('-date')[:5],  # Show the latest 5 logs
-        'daily_stats': daily_stats,
+        'exercise_logs': all_logs[:5],  # Show the latest 5 logs
+        'exercise_minutes': exercise_minutes,
+        'bp_stability': bp_stability,
+        'energy_level': energy_level,
         'bp_data': json.dumps(bp_data),
         'active_days': active_days,
     }

@@ -339,26 +339,24 @@
             </div>
         
             <!-- Daily Stats -->
-        
+            
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                {% for date, stats in daily_stats.items %}
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <h3 class="text-xs md:text-sm font-semibold mb-2">Exercise Minutes ({{ date }})</h3>
-                        <p class="text-xl md:text-3xl font-bold">{{ stats.exercise_minutes }}</p>
-                    </div>
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <h3 class="text-xs md:text-sm font-semibold mb-2">BP Stability</h3>
-                        <p class="text-xl md:text-3xl font-bold">{{ stats.bp_stability|floatformat:0 }}%</p>
-                    </div>
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <h3 class="text-xs md:text-sm font-semibold mb-2">Active Days</h3>
-                        <p class="text-xl md:text-3xl font-bold">{{ active_days }}</p>
-                    </div>
-                    <div class="bg-gray-800 p-4 rounded-lg text-center">
-                        <h3 class="text-xs md:text-sm font-semibold mb-2">Energy Level</h3>
-                        <p class="text-xl md:text-3xl font-bold">{{ stats.energy_level|floatformat:0 }}</p>
-                    </div>
-                {% endfor %}
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Exercise Minutes</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ exercise_minutes|default:0 }}</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">BP Stability</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ bp_stability|floatformat:0|default:0 }}%</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Active Days</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ active_days }}</p>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg text-center">
+                    <h3 class="text-xs md:text-sm font-semibold mb-2">Energy Level</h3>
+                    <p class="text-xl md:text-3xl font-bold">{{ energy_level|floatformat:0|default:0 }}</p>
+                </div>
             </div>
             
 
@@ -473,6 +471,7 @@
                             borderColor: '#3B82F6',
                             backgroundColor: 'rgba(59, 130, 246, 0.2)',
                             fill: true,
+                            tension: 0.4,
                         },
                         {
                             label: 'Feeling Normal',
@@ -480,6 +479,7 @@
                             borderColor: '#F59E0B',
                             backgroundColor: 'rgba(245, 158, 11, 0.2)',
                             fill: true,
+                            tension: 0.4,
                         },
                     ],
                 },
@@ -497,6 +497,7 @@
                             beginAtZero: true,
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
                             ticks: { color: '#fff' }
+                            max: 100, 
                         },
                         x: {
                             grid: { color: 'rgba(255, 255, 255, 0.1)' },
