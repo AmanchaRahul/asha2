@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const navMenu = document.getElementById('nav-menu');
 
   function toggleNav() {
-    navMenu.classList.toggle('show'); // Add/remove 'show' to display menu
+    navMenu.classList.toggle('show'); // Toggle the "show" class
     navToggle.setAttribute('aria-expanded', navMenu.classList.contains('show') ? 'true' : 'false');
   }
 

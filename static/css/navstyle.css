@@ -25,6 +25,8 @@
   margin-top: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 20;
+  display: none; /* Initially hidden */
+  flex-direction: column; /* Align links vertically */
 }
 
 .nav-link {
@@ -46,6 +48,26 @@
   text-shadow: 0 0 10px #808000;
 }
 
+/* Desktop adjustments - larger screens */
+@media (min-width: 768px) {
+  #nav-menu {
+    display: flex; /* Keep the menu visible on larger screens */
+    position: static; /* Keep it in the normal flow, not absolute */
+    margin-top: 0; /* Remove any top margin */
+    padding: 0; /* Remove padding to keep the links close together */
+  }
+
+  .nav-link {
+    font-size: 1rem;
+    padding: 0.5rem 1rem; /* Adjust padding for desktop */
+    text-align: left; /* Align text to the left for desktop */
+  }
+
+  #nav-toggle {
+    display: none; /* Hide the nav toggle on larger screens */
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #nav-menu {
@@ -64,7 +86,7 @@
   .nav-link {
     text-align: right; /* Align each link's text to the right */
     font-size: 1.2rem;
-    padding: 1rem 1rem; /* Adjust padding for the links */
+    padding: 1rem 1.5rem;
   }
 
   /* Show the menu when the nav toggle is clicked */
