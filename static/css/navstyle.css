@@ -75,7 +75,7 @@
     position: absolute;
     top: 3rem;
     right: 0.5rem;
-    text-align: right; /* Align the content to the right */
+    text-align: center; /* Align the content to the right */
     background-color: black; /* Black background */
     padding: 1rem 1.5rem; /* Adjust padding to create a "closed box" appearance */
     border-radius: 0.5rem;
@@ -84,7 +84,7 @@
   }
 
   .nav-link {
-    text-align: right; /* Align each link's text to the right */
+    text-align: center; /* Align each link's text to the right */
     font-size: 1.2rem;
     padding: 1rem 1.5rem;
   }
