@@ -104,19 +104,25 @@
   {% block navbar%}
 
   <nav id="navbar" class="fixed top-4 right-4 text-white flex flex-col space-y-2 z-10">
-    <button id="nav-toggle" class="md:hidden text-white focus:outline-none">
+    <!-- Mobile Toggle Button -->
+    <button id="nav-toggle" class="md:hidden text-white focus:outline-none" aria-expanded="false">
       <i class="fas fa-bars"></i>
     </button>
-    <div id="nav-menu" class="hidden bg-black p-4 rounded-lg md:flex flex-col space-y-2">
-      <a href="{% url 'basedata' %}" class="block hover-olive nav-link">Home</a>
-      <a href="{% url 'aboutdata' %}" class="block hover-olive nav-link">About</a>
-      <a href="{% url 'newsdata' %}" class="block hover-olive nav-link">News</a>
+  
+    <!-- Navigation Menu -->
+    <div 
+      id="nav-menu" 
+      class="hidden bg-black p-4 rounded-lg shadow-lg absolute top-12 right-0 w-60 md:flex md:relative md:w-auto md:space-y-0">
+      <a href="{% url 'basedata' %}" class="block nav-link hover-olive">Home</a>
+      <a href="{% url 'aboutdata' %}" class="block nav-link hover-olive">About</a>
+      <a href="{% url 'newsdata' %}" class="block nav-link hover-olive">News</a>
       {% if user.is_authenticated %}
-        <a href="{% url 'wellnessdata' %}" class="block hover-olive nav-link">Wellness</a>
-        <a href="{% url 'logoutdata' %}" class="block hover-olive nav-link">Logout</a>
+        <a href="{% url 'wellnessdata' %}" class="block nav-link hover-olive">Wellness</a>
+        <a href="{% url 'logoutdata' %}" class="block nav-link hover-olive">Logout</a>
       {% endif %}
     </div>
   </nav>
+  
 
   
  {% endblock navbar %}

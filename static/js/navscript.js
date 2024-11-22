@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const navToggle = document.getElementById('nav-toggle');
   const navMenu = document.getElementById('nav-menu');
 
@@ -10,18 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
   navToggle.addEventListener('click', toggleNav);
 
   // Close navigation when clicking outside
-  document.addEventListener('click', function(event) {
+  document.addEventListener('click', function (event) {
     const isClickInside = navToggle.contains(event.target) || navMenu.contains(event.target);
     if (!isClickInside && !navMenu.classList.contains('hidden')) {
-      toggleNav();
+      navMenu.classList.add('hidden');
+      navToggle.setAttribute('aria-expanded', 'false');
     }
   });
 
   // Close navigation when pressing Escape key
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && !navMenu.classList.contains('hidden')) {
-      toggleNav();
+      navMenu.classList.add('hidden');
+      navToggle.setAttribute('aria-expanded', 'false');
     }
   });
 });
-

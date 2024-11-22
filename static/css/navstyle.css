@@ -24,6 +24,7 @@
   padding: 1rem;
   margin-top: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 20;
 }
 
 .nav-link {
@@ -48,10 +49,10 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #nav-menu {
-    width: 100%;
+    width: calc(100vw - 1rem);
     position: absolute;
-    right: 0;
-    top: 100%;
+    top: 3rem;
+    right: 0.5rem;
   }
 
   .nav-link {
@@ -60,4 +61,3 @@
     padding: 1rem;
   }
 }
-
