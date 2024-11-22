@@ -49,15 +49,17 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #nav-menu {
-    width: calc(100vw - 1rem);
+    width: calc(100vw - 1rem); /* Ensure the menu fits inside the viewport */
     position: absolute;
     top: 3rem;
     right: 0.5rem;
+    text-align: right; /* Align the content to the right */
   }
 
   .nav-link {
-    text-align: center;
+    text-align: right; /* Align each link's text to the right */
     font-size: 1.2rem;
-    padding: 1rem;
+    padding: 1rem 1rem 1rem 0; /* Add right padding and reduce left padding */
   }
 }
+
