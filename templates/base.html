@@ -15,63 +15,47 @@
   <link rel="stylesheet" href="{% static 'css/wellness_button.css' %}">
   <link rel="stylesheet" href="{% static 'css/login_signup.css' %}">
   
-  
-
-
   {% block title %}
   <title>home</title>
   {% endblock title %}
-  
 </head>
 
-
 <body class="flex flex-col justify-between min-h-screen">
-
   <!-- Logo and Name (Top-left) -->
   <header class="fixed top-4 left-4 z-10">
     <div class="flex items-center space-x-4">
-        <i class="fa-solid fa-earth-americas" alt="Logo" class="w-12 h-12 float"></i>
+      <i class="fa-solid fa-earth-americas" alt="Logo" class="w-12 h-12 float"></i>
       <h1 class="text-xl hover-olive transition-colors duration-300">ASHA</h1>
     </div>
   </header>
 
- 
   {% block basepage %}
-
   <!-- Main Section -->
   <main class="flex flex-col items-center justify-center flex-grow py-16">
     <!-- Title -->
-    
-    <div class="typewriter mb-8 px-4 w-full">
-      <h1 class="text-4xl md:text-5xl text-center" style="font-size: 1.2rem;">For better tomorrow</h1>
+    <div class="typewriter mb-8">
+      <h1 class="text-4xl text-center">For better tomorrow</h1>
     </div>
-    
-
-
 
     <!-- Image and Text Section -->
-        
-    <div class="flex flex-col space-y-8 image-container px-4 w-full max-w-6xl"> <!-- Added padding and max-width -->
-      
-      <!-- First Image Row -->
-      <div class="image-row flex flex-col md:flex-row items-center gap-4">
-        <img src="/static/images/diabetes/d3.jpeg" alt="Diabetes Management" class="w-full md:w-1/2 bg-gray-600 object-cover rounded-lg shadow-lg">
-        <p class="image-text w-full md:w-1/2 text-center md:text-left">Balance sugar, reduce life risks, manage diabetes with care.</p>
+    <div class="flex flex-col space-y-8 image-container">
+      <!-- First Image Row (Image on Left, Text on Right) -->
+      <div class="image-row">
+        <img src="{% static 'images/diabetes/d3.jpeg' %}" alt="Diabetes Management" class="bg-gray-600 object-cover rounded-lg shadow-lg">
+        <p class="image-text ml-4">Balance sugar, reduce life risks, manage diabetes with care.</p>
       </div>
 
-      <!-- Second Image Row -->
-      <div class="image-row flex flex-col md:flex-row-reverse items-center gap-4">
-        <img src="/static/images/bloodpressure/bloodpressure1.jpeg" alt="Blood Pressure Check" class="w-full md:w-1/2 bg-gray-600 object-cover rounded-lg shadow-lg">
-        <p class="image-text w-full md:w-1/2 text-center md:text-left">Check your pressure, live well, stay vibrant and healthy.</p>
+      <!-- Second Image Row (Text on Left, Image on Right) -->
+      <div class="image-row">
+        <p class="image-text mr-4">Check your pressure, live well, stay vibrant and healthy.</p>
+        <img src="{% static 'images/bloodpressure/bloodpressure1.jpeg' %}" alt="Blood Pressure Check" class="bg-gray-600 object-cover rounded-lg shadow-lg">
       </div>
 
-      <!-- Third Image Row -->
-      <div class="image-row flex flex-col md:flex-row items-center gap-4">
-        <img src="/static/images/skincare/skincare1.jpeg" alt="Skin Care" class="w-full md:w-1/2 bg-gray-600 object-cover rounded-lg shadow-lg">
-        <p class="image-text w-full md:w-1/2 text-center md:text-left">Glow with care, radiant skin starts from within.</p>
+      <!-- Third Image Row (Image on Left, Text on Right) -->
+      <div class="image-row">
+        <img src="{% static 'images/skincare/skincare1.jpeg' %}" alt="Skin Care" class="bg-gray-600 object-cover rounded-lg shadow-lg">
+        <p class="image-text ml-4">Glow with care, radiant skin starts from within.</p>
       </div>
-    </div>
-
       
       <!-- Get Started Button (Exactly below Third Image) -->
       <div class="w-64 mt-8 self-start">
@@ -81,57 +65,35 @@
           </button>
         </a>
       </div>
-
     </div>
   </main>
 
   <!-- Parallax Section -->
-  
-  <div class="parallax my-16 w-full bg-cover bg-center bg-fixed relative" 
-     style="background-image: url('/static/images/greenbackground.jpg'); height: 300px;">
-  <!-- Container for the text -->
-  <div class="absolute inset-0 flex items-center justify-center">
-    <h2 class="text-2xl md:text-3xl text-white text-center">
-      Embrace a Healthier Lifestyle
-    </h2>
+  <div class="parallax my-16" style="background-image: url('{% static 'images/greenbackground.jpg' %}');">
+    <div class="h-full flex items-center justify-center bg-black bg-opacity-50">
+      <h2 class="text-3xl text-white">Embrace a Healthier Lifestyle</h2>
+    </div>
   </div>
-</div>
-
-
-
   {% endblock basepage %}
 
-  {% block navbar%}
-
-  <nav id="navbar" class="fixed top-4 right-4 text-white flex flex-col space-y-2 z-10">
-    <button id="nav-toggle" class="md:hidden text-white focus:outline-none">
+  {% block navbar %}
+  <nav id="navbar" class="fixed top-4 right-4 z-10">
+    <button id="nav-toggle" class="text-white focus:outline-none">
       <i class="fas fa-bars"></i>
     </button>
-    <div id="nav-menu" class="hidden md:flex flex-col space-y-2">
-      <div class="nav-container">
-        <a href="{% url 'basedata' %}" class="hover-olive nav-link animate-left">Home</a>
-      </div>
-      <div class="nav-container">
-        <a href="{% url 'aboutdata' %}" class="hover-olive nav-link animate-left">About</a>
-      </div>
-      <div class="nav-container">
-        <a href="{% url 'newsdata' %}" class="hover-olive nav-link animate-left">News</a>
-      </div>
+    <div id="nav-menu" class="hidden bg-black p-4 rounded-lg">
+      <a href="{% url 'basedata' %}" class="block hover-olive nav-link">Home</a>
+      <a href="{% url 'aboutdata' %}" class="block hover-olive nav-link">About</a>
+      <a href="{% url 'newsdata' %}" class="block hover-olive nav-link">News</a>
       {% if user.is_authenticated %}
-        <div class="nav-container">
-          <a href="{% url 'wellnessdata' %}" class="hover-olive nav-link animate-left">Wellness</a>
-        </div>
-        <div class="nav-container">
-          <a href="{% url 'logoutdata' %}" class="hover-olive nav-link animate-left">Logout</a>
-        </div>
+        <a href="{% url 'wellnessdata' %}" class="block hover-olive nav-link">Wellness</a>
+        <a href="{% url 'logoutdata' %}" class="block hover-olive nav-link">Logout</a>
       {% endif %}
     </div>
-</nav>
+  </nav>
+  {% endblock navbar %}
 
-  
- {% endblock navbar %}
-
- {% block footer %}
+  {% block footer %}
   <!-- Footer (right-bottom) -->
   <footer class="fixed bottom-4 right-4 text-white flex flex-col space-y-4 z-10">
     <a href="https://www.instagram.com/03_r_a_h_u_l?igsh=MWFtbTVtcXA4eHhyNA==" class="hover-olive transition-colors duration-300 transform hover:scale-110">
@@ -140,18 +102,17 @@
     <a href="https://www.facebook.com/raina.rahul.79" class="hover-olive transition-colors duration-300 transform hover:scale-110">
       <i class="fab fa-facebook"></i>
     </a>
-   
     <a href="https://api.whatsapp.com/send?phone=919032016299" class="hover-olive transition-colors duration-300 transform hover:scale-110">
       <i class="fab fa-whatsapp"></i>
     </a>
   </footer>
-  
   {% endblock footer %}
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://kit.fontawesome.com/586f2c924a.js" crossorigin="anonymous"></script>
-  <script src= "{% static 'js/navscript.js' %}"></script>
+  <script src="{% static 'js/navscript.js' %}"></script>
   
   {% block scripts %}{% endblock %}
 </body>
 </html>
+

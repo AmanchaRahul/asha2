@@ -1,58 +1,27 @@
-// Navbar animation function
-function updateNavAnimation() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    const isMobile = window.innerWidth < 768; // Adjust this value based on your mobile breakpoint
-  
-    navLinks.forEach((link, index) => {
-      if (isMobile) {
-        link.style.animation = 'none';
-      } else {
-        const duration = 1 + (index * 0.1); // Varies from 2s to 2.8s
-        link.style.animation = `moveRight ${duration}s infinite ease-in-out`;
-      }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+  const navToggle = document.getElementById('nav-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  function toggleNav() {
+    navMenu.classList.toggle('hidden');
+    navToggle.setAttribute('aria-expanded', navMenu.classList.contains('hidden') ? 'false' : 'true');
   }
-  
-  // Initialize navbar animation
-  function initNavAnimation() {
-    updateNavAnimation();
-    window.addEventListener('resize', updateNavAnimation);
-  }
-  
-  // Toggle functionality for mobile menu
-  function initMobileMenu() {
-    const navToggle = document.getElementById('nav-toggle');
-    const navMenu = document.getElementById('nav-menu');
-  
-    navToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('hidden');
-    });
-  }
-  
-  // Initialize all functionality when the DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    initNavAnimation();
-    initMobileMenu();
+
+  navToggle.addEventListener('click', toggleNav);
+
+  // Close navigation when clicking outside
+  document.addEventListener('click', function(event) {
+    const isClickInside = navToggle.contains(event.target) || navMenu.contains(event.target);
+    if (!isClickInside && !navMenu.classList.contains('hidden')) {
+      toggleNav();
+    }
   });
-  
-  
-  
-  // Add fade-in animation for elements as they come into view
-  function initFadeInAnimation() {
-    const fadeElements = document.querySelectorAll('.fade-in');
-    
-    const fadeInObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-  
-    fadeElements.forEach(element => {
-      fadeInObserver.observe(element);
-    });
-  }
-  
-  // Initialize fade-in animation
-  initFadeInAnimation();
+
+  // Close navigation when pressing Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !navMenu.classList.contains('hidden')) {
+      toggleNav();
+    }
+  });
+});
+

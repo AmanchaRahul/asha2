@@ -1,25 +1,63 @@
-@keyframes moveRight {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(10px); }
+/* Navigation styles */
+#nav-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 0.25rem;
+  transition: all 0.3s ease;
+}
+
+#nav-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+#nav-menu {
+  background-color: black;
+  color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.nav-link:hover {
+  background-color: rgba(128, 128, 0, 0.2);
+  padding-left: 1.5rem;
+}
+
+.hover-olive:hover {
+  color: #808000;
+  text-shadow: 0 0 10px #808000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #nav-menu {
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 100%;
   }
-  
-  .nav-container {
-    overflow: hidden;
-    padding-right: 10px;
-  }
-  
+
   .nav-link {
-    display: inline-block;
-    position: relative;
-    padding-right: 20px;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 1rem;
   }
-  
-  .animate-right {
-    animation: moveRight 5s infinite ease-in-out;
-  }
-  
-  /* Existing hover effect */
-  .hover-olive:hover {
-    color: #808000;
-    text-shadow: 0 0 10px #808000;
-  }
+}
+
