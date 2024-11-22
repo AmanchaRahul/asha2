@@ -21,9 +21,12 @@
   background-color: black;
   color: white;
   border-radius: 0.5rem;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   margin-top: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  display: none; /* Initially hidden */
+  flex-direction: column; /* Align links vertically */
 }
 
 .nav-link {
@@ -45,27 +48,52 @@
   text-shadow: 0 0 10px #808000;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* Desktop adjustments - larger screens */
+@media (min-width: 768px) {
   #nav-menu {
-    width: auto; /* Change from fixed width to auto */
-    min-width: 130px; /* Set a minimum width instead */
-    position: absolute;
-    top: 3rem;
-    right: 0.5rem;
-    text-align: center;
-    background-color: black;
-    padding: 1rem;  /* Reduce padding to prevent overflow */
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: none;
+    display: flex; /* Keep the menu visible on larger screens */
+    position: static; /* Keep it in the normal flow, not absolute */
+    margin-top: 0; /* Remove any top margin */
+    padding: 0; /* Remove padding to keep the links close together */
   }
 
   .nav-link {
-    text-align: center;
-    font-size: 1.2rem;
-    padding: 0.75rem 1rem; /* Reduce padding to prevent overflow */
-    white-space: nowrap; /* Prevent text wrapping */
+    font-size: 1rem;
+    padding: 0.5rem 1rem; /* Adjust padding for desktop */
+    text-align: left; /* Align text to the left for desktop */
+  }
+
+  #nav-toggle {
+    display: none; /* Hide the nav toggle on larger screens */
   }
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #nav-menu {
+    width: 150px; /* Set a fixed width for the navigation box */
+    position: absolute;
+    top: 3rem;
+    right: 0.5rem;
+    text-align: left; /* Align the content to the right */
+    background-color: black; /* Black background */
+    padding: 1rem 1.5rem; /* Adjust padding to create a "closed box" appearance */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none; /* Hide the menu by default */
+  }
+
+  .nav-link {
+    text-align: center; /* Align each link's text to the right */
+    font-size: 1.2rem;
+    padding: 1rem 1.5rem;
+  }
+
+  /* Show the menu when the nav toggle is clicked */
+  #nav-menu.show {
+    display: block;
+  }
+}
+
+
 
