@@ -186,8 +186,8 @@
 
             bpTypeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    bpTypeBtns.forEach(b => b.classList.remove('bg-gray-600'));
-                    this.classList.add('bg-olive-600');
+                    bpTypeBtns.forEach(b => b.classList.remove('bg-blue-600'));
+                    this.classList.add('bg-blue-600');
                     const type = this.getAttribute('data-type');
                     currentType = type;
                     resetCurrentMeals();
