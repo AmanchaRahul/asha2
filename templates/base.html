@@ -108,25 +108,15 @@
       <i class="fas fa-bars"></i>
     </button>
     <div id="nav-menu" class="hidden bg-black p-4 rounded-lg md:flex flex-col space-y-2">
-      <div class="nav-container">
-        <a href="{% url 'basedata' %}" class="hover-olive nav-link animate-left">Home</a>
-      </div>
-      <div class="nav-container">
-        <a href="{% url 'aboutdata' %}" class="hover-olive nav-link animate-left">About</a>
-      </div>
-      <div class="nav-container">
-        <a href="{% url 'newsdata' %}" class="hover-olive nav-link animate-left">News</a>
-      </div>
+      <a href="{% url 'basedata' %}" class="block hover-olive nav-link">Home</a>
+      <a href="{% url 'aboutdata' %}" class="block hover-olive nav-link">About</a>
+      <a href="{% url 'newsdata' %}" class="block hover-olive nav-link">News</a>
       {% if user.is_authenticated %}
-        <div class="nav-container">
-          <a href="{% url 'wellnessdata' %}" class="hover-olive nav-link animate-left">Wellness</a>
-        </div>
-        <div class="nav-container">
-          <a href="{% url 'logoutdata' %}" class="hover-olive nav-link animate-left">Logout</a>
-        </div>
+        <a href="{% url 'wellnessdata' %}" class="block hover-olive nav-link">Wellness</a>
+        <a href="{% url 'logoutdata' %}" class="block hover-olive nav-link">Logout</a>
       {% endif %}
     </div>
-</nav>
+  </nav>
 
   
  {% endblock navbar %}
