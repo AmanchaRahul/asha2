@@ -27,6 +27,9 @@
   z-index: 20;
   display: none; /* Initially hidden */
   flex-direction: column; /* Align links vertically */
+  align-items: center; /* Ensure links are centered horizontally */
+  max-height: 100vh; /* Prevent content from overflowing the screen height */
+  overflow-y: auto; /* Make the menu scrollable if the content overflows */
 }
 
 .nav-link {
@@ -36,6 +39,7 @@
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 1.1rem;
+  text-align: center; /* Center text horizontally */
 }
 
 .nav-link:hover {
@@ -55,6 +59,7 @@
     position: static; /* Keep it in the normal flow, not absolute */
     margin-top: 0; /* Remove any top margin */
     padding: 0; /* Remove padding to keep the links close together */
+    flex-direction: row; /* Arrange items horizontally */
   }
 
   .nav-link {
@@ -71,20 +76,21 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #nav-menu {
-    width: 130px; /* Set a fixed width for the navigation box */
+    width: 100%; /* Set width to 100% for better responsiveness */
     position: absolute;
     top: 3rem;
-    right: 0.5rem;
-    text-align: right; /* Align the content to the right */
+    left: 0; /* Align the menu to the left */
+    text-align: center; /* Center align the content horizontally */
     background-color: black; /* Black background */
     padding: 1rem 1.5rem; /* Adjust padding to create a "closed box" appearance */
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: none; /* Hide the menu by default */
+    overflow-y: auto; /* Make the menu scrollable if content overflows */
   }
 
   .nav-link {
-    text-align: right; /* Align each link's text to the right */
+    text-align: center; /* Ensure links are centered inside the menu */
     font-size: 1.2rem;
     padding: 1rem 1.5rem;
   }
@@ -94,6 +100,3 @@
     display: block;
   }
 }
-
-
-
