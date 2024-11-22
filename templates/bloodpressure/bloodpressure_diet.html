@@ -28,12 +28,7 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(66, 153, 225, 0.2);
         }
-        .btn {
-            transition: all 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #6b8e23; /* Olive green */
-        }
+       
         .bp-type-btn.active {
             background-color: #4299e1;
             color: #ffffff;
@@ -191,8 +186,8 @@
 
             bpTypeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    bpTypeBtns.forEach(b => b.classList.remove('bg-blue-600'));
-                    this.classList.add('bg-blue-600');
+                    bpTypeBtns.forEach(b => b.classList.remove('bg-gray-600'));
+                    this.classList.add('bg-olive-600');
                     const type = this.getAttribute('data-type');
                     currentType = type;
                     resetCurrentMeals();
