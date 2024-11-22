@@ -77,7 +77,7 @@
     right: 0.5rem;
     text-align: left; /* Align the content to the right */
     background-color: black; /* Black background */
-    padding: 1rem 1.2rem; /* Adjust padding to create a "closed box" appearance */
+    padding: 1rem 1.1rem; /* Adjust padding to create a "closed box" appearance */
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: none; /* Hide the menu by default */
