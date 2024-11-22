@@ -49,17 +49,22 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   #nav-menu {
-    width: calc(100vw - 1rem); /* Ensure the menu fits inside the viewport */
+    width: calc(100vw - 1rem); /* Make the menu fit the screen width */
     position: absolute;
     top: 3rem;
     right: 0.5rem;
     text-align: right; /* Align the content to the right */
+    background-color: black; /* Black background */
+    padding: 1rem 0.5rem; /* Adjust padding for a more compact look */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .nav-link {
     text-align: right; /* Align each link's text to the right */
     font-size: 1.2rem;
-    padding: 1rem 1rem 1rem 0; /* Add right padding and reduce left padding */
+    padding: 1rem 1rem 1rem 0; /* Add right padding, reduce left padding */
   }
 }
+
 
