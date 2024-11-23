@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareCheck, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage
 from .models import DailyCheckIn
-from .models import ExerciseLog, WeeklyStats,Achievement
+from .models import ExerciseLog, WeeklyStats
 
 from .models import BloodPressureExerciseLog
 
@@ -29,14 +29,6 @@ class WeeklyStatsAdmin(admin.ModelAdmin):
     search_fields = ('user__username',)
     date_hierarchy = 'week_start'
     
-    
-    
-@admin.register(Achievement)
-class AchievementAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name', 'icon', 'date_earned')
-    list_filter = ('user', 'name', 'date_earned')
-    search_fields = ('user__username', 'name')
-    date_hierarchy = 'date_earned'
 
 # Define a custom admin class for DailyCheckIn
 class DailyCheckInAdmin(admin.ModelAdmin):

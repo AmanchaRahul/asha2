@@ -147,78 +147,11 @@ def diabetes_diet_view(request):
     return render(request,"diabetes/diabetes_diet.html")
 
 
-def prediabetes_breakfast_view(request):
-    return render(request,'diabetes/prediabetes_breakfast.html')
-
-
-def prediabetes_lunch_view(request):
-    return render(request,'diabetes/prediabetes_lunch.html')
-
-def prediabetes_dinner_view(request):
-    return render(request,'diabetes/prediabetes_dinner.html')
-
-
-
-def type1_breakfast_view(request):
-    return render(request,'diabetes/type1_breakfast.html')
-
-
-def type1_lunch_view(request):
-    return render(request,'diabetes/type1_lunch.html')
-
-def type1_dinner_view(request):
-    return render(request,'diabetes/type1_dinner.html')
-
-
-
-def type2_breakfast_view(request):
-    return render(request,'diabetes/type2_breakfast.html')
-
-
-def type2_lunch_view(request):
-    return render(request,'diabetes/type2_lunch.html')
-
-def type2_dinner_view(request):
-    return render(request,'diabetes/type2_dinner.html')
 
 
 @login_required
 def bloodpressure_diet_view(request):
     return render(request,"bloodpressure/bloodpressure_diet.html")
-
-
-
-def prehypertension_breakfast_view(request):
-    return render(request,'bloodpressure/prehypertension_breakfast.html')
-
-
-def prehypertension_lunch_view(request):
-    return render(request,'bloodpressure/prehypertension_lunch.html')
-
-def prehypertension_dinner_view(request):
-    return render(request,'bloodpressure/prehypertension_dinner.html')
-
-
-def stage1_breakfast_view(request):
-    return render(request,'bloodpressure/stage1_breakfast.html')
-
-def stage1_lunch_view(request):
-    return render(request,'bloodpressure/stage1_lunch.html')
-
-def stage1_dinner_view(request):
-    return render(request,'bloodpressure/stage1_dinner.html')
-
-
-
-def stage2_breakfast_view(request):
-    return render(request,'bloodpressure/stage2_breakfast.html')
-
-
-def stage2_lunch_view(request):
-    return render(request,'bloodpressure/stage2_lunch.html')
-
-def stage2_dinner_view(request):
-    return render(request,'bloodpressure/stage2_dinner.html')
 
 
 def skincare_diet_view(request):
@@ -229,7 +162,7 @@ def skincare_diet_view(request):
 
 from django.db.models import Avg, Sum
 from datetime import datetime, timedelta
-from .models import ExerciseLog, WeeklyStats, Achievement,  BloodPressureExerciseLog
+from .models import ExerciseLog, WeeklyStats, BloodPressureExerciseLog
 from .forms import ExerciseLogForm, BloodPressureExerciseLogForm
 from django.db.models import Avg, Q  
 
@@ -269,9 +202,6 @@ def diabetes_exercises_view(request):
     }
 
 
-    # Get user's achievements
-    achievements = Achievement.objects.filter(user=request.user)
-
     # Get glucose data for the chart
     glucose_data = get_glucose_chart_data(exercise_logs)
 
@@ -279,7 +209,6 @@ def diabetes_exercises_view(request):
         'form': form,
         'exercise_logs': latest_exercise_logs,
         'weekly_stats': weekly_stats,
-        'achievements': achievements,
         'glucose_data': glucose_data,
     }
     return render(request,"diabetes/diabetes_exercises.html",context)

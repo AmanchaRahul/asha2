@@ -16,27 +16,11 @@ urlpatterns = [
     
     
     path('diabetes_diet/',views.diabetes_diet_view,name="diabetesdietdata"),
-    path('prediabetesbreakfast/',views.prediabetes_breakfast_view,name="prediabetesbreakfastdata"),
-    path('prediabeteslunch/', views.prediabetes_lunch_view, name='prediabeteslunchdata'),
-    path('prediabetesdinner/', views.prediabetes_dinner_view, name='prediabetesdinnerdata'),
-    path('type1breakfast/', views.type1_breakfast_view, name='type1breakfastdata'),
-    path('type1lunch/', views.type1_lunch_view, name='type1lunchdata'),
-    path('type1dinner/', views.type1_dinner_view, name='type1dinnerdata'),
-    path('type2breakfast/', views.type2_breakfast_view, name='type2breakfastdata'),
-    path('type2lunch/', views.type2_lunch_view, name='type2lunchdata'),
-    path('type2dinner/', views.type2_dinner_view, name='type2dinnerdata'),
+    
     
     
     path('bloodpressure_diet/',views.bloodpressure_diet_view,name="bloodpressuredietdata"),
-    path('prehypertenisonbreakfast/',views.prehypertension_breakfast_view,name="prehypertensionbreakfastdata"),
-    path('prehypertensionlunch/', views.prehypertension_lunch_view, name='prehypertensionlunchdata'),
-    path('prehypertensiondinner/', views.prehypertension_dinner_view, name='prehypertensiondinnerdata'),
-    path('stage1breakfast/', views.stage1_breakfast_view, name='stage1breakfastdata'),
-    path('stage1lunch/', views.stage1_lunch_view, name='stage1lunchdata'),
-    path('stage1dinner/', views.stage1_dinner_view, name='stage1dinnerdata'),
-    path('stage2breakfast/', views.stage2_breakfast_view, name='stage2breakfastdata'),
-    path('stage2lunch/', views.stage2_lunch_view, name='stage2lunchdata'),
-    path('stage2dinner/', views.stage2_dinner_view, name='stage2dinnerdata'),
+   
     
    
     path('skincare_diet/',views.skincare_diet_view,name="skincaredietdata"),
