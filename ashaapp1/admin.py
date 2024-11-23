@@ -2,7 +2,6 @@ from django.contrib import admin
 from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareCheck, DiabetesChallenge, DiabetesChallengeImage, BloodpressureChallenge, BloodpressureChallengeImage
 from .models import DailyCheckIn
 from .models import ExerciseLog, WeeklyStats
-
 from .models import BloodPressureExerciseLog
 
 

@@ -22,6 +22,7 @@ from groq import Groq
 import os
 from django.views.decorators.http import require_http_methods
 import json
+from django.templatetags.static import static
 
 
 
@@ -165,9 +166,6 @@ from datetime import datetime, timedelta
 from .models import ExerciseLog, WeeklyStats, BloodPressureExerciseLog
 from .forms import ExerciseLogForm, BloodPressureExerciseLogForm
 from django.db.models import Avg, Q  
-
-
-
 
 
     
@@ -982,3 +980,14 @@ def bdoctor_view(request):
 
 def sdoctor_view(request):
     return render(request, 'skincare/sdoctor.html')
+
+
+def heart_model(request):
+    # Pass the heart.glb file to the template
+    model_url = static('images/human_heart.glb')
+    return render(request, 'heart_blood.html', {'model_url': model_url})
+
+def blood_pressure_model(request):
+    # Pass the bloodpressure.glb file to the template
+    model_url = static('images/cell.glb')
+    return render(request, 'heart_blood.html', {'model_url': model_url})

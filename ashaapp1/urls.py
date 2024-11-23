@@ -101,6 +101,15 @@ urlpatterns = [
     path('bdoctor/', views.bdoctor_view, name="bdoctor"),
     path('sdoctor/', views.sdoctor_view, name="sdoctor"),
     
+    
+    
+    
+    path('heart/', views.heart_model, name='heart_model'),
+    
+    path('bloodpressure/', views.blood_pressure_model, name='blood_pressure_model'),
+    
+    
+   
 ]
     
 
