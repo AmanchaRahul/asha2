@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}
-<title>{% if model_type == 'heart' %}Heart Model{% else %}Blood Cell Model{% endif %}</title>
-{% endblock title %}
 
 {% block basepage %}
 <!DOCTYPE html>
@@ -11,7 +8,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>3D Model Viewer</title>
+
+    {% block title %}
+    <title>{% if model_type == 'heart' %}Heart Model{% else %}Blood Cell Model{% endif %}</title>
+    {% endblock title %}
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -93,17 +94,27 @@
             width: 40px;
             height: 40px;
         }
-        .tap-instruction {
+        .model-buttons {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+        .model-button {
             background-color: rgba(255,255,255,0.6);
             color: black;
             padding: 10px 20px;
             border-radius: 20px;
-            z-index: 2;
             font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .model-button:hover {
+            background-color: rgba(255,255,255,0.8);
         }
         @media (max-width: 768px) {
             .info-card {
@@ -120,19 +131,20 @@
             <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
         </a>
 
-        {% if info_content %}
-            <div id="infoCard" class="info-card">
-                <h2>{{ info_content.title }}</h2>
-                <p>{{ info_content.description }}</p>
-                <ul>
-                    {% for point in info_content.key_points %}
-                    <li>{{ point }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
+        <div id="infoCard" class="info-card">
+            <h2>{{ info_content.title }}</h2>
+            <p>{{ info_content.description }}</p>
+            <ul>
+                {% for point in info_content.key_points %}
+                <li>{{ point }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-        <div class="tap-instruction">Tap/Click on the model to see information</div>
+        <div class="model-buttons">
+            <button class="model-button" onclick="showInfo('heart')">Diabetes and Heart Health</button>
+            <button class="model-button" onclick="showInfo('blood_cell')">Blood Cells and Pressure Dynamics</button>
+        </div>
     </div>
 
     <script>
@@ -161,8 +173,8 @@
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.screenSpacePanning = false;
-        controls.minDistance = 10;
-        controls.maxDistance = 100;
+        controls.minDistance = 5;
+        controls.maxDistance = 200;
         controls.target.set(0, 0, 0);
 
         // Adjust Model Scale Based on Screen Size
@@ -170,59 +182,13 @@
 
         // Info Card Toggle
         const infoCard = document.getElementById('infoCard');
-        const tapInstruction = document.querySelector('.tap-instruction');
         let isInfoVisible = false;
 
-        // Raycaster for Click Interaction
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-
-        // Toggle Info Card
-        function toggleInfoCard() {
-            isInfoVisible = !isInfoVisible;
-            infoCard.classList.toggle('show', isInfoVisible);
-            tapInstruction.style.display = isInfoVisible ? 'none' : 'block';
-        }
-
-        // Mouse Click Handler
-        function onMouseClick(event) {
-            // Calculate mouse position
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            // Update the picking ray with the camera and mouse position
-            raycaster.setFromCamera(mouse, camera);
-
-            // Calculate intersections
-            const intersects = raycaster.intersectObject(scene, true);
-
-            // If model is clicked, toggle info card
-            if (intersects.length > 0) {
-                toggleInfoCard();
-            } else if (isInfoVisible) {
-                // Hide info card when clicking outside the model
-                toggleInfoCard();
-            }
-        }
-
-        // Touch Event Handler
-        function onTouchStart(event) {
-            // Calculate touch position
-            mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
-
-            // Update the picking ray with the camera and touch position
-            raycaster.setFromCamera(mouse, camera);
-
-            // Calculate intersections
-            const intersects = raycaster.intersectObject(scene, true);
-
-            // If model is touched, toggle info card
-            if (intersects.length > 0) {
-                toggleInfoCard();
-            } else if (isInfoVisible) {
-                // Hide info card when touching outside the model
-                toggleInfoCard();
+        // Show Info Card
+        function showInfo(modelType) {
+            if (modelType === '{{ model_type }}') {
+                infoCard.classList.add('show');
+                isInfoVisible = true;
             }
         }
 
@@ -240,10 +206,6 @@
 
                 // Add the model to the scene
                 scene.add(model);
-
-                // Add event listeners for click and touch
-                renderer.domElement.addEventListener('click', onMouseClick);
-                renderer.domElement.addEventListener('touchstart', onTouchStart);
 
                 // Animation Loop
                 function animate() {
@@ -274,6 +236,9 @@
                 model.scale.set(scaleFactor, scaleFactor, scaleFactor);
             }
         });
+
+        // Initially show the info card for the current model
+        showInfo('{{ model_type }}');
     </script>
 </body>
 </html>
