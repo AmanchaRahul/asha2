@@ -2,7 +2,6 @@
 {% load static %}
 
 
-
 {% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,11 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
         html, body {
             width: 100%;
             height: 100%;
@@ -48,7 +42,7 @@
         }
         .info-card {
             position: absolute;
-            top: 20px;
+            top: 40px;
             right: 20px;
             width: 300px;
             background-color: rgba(100, 149, 237, 0.9);
@@ -135,9 +129,9 @@
         </div>
 
         {% if model_type == 'heart' %}
-            <button class="model-button" onclick="toggleInfo()">Diabetes and Heart Health</button>
+            <button class="model-button" onclick="toggleInfo()" style="margin-top: -20px;">Diabetes and Heart Health</button>
         {% else %}
-            <button class="model-button" onclick="toggleInfo()">Blood Cells and Pressure Dynamics</button>
+            <button class="model-button" onclick="toggleInfo()" style="margin-top: -20px;">Blood Cells and Pressure Dynamics</button>
         {% endif %}
     </div>
 
@@ -168,7 +162,7 @@
         controls.dampingFactor = 0.05;
         controls.screenSpacePanning = false;
         controls.minDistance = 5;
-        controls.maxDistance = 200;
+        controls.maxDistance = 500;
         controls.target.set(0, 0, 0);
 
         // Adjust Model Scale Based on Screen Size
@@ -231,5 +225,10 @@
     </script>
 </body>
 </html>
+
+{% block navbar %}
+{% endblock navbar %}
+{% block footer %}
+{% endblock footer %}
 
 {% endblock basepage %}
