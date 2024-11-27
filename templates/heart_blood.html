@@ -1,18 +1,9 @@
-{% extends "base.html" %}
-{% load static %}
-
-
-{% block basepage %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    {% block title %}
     <title>{% if model_type == 'heart' %}Heart Model{% else %}Blood Cell Model{% endif %}</title>
-    {% endblock title %}
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -94,16 +85,11 @@
             width: 40px;
             height: 40px;
         }
-        .model-buttons {
+        .model-button {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 2;
-        }
-        .model-button {
             background-color: rgba(255,255,255,0.6);
             color: black;
             padding: 10px 20px;
@@ -112,6 +98,7 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
+            z-index: 2;
         }
         .model-button:hover {
             background-color: rgba(255,255,255,0.8);
@@ -141,10 +128,11 @@
             </ul>
         </div>
 
-        <div class="model-buttons">
-            <button class="model-button" onclick="showInfo('heart')">Diabetes and Heart Health</button>
-            <button class="model-button" onclick="showInfo('blood_cell')">Blood Cells and Pressure Dynamics</button>
-        </div>
+        {% if model_type == 'heart' %}
+            <button class="model-button" onclick="toggleInfo()">Diabetes and Heart Health</button>
+        {% else %}
+            <button class="model-button" onclick="toggleInfo()">Blood Cells and Pressure Dynamics</button>
+        {% endif %}
     </div>
 
     <script>
@@ -184,12 +172,10 @@
         const infoCard = document.getElementById('infoCard');
         let isInfoVisible = false;
 
-        // Show Info Card
-        function showInfo(modelType) {
-            if (modelType === '{{ model_type }}') {
-                infoCard.classList.add('show');
-                isInfoVisible = true;
-            }
+        // Toggle Info Card
+        function toggleInfo() {
+            isInfoVisible = !isInfoVisible;
+            infoCard.classList.toggle('show', isInfoVisible);
         }
 
         // Load 3D Model
@@ -236,18 +222,6 @@
                 model.scale.set(scaleFactor, scaleFactor, scaleFactor);
             }
         });
-
-        // Initially show the info card for the current model
-        showInfo('{{ model_type }}');
     </script>
 </body>
 </html>
-
-
-{% block navbar %}
-{% endblock navbar %}
-
-{% block footer %}
-{% endblock footer %}
-
-{% endblock basepage %}
