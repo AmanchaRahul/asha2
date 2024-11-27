@@ -985,9 +985,39 @@ def sdoctor_view(request):
 def heart_model(request):
     # Pass the heart.glb file to the template
     model_url = static('images/human_heart.glb')
-    return render(request, 'heart_blood.html', {'model_url': model_url})
+    info_content = {
+        'title': 'Diabetes and Heart Health',
+        'description': 'Diabetes can significantly impact heart health by damaging blood vessels and nerves. Prolonged high blood sugar levels can lead to:',
+        'key_points': [
+            'Increased risk of cardiovascular disease',
+            'Higher chances of heart attacks and strokes',
+            'Potential damage to heart muscle and blood vessels',
+            'Elevated risk of heart failure',
+            'Importance of managing blood sugar and maintaining a healthy lifestyle'
+        ]
+    }
+    return render(request, 'heart_blood.html', {
+        'model_url': model_url, 
+        'info_content': info_content,
+        'model_type': 'heart'
+    })
 
 def blood_pressure_model(request):
     # Pass the bloodpressure.glb file to the template
     model_url = static('images/cell.glb')
-    return render(request, 'heart_blood.html', {'model_url': model_url})
+    info_content = {
+        'title': 'Blood Cells and Pressure Dynamics',
+        'description': 'Blood cells play a crucial role in maintaining healthy blood pressure and overall cardiovascular function:',
+        'key_points': [
+            'Red blood cells transport oxygen throughout the body',
+            'Healthy blood flow is essential for maintaining optimal blood pressure',
+            'Blood cell count and quality impact cardiovascular health',
+            'Factors like hydration, exercise, and diet influence blood cell performance',
+            'Regular monitoring of blood cell parameters is important for health'
+        ]
+    }
+    return render(request, 'heart_blood.html', {
+        'model_url': model_url, 
+        'info_content': info_content,
+        'model_type': 'blood_cell'
+    })

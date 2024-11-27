@@ -2,12 +2,10 @@
 {% load static %}
 
 {% block title %}
-<title>Signup</title>
+<title>{% if model_type == 'heart' %}Heart Model{% else %}Blood Cell Model{% endif %}</title>
 {% endblock title %}
 
 {% block basepage %}
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,10 +18,80 @@
     <style>
         body {
             margin: 0;
-            background-color: #ffffff; /* White background */
+            background-color: #ffffff;
+            font-family: monospace;
+            overflow: hidden;
         }
         canvas {
             display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .info-card {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background-color: rgba(100, 149, 237, 0.9); /* Cornflower Blue with opacity */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+            max-height: 70vh;
+            overflow-y: auto;
+            transform: translateX(120%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .info-card.show {
+            transform: translateX(0);
+        }
+        .info-card h2 {
+            color: #ffffff;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        .info-card p {
+            color: #ffffff;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        .info-card ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            color: #ffffff;
+            opacity: 0.9;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 2;
+        }
+        .back-button img {
+            width: 40px;
+            height: 40px;
+        }
+        .tap-instruction {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 2;
+            font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            .info-card {
+                width: 90%;
+                right: 5%;
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -31,56 +99,135 @@
     <a href="{% url 'wellnessdata' %}" class="back-button">
         <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
+
+    {% if info_content %}
+    <div id="infoCard" class="info-card">
+        <h2>{{ info_content.title }}</h2>
+        <p>{{ info_content.description }}</p>
+        <ul>
+            {% for point in info_content.key_points %}
+            <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="tap-instruction">Tap/Click on the model to see information</div>
+
     <script>
         // Scene Setup
         const scene = new THREE.Scene();
 
         // Camera Setup
+        // Camera Setup
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 1, 5);
+        camera.position.set(0, 0, 30);  // Adjusted z-position to show whole model
 
         // Renderer Setup
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio); // High-quality rendering
+        renderer.setPixelRatio(window.devicePixelRatio);
         document.body.appendChild(renderer.domElement);
 
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); // Soft global light
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Strong directional light
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(10, 10, 10);
         scene.add(directionalLight);
 
         // Orbit Controls for Mouse and Touch Interaction
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; // Smooth controls
+        controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.screenSpacePanning = false;
         controls.minDistance = 1;
         controls.maxDistance = 50;
 
         // Adjust Model Scale Based on Screen Size
-        const scaleFactor = window.innerWidth < 768 ? 2 : 3; // Smaller scale for mobile
+        let scaleFactor = window.innerWidth < 768 ? 2 : 3;
+
+        // Info Card Toggle
+        const infoCard = document.getElementById('infoCard');
+        const tapInstruction = document.querySelector('.tap-instruction');
+        let isInfoVisible = false;
+
+        // Raycaster for Click Interaction
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        // Toggle Info Card
+        function toggleInfoCard() {
+            isInfoVisible = !isInfoVisible;
+            infoCard.classList.toggle('show', isInfoVisible);
+            tapInstruction.style.display = isInfoVisible ? 'none' : 'block';
+        }
+
+        // Mouse Click Handler
+        function onMouseClick(event) {
+            // Prevent toggle if controls are being used
+            if (controls.isDragging) return;
+
+            // Calculate mouse position
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            // Update the picking ray with the camera and mouse position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Calculate intersections
+            const intersects = raycaster.intersectObject(scene, true);
+
+            // If model is clicked, toggle info card
+            if (intersects.length > 0) {
+                toggleInfoCard();
+            }
+        }
+
+        // Touch Event Handler
+        function onTouchStart(event) {
+            // Prevent toggle if controls are being used
+            if (controls.isDragging) return;
+
+            // Calculate touch position
+            mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.touches[0].clientY / window.innerHeight) * 2 + 1;
+
+            // Update the picking ray with the camera and touch position
+            raycaster.setFromCamera(mouse, camera);
+
+            // Calculate intersections
+            const intersects = raycaster.intersectObject(scene, true);
+
+            // If model is touched, toggle info card
+            if (intersects.length > 0) {
+                toggleInfoCard();
+            }
+        }
 
         // Load 3D Model
         const loader = new THREE.GLTFLoader();
+        let model;
         loader.load(
             "{{ model_url }}",
             function (gltf) {
-                const model = gltf.scene;
+                model = gltf.scene;
 
                 // Adjust Scale and Position
-                model.scale.set(scaleFactor, scaleFactor, scaleFactor); // Adjust scale dynamically
+                model.scale.set(scaleFactor, scaleFactor, scaleFactor);
                 model.position.set(0, -1, 0);
 
                 // Add the model to the scene
                 scene.add(model);
 
+                // Add event listeners for click and touch
+                renderer.domElement.addEventListener('click', onMouseClick);
+                renderer.domElement.addEventListener('touchstart', onTouchStart);
+
                 // Animation Loop
                 function animate() {
                     requestAnimationFrame(animate);
-                    controls.update(); // Update orbit controls
+                    controls.update();
                     renderer.render(scene, camera);
                 }
                 animate();
@@ -101,23 +248,16 @@
             camera.updateProjectionMatrix();
 
             // Adjust model scale dynamically
-            if (width < 768 && scaleFactor !== 2) {
-                scaleFactor = 2;
-            } else if (width >= 768 && scaleFactor !== 3) {
-                scaleFactor = 3;
-            }
+            scaleFactor = width < 768 ? 2 : 3;
         });
     </script>
 </body>
 </html>
 
-
 {% block navbar %}
 {% endblock navbar %}
 
-
 {% block footer %}
 {% endblock footer %}
-
 
 {% endblock basepage %}
