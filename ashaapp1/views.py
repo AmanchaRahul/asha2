@@ -155,8 +155,15 @@ def bloodpressure_diet_view(request):
     return render(request,"bloodpressure/bloodpressure_diet.html")
 
 
+@login_required
 def skincare_diet_view(request):
-    return render(request,'skincare/skincare_diet.html')
+    # Get or create a DailyCheckIn record for the current user
+    daily_check_in, created = DailyCheckIn.objects.get_or_create(user=request.user)
+    
+    context = {
+        'check_in_count': daily_check_in.check_in_count
+    }
+    return render(request, 'skincare/skincare_diet.html', context)
 
 
 

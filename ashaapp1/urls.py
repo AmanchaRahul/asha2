@@ -23,7 +23,9 @@ urlpatterns = [
    
     
    
-    path('skincare_diet/',views.skincare_diet_view,name="skincaredietdata"),
+    path('skincare_diet/', views.skincare_diet_view, name='skincaredietdata'),
+    path('daily-checkin/', views.daily_checkin, name='daily_checkin'),
+    path('reset-checkin/', views.reset_checkin, name='reset_checkin'),
     
     
     path('diabetesexercises/',views.diabetes_exercises_view,name="diabetesexercises"),
