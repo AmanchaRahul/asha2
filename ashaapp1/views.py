@@ -23,6 +23,7 @@ import os
 from django.views.decorators.http import require_http_methods
 import json
 from django.templatetags.static import static
+from django.views.decorators.http import require_POST
 
 
 
@@ -166,6 +167,26 @@ def skincare_diet_view(request):
     return render(request, 'skincare/skincare_diet.html', context)
 
 
+@login_required
+@require_POST
+def daily_checkin(request):
+    daily_check_in, created = DailyCheckIn.objects.get_or_create(user=request.user)
+    daily_check_in.check_in_count += 1
+    daily_check_in.save()
+    return JsonResponse({
+        'success': True, 
+        'check_in_count': daily_check_in.check_in_count
+    })
+
+@login_required
+@require_POST
+def reset_checkin(request):
+    daily_check_in, created = DailyCheckIn.objects.get_or_create(user=request.user)
+    daily_check_in.reset_count()
+    return JsonResponse({
+        'success': True, 
+        'check_in_count': 0
+    })
 
 
 from django.db.models import Avg, Sum
