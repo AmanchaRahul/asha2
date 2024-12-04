@@ -20,74 +20,92 @@
                 <img src="{% static 'images/bloodpressure/bloodpressure2.jpeg' %}" alt="Blood Pressure" class="w-full h-24 md:h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="blood-pressure">
                 <img src="{% static 'images/skincare/skincare2.jpeg' %}" alt="Skincare" class="w-full h-24 md:h-32 object-cover cursor-pointer hover:scale-110 transition-all duration-300" data-topic="skincare">
             </div>
-            
             <div class="w-full aspect-square relative bg-gray-800 rounded-none overflow-hidden">
                 <div id="diabetes-topics" class="topic-card absolute inset-0 p-4">
                     <div class="grid grid-cols-2 gap-4 h-full">
-                        <a href="{% url 'diabetesdietdata' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'diabetesdietdata' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-apple-whole text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">diet</p>
                         </a>
-                        <a href="{% url 'diabetesexercises' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'diabetesexercises' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-dumbbell text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">exercises</p>
                         </a>
-                        <a href="{% url 'heart_model' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-droplet text-3xl md:text-4xl"></i>
+                        <a href="{% url 'heart_model' %}" class="flex flex-col items-center justify-center hover-olive">
+                            <i class="fa-solid fa-heart-pulse text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">heart model</p>
                         </a>
-                        <a href="{% url 'manage_diabetes_medications' %}" class="flex items-center justify-center hover-olive">
+
+                        <a href="{% url 'manage_diabetes_medications' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-hospital text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">medications</p>
                         </a>
-                        <a href="{% url 'diabeteschallenge' %}" class="flex items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
+                        <a href="{% url 'diabeteschallenge' %}" class="flex flex-col items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
                             <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" style="width: 75px; height: 60px;" class="object-cover">
+                            <p class="text-xs mt-1">challenge</p>
                         </a>
-                        <a href="{% url 'ddoctor' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'ddoctor' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">nutritionist</p>
                         </a>
                     </div>
                 </div>
                 
                 <div id="blood-pressure-topics" class="topic-card absolute inset-0 p-4 hidden">
                     <div class="grid grid-cols-2 gap-4 h-full">
-                        <a href="{% url 'bloodpressuredietdata' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'bloodpressuredietdata' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-apple-whole text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">diet</p>
                         </a>
-                        <a href="{% url 'bloodpressureexercises' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'bloodpressureexercises' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-dumbbell text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">exercises</p>
                         </a>
-                        <a href="{% url 'blood_pressure_model' %}" class="flex items-center justify-center hover-olive">
-                            <i class="fa-solid fa-temperature-half text-3xl md:text-4xl"></i>
+                        <a href="{% url 'blood_pressure_model' %}" class="flex flex-col items-center justify-center hover-olive">
+                            <i class="fa-solid fa-droplet text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">blood cell model</p>
                         </a>
-                        <a href="{% url 'manage_stress' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'manage_stress' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-face-tired text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">managing stress</p>
                         </a>
-                        <a href="{% url 'bloodpressurechallenge' %}" class="flex items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
+                        <a href="{% url 'bloodpressurechallenge' %}" class="flex flex-col items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
                             <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" style="width: 75px; height: 60px;" 
                             class="object-cover">
+                            <p class="text-xs mt-1">challenge</p>
                         </a>
-                        <a href="{% url 'bdoctor' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'bdoctor' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">nutritionist</p>
                         </a>
                     </div>
                 </div>
                 <div id="skincare-topics" class="topic-card absolute inset-0 p-4 hidden">
                     <div class="grid grid-cols-2 gap-4 h-full">
-                        <a href="{% url 'skincaredietdata' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'skincaredietdata' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-apple-whole text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">diet</p>
                         </a>
-                        <a href="{% url 'skincarecheckdata' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'skincarecheckdata' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-hand-dots text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">skincare check</p>
                         </a>
-                        <a href="{% url 'skincareroutine' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'skincareroutine' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-paste text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">skincare routine</p>
                         </a>
-                        <a href="{% url 'water_intake_tracker' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'water_intake_tracker' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-bottle-water text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">water intake</p>
                         </a>
-                        <a href="{% url 'anti_aging_tips' %}" class="flex items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
+                        <a href="{% url 'anti_aging_tips' %}" class="flex flex-col items-center justify-center hover-olive transition-transform duration-300 transform hover:scale-110">
                             <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="skincare Challenge" style="width: 75px; height: 60px;" 
                             class="object-cover">
+                            <p class="text-xs mt-1">challenge</p>
                         </a>
-                        <a href="{% url 'sdoctor' %}" class="flex items-center justify-center hover-olive">
+                        <a href="{% url 'sdoctor' %}" class="flex flex-col items-center justify-center hover-olive">
                             <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
+                            <p class="text-xs mt-1">nutritionist</p>
                         </a>
                     </div>
                 </div>

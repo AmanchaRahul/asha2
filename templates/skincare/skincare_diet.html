@@ -120,54 +120,6 @@
     </main>
 
     <script>
-        const skincareDiets = {
-            hydration: {
-                fruitsVeggies: [
-                    { name: "Cucumber", image: "{% static 'images/skincare/cucumber.gif' %}", description: "High water content, hydrates skin" },
-                    { name: "Watermelon", image: "{% static 'images/skincare/watermelon.gif' %}", description: "Rich in vitamins A and C" },
-                    { name: "Strawberries", image: "{% static 'images/skincare/strawberry.gif' %}", description: "High in antioxidants" }
-                ],
-                proteins: [
-                    { name: "Greek Yogurt", image: "{% static 'images/skincare/yogurt.gif' %}", description: "Probiotics for skin health" },
-                    { name: "Chicken Breast", image: "{% static 'images/skincare/chickenbreast.gif' %}", description: "Lean protein for skin repair" }
-                ],
-                healthyFats: [
-                    { name: "Avocado", image: "{% static 'images/skincare/avacado.gif' %}", description: "Healthy fats for skin elasticity" },
-                    { name: "Chia Seeds", image: "{% static 'images/skincare/chiaseeds.gif' %}", description: "Omega-3 fatty acids" }
-                ]
-            },
-            antiAging: {
-                fruitsVeggies: [
-                    { name: "Blueberries", image: "{% static 'images/skincare/blueberry.gif' %}", description: "High in antioxidants" },
-                    { name: "Spinach", image: "{% static 'images/skincare/spinach.gif' %}", description: "Rich in iron and vitamins" },
-                    { name: "Sweet Potatoes", image: "{% static 'images/skincare/sweetpotato.gif' %}", description: "Beta-carotene for skin health" }
-                ],
-                proteins: [
-                    { name: "Salmon", image: "{% static 'images/skincare/salmon.gif' %}", description: "Omega-3 fatty acids" },
-                    { name: "Eggs", image: "{% static 'images/skincare/eggs.gif' %}", description: "Protein and biotin for skin" }
-                ],
-                healthyFats: [
-                    { name: "Walnuts", image: "{% static 'images/skincare/wallnut.gif' %}", description: "Omega-3 and antioxidants" },
-                    { name: "Olive Oil", image: "{% static 'images/skincare/oliveoil.gif' %}", description: "Healthy fats and vitamin E" }
-                ]
-            },
-            acnePrevention: {
-                fruitsVeggies: [
-                    { name: "Tomatoes", image: "{% static 'images/skincare/tomato.gif' %}", description: "Lycopene for skin health" },
-                    { name: "Kale", image: "{% static 'images/skincare/kale.gif' %}", description: "Vitamins A and C" },
-                    { name: "Red Grapes", image: "{% static 'images/skincare/redgrape.gif' %}", description: "Antioxidants for clear skin" }
-                ],
-                proteins: [
-                    { name: "Lentils", image: "{% static 'images/skincare/lentils.gif' %}", description: "Low glycemic index" },
-                    { name: "Turkey", image: "{% static 'images/skincare/turkey.gif' %}", description: "Lean protein, zinc for skin health" }
-                ],
-                healthyFats: [
-                    { name: "Almonds", image: "{% static 'images/skincare/almonds.gif' %}", description: "Vitamin E for skin" },
-                    { name: "Flaxseeds", image: "{% static 'images/skincare/flexseeds.gif' %}", description: "Omega-3 fatty acids" }
-                ]
-            }
-        };
-
         document.addEventListener('DOMContentLoaded', function() {
             const skinGoalBtns = document.querySelectorAll('.skincare-goal-btn');
             const dietPlanDiv = document.getElementById('dietPlan');
@@ -175,116 +127,193 @@
             const proteinsDiv = document.getElementById('proteins').querySelector('div');
             const healthyFatsDiv = document.getElementById('healthyFats').querySelector('div');
             const engagementFeatures = document.getElementById('engagementFeatures');
-            const progressBar = document.querySelector('.progress-bar');
             const checkInBtn = document.getElementById('checkIn');
+            const resetButton = document.getElementById('resetButton');
+            const daysCountDisplay = document.getElementById('daysCount');
+            const progressBar = document.querySelector('.progress-bar');
             const achievement = document.getElementById('achievement');
             const achievementText = document.getElementById('achievementText');
-
             
-            let currentGoal = "hydration";
-            let daysCount = 0;
-            let interval;
+            
 
-        // Handle goal button clicks
-        skinGoalBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                currentGoal = btn.getAttribute('data-goal');
-                updateDietPlan(currentGoal);
-                dietPlanDiv.classList.remove('hidden');
-                engagementFeatures.classList.remove('hidden');
-            });
-        });
-
-        // Update diet plan section
-        const updateDietPlan = (goal) => {
-            const plan = skincareDiets[goal];
-            updateFoodSection(fruitsVeggiesDiv, plan.fruitsVeggies);
-            updateFoodSection(proteinsDiv, plan.proteins);
-            updateFoodSection(healthyFatsDiv, plan.healthyFats);
-        };
-
-        // Populate individual food sections
-        const updateFoodSection = (sectionDiv, foods) => {
-            sectionDiv.innerHTML = foods.map(food => `
-                <div class="diet-card p-4 rounded-lg">
-                    <img src="${food.image}" alt="${food.name}" class="w-full h-32 object-cover mb-2 rounded-lg">
-                    <h4 class="text-lg font-bold mb-1">${food.name}</h4>
-                    <p class="text-sm">${food.description}</p>
-                </div>
-            `).join('');
-        };
-
-        // Check-in logic for streaks and achievements
-        checkInBtn.addEventListener('click', () => {
-            streakDays++;
-            updateProgress();
-            checkAchievements();
-        });
-
-        // Update progress bar
-        const updateProgress = () => {
-            const progress = Math.min(streakDays * 10, 100);
-            progressBar.style.width = `${progress}%`;
-        };
-
-        // Show achievement based on streak
-        const checkAchievements = () => {
-            const achievements = {
-                1: "First Step: You've started your skincare diet journey!",
-                7: "Week Warrior: You've completed a full week!",
-                30: "Month Master: 30 days of consistent skincare diet!"
+            const skincareDiets = {
+                hydration: {
+                    fruitsVeggies: [
+                        { name: "Cucumber", image: "{% static 'images/skincare/cucumber.gif' %}", description: "High water content, hydrates skin" },
+                        { name: "Watermelon", image: "{% static 'images/skincare/watermelon.gif' %}", description: "Rich in vitamins A and C" },
+                        { name: "Strawberries", image: "{% static 'images/skincare/strawberry.gif' %}", description: "High in antioxidants" }
+                    ],
+                    proteins: [
+                        { name: "Greek Yogurt", image: "{% static 'images/skincare/yogurt.gif' %}", description: "Probiotics for skin health" },
+                        { name: "Chicken Breast", image: "{% static 'images/skincare/chickenbreast.gif' %}", description: "Lean protein for skin repair" }
+                    ],
+                    healthyFats: [
+                        { name: "Avocado", image: "{% static 'images/skincare/avacado.gif' %}", description: "Healthy fats for skin elasticity" },
+                        { name: "Chia Seeds", image: "{% static 'images/skincare/chiaseeds.gif' %}", description: "Omega-3 fatty acids" }
+                    ]
+                },
+                antiAging: {
+                    fruitsVeggies: [
+                        { name: "Blueberries", image: "{% static 'images/skincare/blueberry.gif' %}", description: "High in antioxidants" },
+                        { name: "Spinach", image: "{% static 'images/skincare/spinach.gif' %}", description: "Rich in iron and vitamins" },
+                        { name: "Sweet Potatoes", image: "{% static 'images/skincare/sweetpotato.gif' %}", description: "Beta-carotene for skin health" }
+                    ],
+                    proteins: [
+                        { name: "Salmon", image: "{% static 'images/skincare/salmon.gif' %}", description: "Omega-3 fatty acids" },
+                        { name: "Eggs", image: "{% static 'images/skincare/eggs.gif' %}", description: "Protein and biotin for skin" }
+                    ],
+                    healthyFats: [
+                        { name: "Walnuts", image: "{% static 'images/skincare/wallnut.gif' %}", description: "Omega-3 and antioxidants" },
+                        { name: "Olive Oil", image: "{% static 'images/skincare/oliveoil.gif' %}", description: "Healthy fats and vitamin E" }
+                    ]
+                },
+                acnePrevention: {
+                    fruitsVeggies: [
+                        { name: "Tomatoes", image: "{% static 'images/skincare/tomato.gif' %}", description: "Lycopene for skin health" },
+                        { name: "Kale", image: "{% static 'images/skincare/kale.gif' %}", description: "Vitamins A and C" },
+                        { name: "Red Grapes", image: "{% static 'images/skincare/redgrape.gif' %}", description: "Antioxidants for clear skin" }
+                    ],
+                    proteins: [
+                        { name: "Lentils", image: "{% static 'images/skincare/lentils.gif' %}", description: "Low glycemic index" },
+                        { name: "Turkey", image: "{% static 'images/skincare/turkey.gif' %}", description: "Lean protein, zinc for skin health" }
+                    ],
+                    healthyFats: [
+                        { name: "Almonds", image: "{% static 'images/skincare/almonds.gif' %}", description: "Vitamin E for skin" },
+                        { name: "Flaxseeds", image: "{% static 'images/skincare/flexseeds.gif' %}", description: "Omega-3 fatty acids" }
+                    ]
+                }
             };
 
-            if (achievements[streakDays]) {
-                achievementText.textContent = achievements[streakDays];
-                achievement.classList.remove('hidden', 'pulse');
-                achievement.classList.add('pulse');
-                setTimeout(() => achievement.classList.remove('pulse'), 3000);
+            let currentGoal = "hydration";
+            let streakDays = {{ check_in_count }}; // Initial count from server
+            
+             // Update progress display
+            function updateProgressDisplay() {
+                daysCountDisplay.textContent = `${streakDays} days`;
+                const progress = Math.min(streakDays * 3.33, 100);
+                progressBar.style.width = `${progress}%`;
             }
-        };
+            updateProgressDisplay();
 
-        // Periodic skincare tips
-        setInterval(() => {
-            const tips = [
-                "Remember to stay hydrated!",
-                "Consistency is key in your skincare diet.",
-                "Combine your diet with a good skincare routine for best results.",
-                "Don't forget to protect your skin from the sun!"
-            ];
-            showFloatingTip(tips[Math.floor(Math.random() * tips.length)]);
-        }, 300000); // Every 5 minutes
+            // Handle goal button clicks
+            skinGoalBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentGoal = btn.getAttribute('data-goal');
+                    updateDietPlan(currentGoal);
+                    dietPlanDiv.classList.remove('hidden');
+                    engagementFeatures.classList.remove('hidden');
+                });
+            });
 
-        // Show floating tip
-        const showFloatingTip = (message) => {
-            const tip = document.createElement('div');
-            tip.textContent = message;
-            tip.className = 'fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg';
-            document.body.appendChild(tip);
-            setTimeout(() => tip.remove(), 5000);
-        };
-    });
-    
+            // Update diet plan section
+            const updateDietPlan = (goal) => {
+                const plan = skincareDiets[goal];
+                updateFoodSection(fruitsVeggiesDiv, plan.fruitsVeggies);
+                updateFoodSection(proteinsDiv, plan.proteins);
+                updateFoodSection(healthyFatsDiv, plan.healthyFats);
+            };
 
-    // Check-in functionality (increment day count)
-    document.getElementById('checkIn').addEventListener('click', () => {
-        daysCount++;
-        document.getElementById('daysCount').textContent = `${daysCount} days`;
-        document.querySelector('.progress-bar').style.width = `${(daysCount % 30) * 3.33}%`; // Progress bar logic
+            // Populate individual food sections
+            const updateFoodSection = (sectionDiv, foods) => {
+                sectionDiv.innerHTML = foods.map(food => `
+                    <div class="diet-card p-4 rounded-lg">
+                        <img src="${food.image}" alt="${food.name}" class="w-full h-32 object-cover mb-2 rounded-lg">
+                        <h4 class="text-lg font-bold mb-1">${food.name}</h4>
+                        <p class="text-sm">${food.description}</p>
+                    </div>
+                `).join('');
+            };
 
-        if (daysCount >= 30) {
-            document.getElementById('achievement').classList.remove('hidden');
-            document.getElementById('achievementText').textContent = "You've completed 30 days of your skincare diet!";
-        }
-    });
-    
-    // Reset functionality
-    document.getElementById('resetButton').addEventListener('click', () => {
-        daysCount = 0;
-        document.getElementById('daysCount').textContent = `0 days`;
-        document.querySelector('.progress-bar').style.width = '0%';
-        document.getElementById('achievement').classList.add('hidden');
-    });
+            // Check-in button handler
+            checkInBtn.addEventListener('click', () => {
+                fetch('{% url "daily_checkin" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        streakDays = data.check_in_count;
+                        updateProgressDisplay();
+                        checkAchievements();
+                    }
+                });
+            });
 
+            // Reset button handler
+            resetButton.addEventListener('click', () => {
+                fetch('{% url "reset_checkin" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        streakDays = 0;
+                        updateProgressDisplay();
+                        achievement.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Achievements logic
+            function checkAchievements() {
+                const achievements = {
+                    1: "First Step: You've started your skincare diet journey!",
+                    7: "Week Warrior: You've completed a full week!",
+                    30: "Month Master: 30 days of consistent skincare diet!"
+                };
+
+                if (achievements[streakDays]) {
+                    achievementText.textContent = achievements[streakDays];
+                    achievement.classList.remove('hidden', 'pulse');
+                    achievement.classList.add('pulse');
+                    setTimeout(() => achievement.classList.remove('pulse'), 3000);
+                }
+            }
+
+            // Periodic skincare tips
+            setInterval(() => {
+                const tips = [
+                    "Remember to stay hydrated!",
+                    "Consistency is key in your skincare diet.",
+                    "Combine your diet with a good skincare routine for best results.",
+                    "Don't forget to protect your skin from the sun!"
+                ];
+                showFloatingTip(tips[Math.floor(Math.random() * tips.length)]);
+            }, 300000); // Every 5 minutes
+
+            // Show floating tip
+            const showFloatingTip = (message) => {
+                const tip = document.createElement('div');
+                tip.textContent = message;
+                tip.className = 'fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-lg shadow-lg';
+                document.body.appendChild(tip);
+                setTimeout(() => tip.remove(), 5000);
+            };
+
+            // CSRF Cookie retrieval function
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
 </script>
 
     {% block navbar %}

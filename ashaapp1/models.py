@@ -16,7 +16,6 @@ class DailyCheckIn(models.Model):
         self.save()
 
 
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=100, blank=True, null=True)

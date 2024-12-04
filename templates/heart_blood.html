@@ -15,13 +15,14 @@
     <style>
        
         body {
+            font-family: 'Courier Prime', monospace;
             background-color: #000000;
-            font-family: monospace;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         #modelContainer {
+            top:20px;
             position: relative;
             width: 100%;
             height: 100%;
@@ -38,7 +39,7 @@
         }
         .info-card {
             position: absolute;
-            top: 60px;
+            top: 90px;
             right: 20px;
             width: 300px;
             background-color: rgba(100, 149, 237, 0.9);
@@ -83,19 +84,25 @@
         }
         .model-button {
             position: absolute;
-            bottom: -10px;
+            top: 65px; /* Align dynamically, remove if not needed */
+            bottom: 10px; /* Ensure button is 10px from the bottom of its container */
             left: 50%;
             transform: translateX(-50%);
             background-color: rgba(255,255,255,0.6);
             color: black;
-            padding: 10px 20px;
+            padding: 12px 25px; /* Increase padding for better readability */
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 16px; /* Adjust font size for clearer text */
+            line-height: 0.3; /* Ensure proper spacing within the button */
+            text-align: center; /* Center the text within the button */
+            white-space: nowrap; /* Prevent text wrapping */
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
             z-index: 2;
+            box-sizing: border-box; /* Ensure padding is included in dimensions */
         }
+        
         .model-button:hover {
             background-color: rgba(255,255,255,0.8);
         }
@@ -125,9 +132,9 @@
         </div>
 
         {% if model_type == 'heart' %}
-            <button class="model-button" onclick="toggleInfo()" style="margin-top: -20px;">Diabetes and Heart Health</button>
+            <button class="model-button" onclick="toggleInfo()">Diabetes and Heart Health</button>
         {% else %}
-            <button class="model-button" onclick="toggleInfo()" style="margin-top: -20px;">Blood Cells and Pressure Dynamics</button>
+            <button class="model-button" onclick="toggleInfo()">Blood Cells and Pressure Dynamics</button>
         {% endif %}
     </div>
 
