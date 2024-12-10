@@ -1079,5 +1079,37 @@ def nutritionist_dashboard(request):
     
     return render(request, 'nutritionist_dashboard.html', context)
 
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+@login_required
 def chat_with_nutritionist(request):
-    return render(request, 'chat_with_nutritionist.html')
+    from .models import UserActivity, UserProfile  # Adjust import path as needed
+    
+    try:
+        # Find the nutritionist
+        nutritionist = User.objects.get(userprofile__role='nutritionist')
+        
+        # Check if nutritionist is online
+        try:
+            nutritionist_activity = UserActivity.objects.get(user=nutritionist)
+            is_online = (
+                nutritionist_activity.is_online and 
+                nutritionist_activity.last_activity >= timezone.now() - timedelta(hours=1)
+            )
+        except UserActivity.DoesNotExist:
+            is_online = False
+        
+        context = {
+            'nutritionist': nutritionist,
+            'is_online': is_online
+        }
+    except User.DoesNotExist:
+        context = {
+            'nutritionist': None,
+            'is_online': False
+        }
+    
+    return render(request, 'chat_with_nutritionist.html', context)

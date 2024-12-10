@@ -130,6 +130,37 @@
 
     <div class="chat-container">
         <h2 class="text-2xl text-white text-center mb-4">Chat with Nutritionist</h2>
+        {% if nutritionist %}
+            <div class="text-center">
+                <div class="online-status mb-4">
+                    {% if is_online %}
+                        <span class="dot dot-online"></span>
+                        <span>Online</span>
+                    {% else %}
+                        <span class="dot dot-offline"></span>
+                        <span>Unavailable</span>
+                    {% endif %}
+                </div>
+                
+                <div class="nutritionist-info">
+                    <p>Nutritionist: {{ nutritionist.username }}</p>
+                    <!-- Add more nutritionist details as needed -->
+                </div>
+
+                <div class="chat-section mt-4">
+                    {% if is_online %}
+                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                            Start Chat
+                        </button>
+                    {% else %}
+                        <p class="text-red-400">Nutritionist is currently unavailable</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p class="text-red-400">No nutritionist found</p>
+        {% endif %}
+
         <div id="chat-box" class="chat-box">
             <!-- Chat messages will appear here -->
         </div>
