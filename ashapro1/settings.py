@@ -284,7 +284,6 @@ SOCIALACCOUNT_ADAPTER = 'ashaapp1.adapters.MySocialAccountAdapter'
 
 
 
-
 LOGIN_REDIRECT_URL = '/wellness/'
 LOGOUT_REDIRECT_URL = '/'
 
