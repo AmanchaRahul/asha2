@@ -50,6 +50,14 @@ def login_view(request):
             if user is not None:
                 # Explicitly specify the backend for username/password login
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                
+                
+                # Assign role for Google OAuth users (or any user without a profile)
+                user_profile, created = UserProfile.objects.get_or_create(user=user)
+                if created or user_profile.role not in ['user', 'nutritionist']:
+                    user_profile.role = 'user'
+                    user_profile.save()
+                    
                 messages.success(request, f"Welcome back, {username}!")
                 return redirect('/wellness/')
             else:
