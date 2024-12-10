@@ -134,17 +134,11 @@
             <div class="text-center">
                 <div class="online-status mb-4">
                     {% if is_online %}
-                        <span class="dot dot-online"></span>
-                        <span>Online</span>
+                        <span class="text-green-500 text-xs ml-2">● Online</span>
                     {% else %}
                         <span class="dot dot-offline"></span>
                         <span>Unavailable</span>
                     {% endif %}
-                </div>
-                
-                <div class="nutritionist-info">
-                    <p>Nutritionist: {{ nutritionist.username }}</p>
-                    <!-- Add more nutritionist details as needed -->
                 </div>
 
                 <div class="chat-section mt-4">
