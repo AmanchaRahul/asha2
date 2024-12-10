@@ -142,7 +142,7 @@ def logout_view(request):
     
     # Standard Django logout
     logout(request)
-    return redirect('login')
+    return redirect('/')
 
 def about_view(request):
     return render(request, "about.html")
