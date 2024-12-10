@@ -131,6 +131,19 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_auth_user',  # Default pipeline steps
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'your_app.pipeline.set_user_role',  # Custom function to assign roles
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
+
+
+
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
