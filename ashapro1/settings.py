@@ -48,6 +48,31 @@ SITE_ID = 3
 # Application definition
 
 
+# Security settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True  # Redirect HTTP requests to HTTPS
+
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://asha2.onrender.com",
+    "wss://asha2.onrender.com",
+]
+
+
+# Add CSP headers for WebSocket
+CSP_CONNECT_SRC = [
+    "'self'",
+    "https://asha2.onrender.com/",
+    "wss://asha2.onrender.com/",
+]
+
+
+
+
+
+
 INSTALLED_APPS = [
    
     'channels',
