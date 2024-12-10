@@ -149,9 +149,13 @@
 
                 <div class="chat-section mt-4">
                     {% if is_online %}
-                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Start Chat
-                        </button>
+                    <div id="chat-box" class="chat-box">
+                        <!-- Chat messages will appear here -->
+                    </div>
+                    <div class="input-container">
+                        <textarea id="message-input" placeholder="Type a message..." class="message-input"></textarea>
+                        <button id="send-button" class="send-button">Send</button>
+                    </div>
                     {% else %}
                         <p class="text-red-400">Nutritionist is currently unavailable</p>
                     {% endif %}
@@ -161,13 +165,6 @@
             <p class="text-red-400">No nutritionist found</p>
         {% endif %}
 
-        <div id="chat-box" class="chat-box">
-            <!-- Chat messages will appear here -->
-        </div>
-        <div class="input-container">
-            <textarea id="message-input" placeholder="Type a message..." class="message-input"></textarea>
-            <button id="send-button" class="send-button">Send</button>
-        </div>
     </div>
 
     <script>
