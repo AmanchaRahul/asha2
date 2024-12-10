@@ -29,9 +29,6 @@ from .models import UserProfile, User
 
 
 
-
-
-
 # Create your views here.
 def base_view(request):
     return render(request,"base.html")
