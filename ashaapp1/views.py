@@ -49,12 +49,13 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                  # Check if the user is logging in via Google OAuth
-                if not hasattr(user, 'userprofile') or user.userprofile.role not in ['user', 'nutritionist']:
-                    # Ensure role is set to 'user' for Google OAuth or missing profiles
-                    user_profile, created = UserProfile.objects.get_or_create(user=user)
-                    if created or user_profile.role not in ['user', 'nutritionist']:
-                        user_profile.role = 'user'
-                        user_profile.save()
+                  # Assign default role for Google OAuth users
+                user_profile, created = UserProfile.objects.get_or_create(user=user)
+
+                # If this is a new profile or no valid role is set, assign "user"
+                if created or not user_profile.role:
+                    user_profile.role = 'user'
+                    user_profile.save()
 
                 # Explicitly specify the backend for username/password login
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
