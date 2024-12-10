@@ -17,10 +17,16 @@ class DailyCheckIn(models.Model):
 
 
 class UserProfile(models.Model):
+    USER_ROLES = [
+        ('user', 'User'),
+        ('nutritionist', 'Nutritionist'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=100, blank=True, null=True)
     email_token = models.UUIDField(default=uuid.uuid4, editable=False)
     email_verified = models.BooleanField(default=False)
+    role = models.CharField(max_length=20, choices=USER_ROLES, default='user')
 
     def __str__(self):
         return self.user.email if self.user else str(self.email_token)

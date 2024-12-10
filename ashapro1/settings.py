@@ -50,6 +50,7 @@ SITE_ID = 3
 
 INSTALLED_APPS = [
    
+    'channels',
     'cloudinary',
     'cloudinary_storage',
       
@@ -68,6 +69,23 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google', 
   
 ]
+
+
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379') 
+
+
+
+ASGI_APPLICATION = 'ashapro1.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [REDIS_URL],
+        },
+    },
+}
+
 
 #SOCIAL_AUTH_GOOGLE_CLIENT_ID = '779188846891-al5ispsfj3pijqs6912nh13ot2pd4r4k.apps.googleusercontent.com'
 #SOCIAL_AUTH_GOOGLE_SECRET = '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'

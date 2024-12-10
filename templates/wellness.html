@@ -44,10 +44,17 @@
                             <img src="{% static 'images/diabetes/challenge.jpeg' %}" alt="Blood Pressure Challenge" style="width: 75px; height: 60px;" class="object-cover">
                             <p class="text-xs mt-1">challenge</p>
                         </a>
-                        <a href="{% url 'ddoctor' %}" class="flex flex-col items-center justify-center hover-olive">
-                            <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
-                            <p class="text-xs mt-1">nutritionist</p>
-                        </a>
+                        {% if user.userprofile.role == 'user' %}
+                            <a href="{% url 'ddoctor' %}" class="flex flex-col items-center justify-center hover-olive">
+                                <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
+                                <p class="text-xs mt-1">Nutritionist</p>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'nutritionist_dashboard' %}" class="flex flex-col items-center justify-center hover-olive">
+                                <i class="fa-solid fa-user text-3xl md:text-4xl"></i>
+                                <p class="text-xs mt-1">Nutritionist_dashboard</p>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
                 
@@ -74,10 +81,17 @@
                             class="object-cover">
                             <p class="text-xs mt-1">challenge</p>
                         </a>
-                        <a href="{% url 'bdoctor' %}" class="flex flex-col items-center justify-center hover-olive">
-                            <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
-                            <p class="text-xs mt-1">nutritionist</p>
-                        </a>
+                        {% if user.userprofile.role == 'user' %}
+                            <a href="{% url 'bdoctor' %}" class="flex flex-col items-center justify-center hover-olive">
+                                <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
+                                <p class="text-xs mt-1">Nutritionist</p>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'nutritionist_dashboard' %}" class="flex flex-col items-center justify-center hover-olive">
+                                <i class="fa-solid fa-user text-3xl md:text-4xl"></i>
+                                <p class="text-xs mt-1">Nutritionist_dashboard</p>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
                 <div id="skincare-topics" class="topic-card absolute inset-0 p-4 hidden">
@@ -103,10 +117,17 @@
                             class="object-cover">
                             <p class="text-xs mt-1">challenge</p>
                         </a>
-                        <a href="{% url 'sdoctor' %}" class="flex flex-col items-center justify-center hover-olive">
-                            <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
-                            <p class="text-xs mt-1">nutritionist</p>
-                        </a>
+                        {% if user.userprofile.role == 'user' %}
+                            <a href="{% url 'sdoctor' %}" class="flex flex-col items-center justify-center hover-olive">
+                                <i class="fa-solid fa-user-doctor text-3xl md:text-4xl"></i>
+                                <p class="text-xs mt-1">Nutritionist</p>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'nutritionist_dashboard' %}" class="flex flex-col items-center justify-center hover-olive">
+                                <i class="fa-solid fa-user text-3xl md:text-4xl"></i>
+                                <p class="text-xs mt-1">Nutritionist_dashboard</p>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

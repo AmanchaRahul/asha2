@@ -112,6 +112,10 @@ urlpatterns = [
     path('bloodpressure/', views.blood_pressure_model, name='blood_pressure_model'),
     
     
+    path('chat/<int:user_id>/', views.chat_with_user, name='chat_with_user'),
+    path('nutritionist_dashboard/', views.nutritionist_dashboard, name='nutritionist_dashboard'),
+    path('chat_with_nutritionist/', views.chat_with_nutritionist, name='chat_with_nutritionist'),
+
     
     
    

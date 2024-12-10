@@ -24,6 +24,7 @@ from django.views.decorators.http import require_http_methods
 import json
 from django.templatetags.static import static
 from django.views.decorators.http import require_POST
+from .models import UserProfile, User
 
 
 
@@ -1049,3 +1050,16 @@ def blood_pressure_model(request):
         'info_content': info_content,
         'model_type': 'blood_cell'
     })
+    
+    
+    
+def chat_with_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    return render(request, 'chat_with_user.html', {'user': user})
+
+def nutritionist_dashboard(request):
+    users = User.objects.filter(userprofile__role='user')  # Get users with role 'user'
+    return render(request, 'nutritionist_dashboard.html', {'users': users})
+
+def chat_with_nutritionist(request):
+    return render(request, 'chat_with_nutritionist.html')
