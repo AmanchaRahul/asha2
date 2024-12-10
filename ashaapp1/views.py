@@ -48,19 +48,10 @@ def login_view(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                 # Check if the user is logging in via Google OAuth
-                  # Assign default role for Google OAuth users
-                user_profile, created = UserProfile.objects.get_or_create(user=user)
-
-                # If this is a new profile or no valid role is set, assign "user"
-                if created or not user_profile.role:
-                    user_profile.role = 'user'
-                    user_profile.save()
-
                 # Explicitly specify the backend for username/password login
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                   
                 messages.success(request, f"Welcome back, {username}!")
+
                 return redirect('/wellness/')
             else:
                 messages.error(request, "Invalid username or password.")
