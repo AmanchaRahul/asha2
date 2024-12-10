@@ -4,7 +4,28 @@ from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 import uuid
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
+class UserActivity(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    last_activity = models.DateTimeField(auto_now=True)
+    is_online = models.BooleanField(default=False)
+
+    @classmethod
+    def update_last_activity(cls, user):
+        activity, created = cls.objects.get_or_create(user=user)
+        activity.last_activity = timezone.now()
+        activity.is_online = True
+        activity.save()
+
+    @classmethod
+    def mark_offline(cls, user):
+        try:
+            activity = cls.objects.get(user=user)
+            activity.is_online = False
+            activity.save()
+        except cls.DoesNotExist:
+            pass
 
 
 class DailyCheckIn(models.Model):

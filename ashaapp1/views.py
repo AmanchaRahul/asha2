@@ -133,10 +133,16 @@ def activate(request, uidb64, token):
 
     
     
-    
 def logout_view(request):
+    # Mark user as offline before logging out
+    from .models import UserActivity
+    
+    if request.user.is_authenticated:
+        UserActivity.mark_offline(request.user)
+    
+    # Standard Django logout
     logout(request)
-    return redirect('/')
+    return redirect('login')
 
 def about_view(request):
     return render(request, "about.html")
@@ -1055,9 +1061,23 @@ def chat_with_user(request, user_id):
     user = User.objects.get(id=user_id)
     return render(request, 'chat_with_user.html', {'user': user})
 
+@login_required
 def nutritionist_dashboard(request):
-    users = User.objects.filter(userprofile__role='user')  # Get users with role 'user'
-    return render(request, 'nutritionist_dashboard.html', {'users': users})
+    # Get active users (logged in within last hour and with 'user' role)
+    from .models import UserActivity
+    
+    # Find users active within the last hour who are not nutritionists
+    active_users = User.objects.filter(
+        userprofile__role='user',
+        useractivity__last_activity__gte=timezone.now() - timedelta(hours=1),
+        useractivity__is_online=True
+    ).distinct()
+    
+    context = {
+        'users': active_users
+    }
+    
+    return render(request, 'nutritionist_dashboard.html', context)
 
 def chat_with_nutritionist(request):
     return render(request, 'chat_with_nutritionist.html')

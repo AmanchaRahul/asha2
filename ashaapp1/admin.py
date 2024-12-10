@@ -3,7 +3,14 @@ from .models import UserProfile, DiabetesCheck, BloodPressureCheck, SkinCareChec
 from .models import DailyCheckIn
 from .models import ExerciseLog, WeeklyStats
 from .models import BloodPressureExerciseLog
+from .models import UserActivity
 
+@admin.register(UserActivity)
+class UserActivityAdmin(admin.ModelAdmin):
+    list_display = ('user', 'last_activity', 'is_online')
+    list_filter = ('is_online',)
+    search_fields = ('user__username', 'user__email')
+    ordering = ('-last_activity',)
 
 
 @admin.register(BloodPressureExerciseLog)
