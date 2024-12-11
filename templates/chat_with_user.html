@@ -168,13 +168,16 @@
             messageElement.classList.add('message');
             
             // Check if the message belongs to the logged-in user or the other user
-            if (data.user_id === userId) {
+            if (data.role === 'nutritionist') {
+                // Logged-in nutritionist
                 messageWrapper.classList.add('self'); // Align to the right
                 messageElement.classList.add('self');
-            } else {
+            } else if (data.role === 'user') {
+                // User
                 messageWrapper.classList.add('other'); // Align to the left
                 messageElement.classList.add('other');
             }
+            
         
             // Add the message content
             messageElement.textContent = data.message;
