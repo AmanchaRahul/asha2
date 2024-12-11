@@ -182,12 +182,12 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
             
-            // Check if the message belongs to the logged-in user or the other user
+            // Check if the message belongs to the logged-in user or the nutritionist
             if (data.user_id === userId) {
-                messageWrapper.classList.add('self'); // Align to the right
+                messageWrapper.classList.add('self'); // Align self messages to the right
                 messageElement.classList.add('self');
             } else {
-                messageWrapper.classList.add('other'); // Align to the left
+                messageWrapper.classList.add('other'); // Align other (nutritionist) messages to the left
                 messageElement.classList.add('other');
             }
         
