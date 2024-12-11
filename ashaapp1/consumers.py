@@ -42,7 +42,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             logger.info(f"WebSocket disconnected: {close_code}")
         except Exception as e:
             logger.error(f"Disconnect error: {str(e)}")
-
+    
+    
+    
+    @database_sync_to_async
+    def get_user_role(self):
+        return self.user.userprofile.role
+    
     async def receive(self, text_data):
         try:
             data = json.loads(text_data)
@@ -51,13 +57,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             if not message:
                 logger.warning("Received empty message")
                 return
-
+            
+            user_role = await self.get_user_role()
+            
             await self.channel_layer.group_send(
                 self.group_name,
                 {
                     'type': 'chat_message',
                     'message': message,
                     'user': self.user.username,
+                    'user_role': user_role,  # Add user role here
                 }
             )
         except json.JSONDecodeError:
@@ -70,6 +79,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({
                 'message': event['message'],
                 'user': event['user'],
+                'user_role': event['user_role'],  # Include user role in the response
             }))
         except Exception as e:
             logger.error(f"Message send error: {str(e)}")
