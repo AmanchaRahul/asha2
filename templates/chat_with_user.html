@@ -169,13 +169,13 @@
             
             // Check the role of the message sender
             if (data.user_role === 'nutritionist') {
-                messageWrapper.classList.add('self'); // User messages (right side)
+                messageWrapper.classList.add('self'); // Nutritionist messages (right side)
                 messageElement.classList.add('self');
             } else if (data.user_role === 'user') {
-                messageWrapper.classList.add('other'); // Nutritionist messages (left side)
+                messageWrapper.classList.add('other'); // User messages (left side)
                 messageElement.classList.add('other');
             }
-        
+            
             // Add the message content
             messageElement.textContent = data.message;
             
