@@ -182,12 +182,12 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
             
-            // Check if the message belongs to the logged-in user or the nutritionist
-            if (data.user_id === userId) {
-                messageWrapper.classList.add('self'); // Align self messages to the right
+            // Check the role of the message sender
+            if (data.user_role === 'user') {
+                messageWrapper.classList.add('self'); // User messages (right side)
                 messageElement.classList.add('self');
-            } else {
-                messageWrapper.classList.add('other'); // Align other (nutritionist) messages to the left
+            } else if (data.user_role === 'nutritionist') {
+                messageWrapper.classList.add('other'); // Nutritionist messages (left side)
                 messageElement.classList.add('other');
             }
         

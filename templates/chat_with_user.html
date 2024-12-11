@@ -168,10 +168,10 @@
             messageElement.classList.add('message');
             
             // Check the role of the message sender
-            if (data.user_role === 'user') {
+            if (data.user_role === 'nutritionist') {
                 messageWrapper.classList.add('self'); // User messages (right side)
                 messageElement.classList.add('self');
-            } else if (data.user_role === 'nutritionist') {
+            } else if (data.user_role === 'user') {
                 messageWrapper.classList.add('other'); // Nutritionist messages (left side)
                 messageElement.classList.add('other');
             }
