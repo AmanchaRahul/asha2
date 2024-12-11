@@ -1,222 +1,215 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with Nutritionist</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Courier Prime', monospace;
-            background-color: #000000;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-        }
-        .back-button {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 10;
-        }
-        .back-button img {
-            width: 30px;
-            height: auto;
-        }
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            max-width: 100%;
-            width: 100%;
-            height: 100vh;
-            padding: 10px;
-            background-color: black;
-            box-sizing: border-box;
-        }
-        .chat-box {
-            flex-grow: 1;
-            overflow-y: auto;
-            background-color: #1a1a1a;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-            max-height: calc(100vh - 250px); /* Adjust based on other elements */
-        }
-        .message-wrapper {
-            display: flex;
-            width: 100%;
-            margin: 5px 0;
-        }
-        .message-wrapper.self {
-            justify-content: flex-end;
-        }
-        .message-wrapper.other {
-            justify-content: flex-start;
-        }
-        .message {
-            max-width: 80%; /* Slightly increased for mobile */
-            padding: 10px;
-            border-radius: 10px;
-            word-wrap: break-word;
-            font-size: 16px; /* Ensure readability on mobile */
-        }
-        .message.self {
-            background-color: #4CAF50;
-            color: white;
-            text-align: right;
-        }
-        .message.other {
-            background-color: #333333;
-            color: white;
-            text-align: left;
-        }
-        .input-container {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-        }
-        .message-input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            color: white;
-            text-align: left; 
-            background-color: black;
-            font-size: 16px; /* Ensure readability on mobile */
-            min-height: 50px; /* Make input easier to tap on mobile */
-        }
-        .send-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px; /* Ensure readability on mobile */
-        }
-
-        /* Media Queries for Responsive Design */
-        @media (max-width: 600px) {
-            .chat-container {
-                padding: 5px;
-                margin-top: 40px; /* Moves the chat container further down */
-            }
-            .message {
-                max-width: 90%; /* More width on smaller screens */
-            }
-            .input-container {
-                flex-direction: column;
-            }
-            .send-button {
-                width: 100%;
-                margin-top: 10px;
-            }
-        }
-    </style>
-</head>
-<body>
+{% block basepage %}
+<div class="chat-container">
     <!-- Back Button -->
     <a href="{% url 'wellnessdata' %}" class="back-button">
         <img src="{% static 'images/backbutton1.png' %}" alt="Back" title="Go back">
     </a>
 
-    <div class="chat-container">
-        <h2 class="text-2xl text-white text-center mb-4">Chat with Nutritionist</h2>
-        {% if nutritionist %}
-            <div class="text-center">
-                <div class="online-status mb-4 text-center">
-                    {% if is_online %}
-                        <span class="text-green-500 text-xs ml-2">● Online</span>
-                    {% else %}
-                        <span class="dot dot-offline"></span>
-                        <span>Unavailable</span>
-                    {% endif %}
-                </div>
+    <h2 class="text-2xl text-white text-center mb-4">Chat with Nutritionist</h2>
+    {% if nutritionist %}
+        <div class="text-center">
+            <div class="online-status mb-4 text-center">
+                {% if is_online %}
+                    <span class="text-green-500 text-xs ml-2">● Online</span>
+                {% else %}
+                    <span class="dot dot-offline"></span>
+                    <span>Unavailable</span>
+                {% endif %}
             </div>
-                <div id="chat-box" class="chat-box">
-                    <!-- Chat messages will appear here -->
-                </div>
-                <div class="input-container">
-                    <textarea id="message-input" placeholder="Type a message..." class="message-input"></textarea>
-                    <button id="send-button" class="send-button">Send</button>
-                </div>
-                
-        {% else %}
-            <p class="text-red-400">No nutritionist found</p>
-        {% endif %}
+        </div>
+        <div id="chat-box" class="chat-box">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="input-container">
+            <textarea id="message-input" placeholder="Type a message..." class="message-input"></textarea>
+            <button id="send-button" class="send-button">Send</button>
+        </div>
+    {% else %}
+        <p class="text-red-400">No nutritionist found</p>
+    {% endif %}
+</div>
 
-    </div>
+<style>
+    body {
+        font-family: 'Courier Prime', monospace;
+        background-color: #000000;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+    .back-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 10;
+    }
+    .back-button img {
+        width: 30px;
+        height: auto;
+    }
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 100%;
+        width: 100%;
+        height: 100vh;
+        padding: 10px;
+        background-color: black;
+        box-sizing: border-box;
+    }
+    .chat-box {
+        flex-grow: 1;
+        overflow-y: auto;
+        background-color: #1a1a1a;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+        max-height: calc(100vh - 250px); /* Adjust based on other elements */
+    }
+    .message-wrapper {
+        display: flex;
+        width: 100%;
+        margin: 5px 0;
+    }
+    .message-wrapper.self {
+        justify-content: flex-end;
+    }
+    .message-wrapper.other {
+        justify-content: flex-start;
+    }
+    .message {
+        max-width: 80%; /* Slightly increased for mobile */
+        padding: 10px;
+        border-radius: 10px;
+        word-wrap: break-word;
+        font-size: 16px; /* Ensure readability on mobile */
+    }
+    .message.self {
+        background-color: #4CAF50;
+        color: white;
+        text-align: right;
+    }
+    .message.other {
+        background-color: #333333;
+        color: white;
+        text-align: left;
+    }
+    .input-container {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+    }
+    .message-input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        color: white;
+        text-align: left; 
+        background-color: black;
+        font-size: 16px; /* Ensure readability on mobile */
+        min-height: 50px; /* Make input easier to tap on mobile */
+    }
+    .send-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px; /* Ensure readability on mobile */
+    }
 
-    <script>
-        const userId = {{ user.id }};
-        const socket = new WebSocket('wss://' + window.location.host + '/ws/chat/' + userId + '/');
-        const chatBox = document.getElementById('chat-box');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
+    /* Media Queries for Responsive Design */
+    @media (max-width: 600px) {
+        .chat-container {
+            padding: 5px;
+            margin-top: 40px; /* Moves the chat container further down */
+        }
+        .message {
+            max-width: 90%; /* More width on smaller screens */
+        }
+        .input-container {
+            flex-direction: column;
+        }
+        .send-button {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+</style>
 
-        // Prevent zooming on input focus for mobile
-        messageInput.addEventListener('focus', function() {
-            document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-        });
+<script>
+    const userId = {{ user.id }};
+    const socket = new WebSocket('wss://' + window.location.host + '/ws/chat/' + userId + '/');
+    const chatBox = document.getElementById('chat-box');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
 
-        messageInput.addEventListener('blur', function() {
-            document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0');
-        });
+    // Prevent zooming on input focus for mobile
+    messageInput.addEventListener('focus', function() {
+        document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    });
 
-        socket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            
-            // Create a wrapper div for proper alignment
-            const messageWrapper = document.createElement('div');
-            messageWrapper.classList.add('message-wrapper');
-            
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            
-            // Check the role of the message sender
-            if (data.user_role === 'user') {
-                messageWrapper.classList.add('self'); // User messages (right side)
-                messageElement.classList.add('self');
-            } else if (data.user_role === 'nutritionist') {
-                messageWrapper.classList.add('other'); // Nutritionist messages (left side)
-                messageElement.classList.add('other');
-            }
-            
-            // Add the message content
-            messageElement.textContent = data.message;
-            
-            // Append message to its wrapper
-            messageWrapper.appendChild(messageElement);
-            chatBox.appendChild(messageWrapper);
-            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
-        };
+    messageInput.addEventListener('blur', function() {
+        document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1.0');
+    });
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
         
-        sendButton.onclick = function() {
-            const message = messageInput.value.trim();
+        // Create a wrapper div for proper alignment
+        const messageWrapper = document.createElement('div');
+        messageWrapper.classList.add('message-wrapper');
+        
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message');
+        
+        // Check if the message belongs to the logged-in user or the other user
+        if (data.user_id === userId) {
+            messageWrapper.classList.add('self'); // Align to the right
+            messageElement.classList.add('self');
+        } else {
+            messageWrapper.classList.add('other'); // Align to the left
+            messageElement.classList.add('other');
+        }
+    
+        // Add the message content
+        messageElement.textContent = data.message;
+        
+        // Append message to its wrapper
+        messageWrapper.appendChild(messageElement);
+        chatBox.appendChild(messageWrapper);
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the latest message
+    };
+    
+    sendButton.onclick = function() {
+        const message = messageInput.value.trim();
 
-            if (message !== '') {
-                socket.send(JSON.stringify({
-                    'message': message
-                }));
-                messageInput.value = ''; // Clear the input field
-            }
-        };
+        if (message !== '') {
+            socket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInput.value = ''; // Clear the input field
+        }
+    };
 
-        // Optional: Add keyboard send functionality
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendButton.click();
-            }
-        });
-    </script>
+    // Optional: Add keyboard send functionality
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendButton.click();
+        }
+    });
+</script>
+{% block footer %}
+{% endblock footer %}
 
-</body>
-</html>
+{% endblock basepage %}
