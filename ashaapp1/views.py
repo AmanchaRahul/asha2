@@ -61,7 +61,7 @@ def analyze_food(request):
         ]
 
         completion = client.chat.completions.create(
-            model="meta-llama/Llama-3.3-70B-Instruct", 
+            model="meta-llama/Llama-3.2-3B-Instruct", 
             messages=messages, 
             max_tokens=500
         )
