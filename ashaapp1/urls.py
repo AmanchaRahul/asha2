@@ -117,7 +117,9 @@ urlpatterns = [
     path('chat_with_nutritionist/', views.chat_with_nutritionist, name='chat_with_nutritionist'),
 
     
-    
+   
+    path('calorie-tracker/', views.calorie_tracker, name='calorie_tracker'),
+    path('api/analyze-food/', views.analyze_food, name='analyze_food'),
    
 ]
     

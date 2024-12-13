@@ -4,7 +4,28 @@ from .models import DailyCheckIn
 from .models import ExerciseLog, WeeklyStats
 from .models import BloodPressureExerciseLog
 from .models import UserActivity
+from .models import FoodAnalysis
 
+@admin.register(FoodAnalysis)
+class FoodAnalysisAdmin(admin.ModelAdmin):
+    list_display = ('user', 'calories', 'protein', 'fat', 'carbs', 'created_at')
+    list_filter = ('user', 'created_at')
+    search_fields = ('user__username', 'analysis')
+    readonly_fields = ('created_at',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'image', 'analysis')
+        }),
+        ('Nutritional Information', {
+            'fields': ('calories', 'protein', 'fat', 'carbs')
+        }),
+        ('Metadata', {
+            'fields': ('created_at',)
+        }),
+    )
+    
+    
 @admin.register(UserActivity)
 class UserActivityAdmin(admin.ModelAdmin):
     list_display = ('user', 'last_activity', 'is_online')

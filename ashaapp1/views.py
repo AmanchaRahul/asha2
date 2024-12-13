@@ -29,6 +29,80 @@ from .models import UserProfile, User
 
 
 
+
+from .models import FoodAnalysis
+from huggingface_hub import InferenceClient
+import json
+import logging
+import traceback
+
+logger = logging.getLogger(__name__)
+
+@require_http_methods(["POST"])
+def analyze_food(request):
+    if not request.FILES.get('image'):
+        return JsonResponse({'error': 'No image file provided'}, status=400)
+
+    try:
+        image = request.FILES['image']
+        
+        # Save the image temporarily
+        food_analysis = FoodAnalysis(user=request.user, image=image)
+        food_analysis.save()
+
+        # Analyze the image using Llama 3.3 70B model
+        client = InferenceClient(api_key="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")
+        
+        messages = [
+            {
+                "role": "user",
+                "content": f"Analyze this food image and provide a brief description of the meal along with its macronutrients (calories, protein, fat, and carbs). The image URL is: {request.build_absolute_uri(food_analysis.image.url)}"
+            }
+        ]
+
+        completion = client.chat.completions.create(
+            model="meta-llama/Llama-3.3-70B-Instruct", 
+            messages=messages, 
+            max_tokens=500
+        )
+
+        analysis = completion.choices[0].message.content
+
+        # Extract macronutrients from the analysis (this is a simplified example)
+        calories = protein = fat = carbs = 0
+        try:
+            lines = analysis.split('\n')
+            for line in lines:
+                if 'calories:' in line.lower():
+                    calories = int(line.split(':')[1].strip())
+                elif 'protein:' in line.lower():
+                    protein = float(line.split(':')[1].strip().rstrip('g'))
+                elif 'fat:' in line.lower():
+                    fat = float(line.split(':')[1].strip().rstrip('g'))
+                elif 'carbs:' in line.lower():
+                    carbs = float(line.split(':')[1].strip().rstrip('g'))
+        except Exception as e:
+            logger.warning(f"Error parsing macronutrients: {str(e)}")
+
+        # Update the FoodAnalysis object
+        food_analysis.analysis = analysis
+        food_analysis.calories = calories
+        food_analysis.protein = protein
+        food_analysis.fat = fat
+        food_analysis.carbs = carbs
+        food_analysis.save()
+
+        return JsonResponse({'analysis': analysis})
+    except Exception as e:
+        logger.error(f"Error in analyze_food view: {str(e)}")
+        logger.error(traceback.format_exc())
+        return JsonResponse({'error': 'An error occurred while processing your request'}, status=500)
+
+def calorie_tracker(request):
+    return render(request, 'calorie_tracker.html')
+
+
+
 # Create your views here.
 def base_view(request):
     return render(request,"base.html")

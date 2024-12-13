@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Calorie Tracker</title>
+{% endblock title %}
+
+{% block basepage %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .meal-card {
+            background-color: #2d3748;
+            transition: all 0.3s ease;
+            border: 1px solid #4a5568;
+        }
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(66, 153, 225, 0.2);
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #4299e1;
+        }
+        @media (max-width: 640px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <a href="{% url 'wellnessdata' %}" class="back-button fixed top-4 left-4 z-50 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105">
+        <i class="fas fa-arrow-left mr-2"></i> Back
+    </a>
+    <div class="container mx-auto px-4 py-8 mt-16">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Calorie Tracker</h1>
+            <p class="text-xl text-blue-300">Analyze your meals with AI</p>
+        </header>
+
+        <div class="max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Upload Food Image</h2>
+            <p class="text-gray-400 mb-4">Take a picture or upload an image of your meal for analysis</p>
+            <form id="foodAnalysisForm" enctype="multipart/form-data" class="space-y-4">
+                <div>
+                    <input type="file" id="foodImage" name="image" accept="image/*" class="w-full p-2 bg-gray-700 rounded-lg text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out">
+                    Analyze Food
+                </button>
+            </form>
+        </div>
+
+        <div id="analysisResult" class="max-w-md mx-auto mt-8 bg-gray-800 p-6 rounded-lg shadow-lg hidden">
+            <h2 class="text-2xl font-semibold mb-4">Analysis Results</h2>
+            <p id="analysisText" class="text-lg"></p>
+        </div>
+
+        <div id="errorMessage" class="max-w-md mx-auto mt-8 bg-red-800 p-6 rounded-lg shadow-lg hidden">
+            <h2 class="text-2xl font-semibold mb-4">Error</h2>
+            <p id="errorText" class="text-lg"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('foodAnalysisForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const submitButton = this.querySelector('button[type="submit"]');
+            const analysisResult = document.getElementById('analysisResult');
+            const analysisText = document.getElementById('analysisText');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Analyzing...';
+            analysisResult.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            try {
+                const response = await fetch('{% url "analyze_food" %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                analysisText.textContent = data.analysis;
+                analysisResult.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                errorText.textContent = `Error: ${error.message}. Please try again or contact support if the issue persists.`;
+                errorMessage.classList.remove('hidden');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Analyze Food';
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock basepage %}
