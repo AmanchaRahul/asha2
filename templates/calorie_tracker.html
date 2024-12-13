@@ -103,11 +103,12 @@
                     }
                 });
                 
+                const data = await response.json();
+
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
                 }
                 
-                const data = await response.json();
                 nutritionInfo.innerHTML = `
                     <p><strong>Calories:</strong> ${data.calories}</p>
                     <p><strong>Protein:</strong> ${data.protein}g</p>
@@ -127,4 +128,6 @@
     </script>
 </body>
 </html>
+{% block footer %}
+{% endblock footer %}
 {% endblock basepage %}

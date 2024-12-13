@@ -28,9 +28,11 @@ from .models import UserProfile, User
 
 
 
-
 from huggingface_hub import InferenceClient
+import logging
+import traceback
 
+logger = logging.getLogger(__name__)
 
 @require_http_methods(["GET"])
 def calorie_tracker(request):
@@ -50,7 +52,7 @@ def analyze_meal(request):
         messages = [
             {
                 "role": "user",
-                "content": f"Analyze this meal and provide its nutritional information (calories, protein, fat, and carbs) for one serving: {meal_name}"
+                "content": f"Analyze this meal and provide its nutritional information (calories, protein, fat, and carbs) for one serving: {meal_name}. Please respond in the following format:\nCalories: X\nProtein: Xg\nFat: Xg\nCarbs: Xg"
             }
         ]
 
@@ -62,34 +64,37 @@ def analyze_meal(request):
 
         analysis = completion.choices[0].message.content
 
-        # Extract nutritional information (this is a simplified example)
-        calories = protein = fat = carbs = 0
-        lines = analysis.split('\n')
-        for line in lines:
-            if 'calories:' in line.lower():
-                calories = int(line.split(':')[1].strip())
-            elif 'protein:' in line.lower():
-                protein = float(line.split(':')[1].strip().rstrip('g'))
-            elif 'fat:' in line.lower():
-                fat = float(line.split(':')[1].strip().rstrip('g'))
-            elif 'carbs:' in line.lower():
-                carbs = float(line.split(':')[1].strip().rstrip('g'))
+        # Extract nutritional information
+        nutritional_info = {
+            'calories': 0,
+            'protein': 0,
+            'fat': 0,
+            'carbs': 0
+        }
 
-        # Adjust for number of servings
-        calories *= servings
-        protein *= servings
-        fat *= servings
-        carbs *= servings
+        for line in analysis.split('\n'):
+            for key in nutritional_info.keys():
+                if key.lower() in line.lower():
+                    try:
+                        value = float(line.split(':')[1].strip().rstrip('g'))
+                        nutritional_info[key] = value * servings
+                    except ValueError:
+                        logger.warning(f"Could not parse value for {key} from line: {line}")
 
-        return JsonResponse({
-            'calories': calories,
-            'protein': round(protein, 1),
-            'fat': round(fat, 1),
-            'carbs': round(carbs, 1)
-        })
+        # Round values for display
+        for key in nutritional_info.keys():
+            if key != 'calories':
+                nutritional_info[key] = round(nutritional_info[key], 1)
+            else:
+                nutritional_info[key] = round(nutritional_info[key])
+
+        return JsonResponse(nutritional_info)
     except Exception as e:
-        print(f"Error in analyze_meal view: {str(e)}")
-        return JsonResponse({'error': str(e)}, status=500)
+        logger.error(f"Error in analyze_meal view: {str(e)}")
+        logger.error(traceback.format_exc())
+        return JsonResponse({'error': 'An error occurred while analyzing the meal. Please try again.'}, status=500)
+
+
 
 
 
