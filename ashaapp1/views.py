@@ -51,7 +51,7 @@ def analyze_food(request):
         food_analysis.save()
 
         # Analyze the image using Llama 3.3 70B model
-        client = InferenceClient(api_key="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")
+        client = InferenceClient(api_key="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")
         
         messages = [
             {
