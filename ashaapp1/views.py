@@ -34,7 +34,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Configure Gemini API
-genai.configure(api_key="AIzaSyBI2EZJF-BZ9kmVo5ECCrQSkg7sfwMwx2Q")
+api_key = os.getenv('GOOGLE_API_KEY')
+genai.configure(api_key=api_key)
+
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 @require_http_methods(["GET"])
