@@ -27,73 +27,108 @@ from django.views.decorators.http import require_POST
 from .models import UserProfile, User
 
 
+
+
 import google.generativeai as genai
 import base64
 import logging
+import traceback
+from PIL import Image
+import io
 
 logger = logging.getLogger(__name__)
 
-# Configure Gemini API
 api_key = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=api_key)
 
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-@require_http_methods(["GET"])
-def calorie_tracker(request):
-    return render(request, 'calorie_tracker.html')
-
-@require_http_methods(["POST"])
+@csrf_exempt
 def analyze_food(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        
     if 'food_image' not in request.FILES:
         return JsonResponse({'error': 'No image file provided'}, status=400)
 
-    food_image = request.FILES['food_image']
-    servings = int(request.POST.get('servings', 1))
-
     try:
-        # Read the image file and encode it to base64
-        image_data = base64.b64encode(food_image.read()).decode('utf-8')
+        food_image = request.FILES['food_image']
+        servings = int(request.POST.get('servings', 1))
 
-        # Prepare the prompt for Gemini
-        prompt = f"""
-        Analyze this food image and provide the following information:
+        # Convert the uploaded file to PIL Image
+        image = Image.open(food_image)
+        
+        # Convert image to bytes
+        img_byte_arr = io.BytesIO()
+        image.save(img_byte_arr, format=image.format or 'JPEG')
+        img_byte_arr = img_byte_arr.getvalue()
+
+        # Create the prompt for analysis
+        prompt = """
+        Analyze this food image and provide the following nutritional information per serving:
         1. Name of the food item
-        2. Estimated calories (per serving)
-        3. Estimated protein content (in grams, per serving)
-        4. Estimated fat content (in grams, per serving)
-        5. Estimated carbohydrate content (in grams, per serving)
-
-        Please provide the information in a structured format.
+        2. Calories
+        3. Protein (in grams)
+        4. Fat (in grams)
+        5. Carbohydrates (in grams)
+        
+        Format your response exactly like this example:
+        Food: Grilled Chicken Salad
+        Calories: 350
+        Protein: 25
+        Fat: 15
+        Carbs: 20
         """
 
-        # Generate content using Gemini
-        response = model.generate_content([prompt, image_data])
+        # Generate response using Gemini
+        response = model.generate_content([prompt, img_byte_arr])
+        
+        # Parse the response
+        result = {}
+        try:
+            lines = response.text.strip().split('\n')
+            for line in lines:
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    key = key.strip().lower()
+                    value = value.strip()
+                    if key == 'food':
+                        result['food_item'] = value
+                    elif key in ['calories', 'protein', 'fat', 'carbs']:
+                        # Extract just the number
+                        result[key] = float(''.join(c for c in value if c.isdigit() or c == '.'))
 
-        # Parse the response (you may need to adjust this based on the actual response format)
-        lines = response.text.split('\n')
-        food_item = lines[0].split(':')[1].strip()
-        calories = float(lines[1].split(':')[1].strip().split()[0])
-        protein = float(lines[2].split(':')[1].strip().split()[0])
-        fat = float(lines[3].split(':')[1].strip().split()[0])
-        carbs = float(lines[4].split(':')[1].strip().split()[0])
+        except Exception as e:
+            logger.error(f"Error parsing Gemini response: {str(e)}")
+            logger.error(f"Raw response: {response.text}")
+            return JsonResponse({'error': 'Error parsing nutritional information'}, status=500)
 
-        # Adjust for number of servings
-        calories *= servings
-        protein *= servings
-        fat *= servings
-        carbs *= servings
+        # Adjust for servings
+        for key in ['calories', 'protein', 'fat', 'carbs']:
+            if key in result:
+                result[key] *= servings
 
-        return JsonResponse({
-            'food_item': food_item,
-            'calories': round(calories),
-            'protein': round(protein, 1),
-            'fat': round(fat, 1),
-            'carbs': round(carbs, 1)
-        })
+        # Round the values
+        result['calories'] = round(result['calories'])
+        result['protein'] = round(result['protein'], 1)
+        result['fat'] = round(result['fat'], 1)
+        result['carbs'] = round(result['carbs'], 1)
+
+        return JsonResponse(result)
+
     except Exception as e:
-        logger.error(f"Error in analyze_food view: {str(e)}")
-        return JsonResponse({'error': 'An error occurred while analyzing the food. Please try again.'}, status=500)
+        logger.error(f"Error in analyze_food: {str(e)}")
+        logger.error(traceback.format_exc())
+        return JsonResponse({
+            'error': 'An error occurred while analyzing the food. Please try again.',
+            'details': str(e) if settings.DEBUG else ''
+        }, status=500)
+
+def calorie_tracker(request):
+    return render(request, 'calorie_tracker.html')
+
+
+
 
 
 
