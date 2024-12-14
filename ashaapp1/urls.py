@@ -118,9 +118,10 @@ urlpatterns = [
 
     
    
-     path('calorie-tracker/', views.calorie_tracker, name='calorie_tracker'),
-    path('api/analyze-meal/', views.analyze_meal, name='analyze_meal'),
+    path('calorie-tracker/', views.calorie_tracker, name='calorie_tracker'),
+    path('api/analyze-food/', views.analyze_food, name='analyze_food'),
 ]
+
    
 
     

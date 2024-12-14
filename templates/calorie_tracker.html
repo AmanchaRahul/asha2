@@ -51,19 +51,19 @@
         </header>
 
         <div class="max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4">Meal Analysis</h2>
-            <form id="mealAnalysisForm" class="space-y-4">
+            <h2 class="text-2xl font-semibold mb-4">Upload Food Image</h2>
+            <form id="foodAnalysisForm" enctype="multipart/form-data" class="space-y-4">
                 {% csrf_token %}
                 <div>
-                    <label for="mealName" class="block text-sm font-medium text-gray-400">Meal Name</label>
-                    <input type="text" id="mealName" name="meal_name" required class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <label for="foodImage" class="block text-sm font-medium text-gray-400">Food Image</label>
+                    <input type="file" id="foodImage" name="food_image" accept="image/*" required class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 <div>
                     <label for="servings" class="block text-sm font-medium text-gray-400">Number of Servings</label>
                     <input type="number" id="servings" name="servings" min="1" value="1" required class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out">
-                    Analyze Meal
+                    Analyze Food
                 </button>
             </form>
         </div>
@@ -80,7 +80,7 @@
     </div>
 
     <script>
-        document.getElementById('mealAnalysisForm').addEventListener('submit', async function(e) {
+        document.getElementById('foodAnalysisForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = new FormData(this);
             const submitButton = this.querySelector('button[type="submit"]');
@@ -95,7 +95,7 @@
             errorMessage.classList.add('hidden');
 
             try {
-                const response = await fetch('{% url "analyze_meal" %}', {
+                const response = await fetch('{% url "analyze_food" %}', {
                     method: 'POST',
                     body: form,
                     headers: {
@@ -110,6 +110,7 @@
                 }
                 
                 nutritionInfo.innerHTML = `
+                    <p><strong>Food Item:</strong> ${data.food_item}</p>
                     <p><strong>Calories:</strong> ${data.calories}</p>
                     <p><strong>Protein:</strong> ${data.protein}g</p>
                     <p><strong>Fat:</strong> ${data.fat}g</p>
@@ -122,12 +123,10 @@
                 errorMessage.classList.remove('hidden');
             } finally {
                 submitButton.disabled = false;
-                submitButton.textContent = 'Analyze Meal';
+                submitButton.textContent = 'Analyze Food';
             }
         });
     </script>
 </body>
 </html>
-{% block footer %}
-{% endblock footer %}
 {% endblock basepage %}

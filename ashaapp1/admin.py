@@ -8,17 +8,17 @@ from .models import FoodAnalysis
 
 @admin.register(FoodAnalysis)
 class FoodAnalysisAdmin(admin.ModelAdmin):
-    list_display = ('user', 'calories', 'protein', 'fat', 'carbs', 'created_at')
+    list_display = ('food_item', 'user', 'calories', 'protein', 'fat', 'carbs', 'servings', 'created_at')
     list_filter = ('user', 'created_at')
-    search_fields = ('user__username', 'analysis')
+    search_fields = ('food_item', 'user__username')
     readonly_fields = ('created_at',)
 
     fieldsets = (
         (None, {
-            'fields': ('user', 'image', 'analysis')
+            'fields': ('user', 'food_image', 'food_item')
         }),
         ('Nutritional Information', {
-            'fields': ('calories', 'protein', 'fat', 'carbs')
+            'fields': ('calories', 'protein', 'fat', 'carbs', 'servings')
         }),
         ('Metadata', {
             'fields': ('created_at',)

@@ -9,19 +9,17 @@ from django.utils import timezone
 
 class FoodAnalysis(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='food_images/')
-    analysis = models.TextField()
-    calories = models.IntegerField(default=0)
-    protein = models.FloatField(default=0)
-    fat = models.FloatField(default=0)
-    carbs = models.FloatField(default=0)
+    food_image = models.ImageField(upload_to='food_images/')
+    food_item = models.CharField(max_length=255, default='apple')
+    calories = models.IntegerField()
+    protein = models.FloatField()
+    fat = models.FloatField()
+    carbs = models.FloatField()
+    servings = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Food Analysis for {self.user.username} on {self.created_at}"
-
-    class Meta:
-        verbose_name_plural = "Food Analyses"
+        return f"{self.food_item} - {self.user.username} - {self.created_at}"
 
 class UserActivity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
